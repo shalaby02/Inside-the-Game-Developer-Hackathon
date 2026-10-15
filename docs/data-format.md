@@ -106,4 +106,28 @@ The same move as JSON (the event and possession ids are examples):
 ]
 ```
 
-xT note for Day 4: only `pass` and `carry` with outcome `complete` get an "xT added" value (value at end − value at start). The other types are kept for context: turnovers, pressure and fouls.
+## Expected Threat (xT)
+
+`src/xt_model.py` reads `data/match.json` and writes `data/match_xt.csv`: the same columns, plus these:
+
+| Column | Type | Meaning |
+|---|---|---|
+| `zone_start`, `zone_end` | string | Zone of the start and end point, e.g. `c10r4` (see below). |
+| `xt_added` | number | How much the event changed its team's chance of scoring soon (see the table below). |
+| `shot_zone_value` | number or blank | Shots only: the value of the zone the shot was taken from, a measure of how good the chance was. Blank for other types. |
+| `possession_seconds` | int | The same on every event of a possession: seconds from its first event to its shot, or to its last event if there was no shot. Use it for tempo, e.g. the fastest moves from a team's own half (`start_x` < 50 on the first event) to a shot. |
+
+**Zones.** The pitch is split into 12 columns along `x` (each 8.33 wide) and 8 rows along `y` (each 12.5 wide), in the acting team's frame. A zone is written `c{column}r{row}`: `c0` is at the team's own goal line, `c11` is next to the goal they attack, and `r0` is the attacker's right touchline. Points on `x = 100` or `y = 100` fall in the last zone. For example, `(88, 52)` is in `c10r4`.
+
+**Zone values.** Each zone's value is roughly "how likely is a goal soon if we have the ball here". The values are hand-built, with no outside data: the value halves for every 8 units the zone's centre is from the middle of the goal (100, 50). Sideways distance counts 70%, so the wide zones by the byline still have some value. The best zone is scaled to 0.30. The values go from about 0.005 in the centre circle to 0.08 at the edge of the box and 0.30 in front of goal.
+
+**xT added per event.**
+
+| Event | `xt_added` |
+|---|---|
+| `pass` / `carry`, `complete` | value(end zone) − value(start zone) |
+| `pass` `incomplete`, `carry` `lost` | − value(start zone): the team gave away what it had |
+| `shot` | 0: its danger is in `shot_zone_value` instead, so goals don't swamp the totals |
+| `tackle`, `interception`, `foul`, `clearance` | 0 (kept for context) |
+
+Example: Quill's assist at 61' goes from `c8r6` (0.021) to `c10r4` (0.161), so `xt_added` = +0.139. Vane's goal straight after has `xt_added` = 0 and `shot_zone_value` = 0.161.

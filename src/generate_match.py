@@ -288,7 +288,12 @@ class MatchGenerator:
             if action is None:
                 in_box = x >= 83 and 21 <= y <= 79
                 edge = 75 <= x < 83 and 30 <= y <= 70
-                if x < p["deep"] and rng.random() < p["hoof"]:
+                # Filler play only reaches the six-yard box by winning the
+                # ball there (e.g. a back-pass cut out): always shoot.
+                six_yard_box = x >= 94 and 36 <= y <= 64
+                if six_yard_box:
+                    action = "shot"
+                elif x < p["deep"] and rng.random() < p["hoof"]:
                     action = "clearance"
                 elif in_box and rng.random() < p["shoot"]:
                     action = "shot"

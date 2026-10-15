@@ -32,6 +32,9 @@ secrets.*
 credentials*.json
 .azure/
 
+# Local backup of generated data
+data_backup/
+
 # Editor / OS
 .vscode/
 .idea/

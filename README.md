@@ -23,9 +23,20 @@ Synthetic match → xT model → Analyst → Narrator → Personalizer → Recap
    (code)          (code)     (agent)    (agent)     (agent)
 ```
 
-## Getting started
+## How to run
 
-_Coming soon: setup and run instructions._
+You need **Python 3.12**. Newer versions may not work with the Azure packages used later. Run these from the project folder, in order:
+
+```
+py -3.12 -m venv .venv              # macOS/Linux: python3.12 -m venv .venv
+.venv\Scripts\Activate.ps1          # macOS/Linux: source .venv/bin/activate
+pip install -r requirements.txt
+python src/generate_match.py        # writes data/match.json + data/match.csv
+python src/validate_match.py        # checks the data against docs/
+python src/xt_model.py              # writes data/match_xt.csv, prints top events
+```
+
+The match is generated with a fixed random seed, so you get exactly the same data every time. The data format is described in [docs/data-format.md](docs/data-format.md), and the story the match is built around is in [docs/match-story.md](docs/match-story.md).
 
 ## Demo
 

@@ -73,7 +73,7 @@ Small on purpose: about 8 Python files in total.
 
 | # | What | Why | Notes |
 |---|---|---|---|
-| 1 | **Python 3.12** | Runs the project | You have 3.15, which is very new. Some packages (especially Azure ones) may not support it yet. Install 3.12 from python.org next to it. They can live side by side. |
+| 1 | **Python 3.12** ✅ | Runs the project | You also have 3.15, which is very new. Some packages (especially Azure ones) may not support it yet. Both are installed side by side, and plain `py` picks 3.15, so always create the venv with `py -3.12 -m venv .venv`. |
 | 2 | **Git** ✅ | Version control | Already installed. |
 | 3 | **VS Code** ✅ + **Python extension** | Editor | VS Code is installed. Add the "Python" extension by Microsoft. |
 | 4 | **GitHub account** + make this repo **public** | Hackathon requirement | Check it's public in Settings → General. |
@@ -91,23 +91,23 @@ Small on purpose: about 8 Python files in total.
 
 ### Week 1 — Everything works offline (no cloud)
 
-**Day 1 — Setup**
+**Day 1 — Setup** ✅
 - Install Python 3.12 and the VS Code Python extension.
 - Create the folder structure, `.gitignore`, `.venv`, `requirements.txt`. Install the packages.
 - Done when: `python -c "import pandas, mplsoccer"` runs with no error and the skeleton is pushed.
 
-**Day 2 — Design the match data**
+**Day 2 — Design the match data** ✅
 - Decide what one event looks like, e.g. `{minute, team, player, type: pass|carry|shot, start_x, start_y, end_x, end_y, outcome}`.
 - Pick 2 fictional teams, 11 players each, and a final score.
 - Write it down in `docs/data-format.md`.
 - Done when: you can describe one full attacking move as 4–5 events on paper.
 
-**Day 3 — Match generator**
+**Day 3 — Match generator** ✅
 - `generate_match.py` creates around 300–600 events using a fixed random seed, so you get the same match every time.
 - Plant 4–6 "story" moments on purpose: a goal, a big missed chance, a fast counter-attack, a late equaliser.
 - Done when: `data/match.json` exists and the goals in it match your chosen score.
 
-**Day 4 — xT model**
+**Day 4 — xT model** ✅
 - `xt_model.py`: build a 12 × 8 grid where value grows closer to the goal (a simple formula is fine). Write a function that gives the xT added for each pass/carry.
 - Done when: a pass from midfield into the box gives a clearly positive number, and a back-pass gives a negative one.
 
@@ -168,3 +168,13 @@ Small on purpose: about 8 Python files in total.
 3. Tests → keep just 1–2.
 
 Never cut: the working pipeline, the README, the demo video.
+
+---
+
+## Optional extras (only if there's time)
+
+**`recovery_value`**: credit for winning the ball back. Don't build this yet.
+- A separate column in `data/match_xt.csv`, not part of `xt_added`.
+- For `tackle` and `interception` events with outcome `won`: the xT value of the zone where the ball was won, from the winning team's point of view.
+- All other events get 0.
+- Frames: tackle and interception rows are already stored from the winning team's point of view, so use their `start_x`, `start_y` as they are. Flip (`100 − x`, `100 − y`) only if you take the spot from the other team's event instead, for example the end point of the pass that was intercepted, which is in the passer's frame.
