@@ -22,7 +22,7 @@ from openai import OpenAI, OpenAIError
 
 from hello_foundry import openai_base_url
 from narrator import INSTRUCTIONS, MODEL_PARAMS, OUTPUT_SCHEMA, moment_input, narrate
-from style_check import BLOCKED, MAX_NUMBERS
+import style_rules
 
 ROOT = Path(__file__).resolve().parent.parent
 MOMENTS_PATH = ROOT / "data" / "key_moments.json"
@@ -31,7 +31,8 @@ OUT_PATH = ROOT / "data" / "narrations.json"
 
 def input_hash(moment: dict) -> str:
     """Changes when the moment, the instructions, the model settings or the style rules change."""
-    blob = json.dumps([moment_input(moment), INSTRUCTIONS, MODEL_PARAMS, OUTPUT_SCHEMA, BLOCKED, MAX_NUMBERS],
+    blob = json.dumps([moment_input(moment), INSTRUCTIONS, MODEL_PARAMS, OUTPUT_SCHEMA, style_rules.BLOCKED,
+                       style_rules.DURATION, style_rules.MAX_NUMBERS],
                       sort_keys=True)
     return hashlib.sha256(blob.encode()).hexdigest()[:16]
 

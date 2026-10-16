@@ -29,10 +29,22 @@ Tags (a list, can be empty):
                      (start_x < 50), ends in a shot and takes
                      MAX_COUNTER_SECONDS or less.
 
-Facts are rounded numbers, plus action_type ("pass" or "carry") for every
-moment with a key action: a threat swing's own pass or carry, or a shot's
-key pass (the last pass before it). Momentum shifts have none. team_score and opponent_score are the score just
-after the moment (for a momentum shift: at the start of its first block).
+Facts are rounded numbers, plus these code-derived words (see
+docs/data-format.md for every rule):
+- action_type   "pass" or "carry" for every moment with a key action: a
+                threat swing's own pass or carry, or a shot's key pass (the
+                last pass before it). Momentum shifts have none.
+- score_effect  goals only, e.g. "put London Blue 1-0 up".
+- build_up      how the possession got to the key action, from its events,
+                e.g. "won the ball back in midfield and scored 10 seconds
+                later, after 2 passes and a carry from midfield into the
+                attacking third". A duration only appears when the
+                possession starts with a won tackle or interception, the
+                only start with a recorded time.
+- counter_label counter goals only, e.g. "the fastest of the match's two
+                counter-attacks".
+team_score and opponent_score are the score just after the moment (for a
+momentum shift: at the start of its first block).
 
 Run:  python src/key_moments.py
 """
@@ -55,10 +67,14 @@ BLOCK_MINUTES = 5
 MAX_PER_CATEGORY = 3
 MIN_GAP_SECONDS = 60
 PITCH_M = (105, 68)         # for distances in metres
+NOTABLE_CARRY = 10          # forward distance (pitch units) for a carry to count in build_up
 
 PRIORITY = ["save", "big_chance_missed", "momentum_shift", "biggest_threat_swing"]
 GOALKEEPERS = {"london_red": "Ellis Harwick", "london_blue": "Bram Hollis"}  # docs/teams.md
 TEAMS = ("london_red", "london_blue")
+TEAM_NAMES = {"london_red": "London Red", "london_blue": "London Blue"}  # docs/teams.md
+COUNT_WORDS = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six"}
+SPEED_RANKS = {1: "fastest", 2: "second-fastest", 3: "third-fastest"}
 
 
 def load(path):
@@ -105,6 +121,80 @@ def scores_after(events):
     return out
 
 
+def zone(x):
+    """Third of the pitch, from the acting team's point of view."""
+    return "the defensive third" if x < 100 / 3 else "midfield" if x < 200 / 3 else "the attacking third"
+
+
+def score_effect(team, after):
+    """What a goal did to the score, e.g. "put London Blue 1-0 up"."""
+    mine, theirs = after[team], after[other(team)]
+    name = TEAM_NAMES[team]
+    if mine == theirs:
+        return f"levelled the match at {mine}-{theirs}"
+    if mine - 1 == theirs:  # was level before this goal
+        return f"put {name} {mine}-{theirs} " + ("up" if mine + theirs == 1 else "ahead")
+    if mine > theirs:
+        return f"extended {name}'s lead to {mine}-{theirs}"
+    return f"pulled {name} back to {mine}-{theirs}"
+
+
+def one_two(own):
+    """A passes to B, B passes, and A is next on the ball (one team's events, in order)."""
+    for a, b, c in zip(own, own[1:], own[2:]):
+        if (a["type"] == b["type"] == "pass" and a["outcome"] == b["outcome"] == "complete"
+                and a["player"] != b["player"] and c["player"] == a["player"]):
+            return True
+    return False
+
+
+def build_up(prev, possession, action, verb):
+    """How the possession got to action, in plain words, or None.
+
+    prev: the event just before the possession. verb: what action did
+    ("scored", "shot", "passed", "carried"). Only what the events record:
+    how the possession started (a won tackle or interception, or straight
+    after an opponent foul), completed passes, forward carries of
+    NOTABLE_CARRY or more, and a one-two. A duration is only given from a
+    won ball, the only start with a recorded time.
+    """
+    own = [p for p in possession if p["team"] == action["team"] and p["event_id"] <= action["event_id"]]
+    before = own[:-1]
+    first = own[0]
+
+    parts = []
+    passes = sum(p["type"] == "pass" and p["outcome"] == "complete" for p in before)
+    if passes:
+        parts.append(f"{passes} pass" + ("es" if passes > 1 else ""))
+    carries = [p for p in before if p["type"] == "carry" and p["outcome"] == "complete"
+               and p["end_x"] - p["start_x"] >= NOTABLE_CARRY]
+    if len(carries) == 1:
+        a, b = zone(carries[0]["start_x"]), zone(carries[0]["end_x"])
+        parts.append(f"a carry from {a} into {b}" if a != b else f"a carry in {a}")
+    elif carries:
+        parts.append(f"{len(carries)} forward carries")
+    if one_two(own):
+        parts.append("a one-two")
+    middle = ", ".join(parts[:-1]) + " and " + parts[-1] if len(parts) > 1 else "".join(parts)
+
+    if first["type"] in ("tackle", "interception") and first["outcome"] == "won" and first is not action:
+        seconds = clock(action) - clock(first)
+        text = (f"won the ball back in {zone(first['start_x'])} and {verb} "
+                f"{seconds} second{'s' if seconds != 1 else ''} later")
+        return text + (f", after {middle}" if middle else "")
+    if prev and prev["type"] == "foul" and prev["team"] != action["team"]:
+        text = f"started after a {TEAM_NAMES[prev['team']]} foul"
+        return text + (f" and was built through {middle}" if middle else "")
+    return f"built through {middle}" if middle else None
+
+
+def counter_label(rank, count):
+    if count == 1:
+        return "the match's only counter-attack"
+    speed = SPEED_RANKS.get(rank, f"number {rank} by speed")
+    return f"the {speed} of the match's {COUNT_WORDS.get(count, count)} counter-attacks"
+
+
 def moment(category, e, team, players, facts, score, score_value, tags=()):
     return {"category": category, "tags": list(tags), "period": e["period"],
             "minute": e["minute"], "second": e["second"], "team": team, "players": players,
@@ -117,6 +207,7 @@ def candidates(events):
     for e in events:
         possessions.setdefault(e["possession_id"], []).append(e)
     score = scores_after(events)
+    by_id = {e["event_id"]: e for e in events}
 
     # Counter-attacks (the counter tag), ranked fastest first (counter_rank).
     counters = [es for es in possessions.values()
@@ -145,12 +236,18 @@ def candidates(events):
         if key_pass:
             facts["action_type"] = key_pass["type"]
             facts["key_pass_xt_added"] = key_pass["xt_added"]
+        move = build_up(by_id.get(es[0]["event_id"] - 1), es, e,
+                        "scored" if e["outcome"] == "goal" else "shot")
+        if move:
+            facts["build_up"] = move
         players = [e["player"]] + ([key_pass["player"]] if key_pass and key_pass["player"] != e["player"] else [])
 
         if e["outcome"] == "goal":
             if e["possession_id"] in counter_rank:
                 facts["counter_rank"] = counter_rank[e["possession_id"]]
                 facts["counters_in_match"] = len(counters)
+                facts["counter_label"] = counter_label(facts["counter_rank"], len(counters))
+            facts["score_effect"] = score_effect(e["team"], score[e["event_id"]])
             out.append(moment("goal", e, e["team"], players, facts, score[e["event_id"]],
                               e["shot_zone_value"], tags(e)))
         elif e["shot_zone_value"] >= BIG_CHANCE:
@@ -167,6 +264,9 @@ def candidates(events):
     for i, e in enumerate(events):
         if threat(e) <= 0:
             continue
+        es = possessions[e["possession_id"]]
+        move = build_up(by_id.get(es[0]["event_id"] - 1), es, e,
+                        "passed" if e["type"] == "pass" else "carried")
         nxt = events[i + 1] if i + 1 < len(events) else None
         receiver = nxt["player"] if (e["type"] == "pass" and nxt and nxt["team"] == e["team"]
                                      and nxt["player"] != e["player"]) else None
@@ -178,6 +278,7 @@ def candidates(events):
             "start_x": e["start_x"], "start_y": e["start_y"],
             "end_x": e["end_x"], "end_y": e["end_y"],
             "action_type": e["type"],
+            **({"build_up": move} if move else {}),
         }, score[e["event_id"]], e["xt_added"], tags(e)))
     return out
 

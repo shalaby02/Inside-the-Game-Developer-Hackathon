@@ -10,7 +10,7 @@ import pytest
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 from grounding import check  # noqa: E402
-from narrator import format_problems, moment_input  # noqa: E402
+from narrator import moment_input  # noqa: E402
 
 MOMENTS = {m["id"]: m for m in json.loads((ROOT / "data" / "key_moments.json").read_text())["moments"]}
 
@@ -29,13 +29,13 @@ PASS_CASES = [
     ("m07", narration(
         "Niko Vane punishes London Red on the break",
         "Niko Vane finished in the 61st minute to put London Blue 1-0 up. "
-        "The move started at 44.0 and took just 10 seconds, and Dario Quill's key pass added 0.1392 xT. "
-        "It was the fastest of the 2 counter-attacks in the match.",
-        ["61", "1-0", "44.0", "10", "0.1392", "2"])),
-    ("m07", narration(  # 44 for 44.0, minute:second, possessive, sentence-start word
+        "London Blue won the ball back in midfield and scored 10 seconds later, and Dario Quill's key pass "
+        "added 0.1392 xT. It was the fastest of the match's two counter-attacks.",
+        ["61", "1-0", "10", "0.1392", "two"])),
+    ("m07", narration(  # minute:second, possessive, sentence-start word, 2 from "two" in counter_label
         "Vane strikes first",
         "With the clock on 61:14, Vane's shot from 12.7 metres went in. "
-        "London Blue had gone from 44 to goal in 10 seconds.")),
+        "It was the fastest of 2 counters.")),
     ("m01", narration(  # 8 for 8.0; "Hollis" alone mid-sentence
         "Bram Hollis keeps it level early",
         "In the 3rd minute, Cass Dunmore shot from just 8 metres, "
@@ -48,7 +48,7 @@ PASS_CASES = [
     ("m10", narration(  # number word, team name, score
         "Rafael Tovey levels it",
         "Rafael Tovey made it 1-1 in the 74th minute, two of the match's counters now ending in goals. "
-        "Theo Brannick's pass added 0.1007 and the move began at 17.0.")),
+        "Theo Brannick's pass added 0.1007 and London Red scored 12 seconds later.")),
 ]
 
 
@@ -103,6 +103,14 @@ FAIL_CASES = [
     # a number word not in the facts
     ("m07", narration("Vane scores", "The move took three seconds. Niko Vane made it 1-0."),
      {("number", "three")}),
+    # raw positions and the possession clock are hidden from the model, so they are not facts
+    ("m07", narration("Vane scores", "The move started at 44.0. Niko Vane made it 1-0."),
+     {("number", "44.0")}),
+    ("m10", narration("Tovey scores", "Rafael Tovey shot from 90.0. It was 1-1."),
+     {("number", "90.0")}),
+    # a phrase word is not a name: "midfield" is in build_up, "Midfield" mid-sentence is not a name
+    ("m07", narration("Vane scores", "London Blue won it in Midfield. Niko Vane made it 1-0."),
+     {("name", "Midfield")}),
     # numbers_used lists a number the facts don't have
     ("m07", narration("Vane scores", "Niko Vane made it 1-0. Dario Quill set it up.", ["1-0", "0.5"]),
      {("number", "0.5")}),
@@ -116,10 +124,9 @@ def test_ungrounded_narration_fails(moment_id, output, expected):
     assert {(o["type"], o["value"]) for o in result.offending} == expected
 
 
-# ------------------------------------------------------------- format
 
-def test_format_allows_at_most_two_sentences():
-    assert format_problems(narration("h", "One at 0.3 xT. Two.")) == []
-    assert format_problems(narration("h", "Only one sentence here.")) == []
-    assert format_problems(narration("h", "One. Two. Three.")) == ["explanation has 3 sentences, at most 2 allowed"]
-    assert format_problems("not a dict") == ["response is not a JSON object"]
+
+def test_possessive_ends_a_name():
+    # "London Blue's Bram Hollis" is a team and a player, not one long name
+    out = narration("Bram Hollis saves", "London Blue's Bram Hollis saved Cass Dunmore's shot.")
+    assert check(out, facts("m01")).passed

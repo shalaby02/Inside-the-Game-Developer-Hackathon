@@ -6,7 +6,8 @@ any JSON-like dict/list, every string in it is checked) and the facts the
 agent was given (any JSON-like object).
 
 What counts as allowed:
-- numbers: every number anywhere in the facts, compared by value, so "8"
+- numbers: every number anywhere in the facts, including numbers inside
+  fact strings ("scored 10 seconds later", "two counter-attacks"), compared by value, so "8"
   matches 8.0 and "0.30" matches 0.3, but "0.08" does not match 0.0758 and
   "30%" does not match 0.3. Signs are ignored, so "-0.0002" and "0.0002"
   both match -0.0002. Scores like "1-0" and times like "61:14" are read as
@@ -16,8 +17,9 @@ What counts as allowed:
   A duration ("5 minutes", "5-minute blocks") is checked as a plain number
   instead.
 - names: capitalised words are read as names. A run of them ("Cass Dunmore")
-  must be part of a name string in the facts, and a single capitalised word
-  ("Dunmore") must be a word of one. Common words that start a sentence
+  must be a run of capitalised words in a fact string ("Cass Dunmore",
+  "put London Blue 1-0 up"), and a single capitalised word ("Dunmore") must
+  be one of those words. Common words that start a sentence
   ("The", "After") are skipped.
 
 Run the tests:  python -m pytest tests/test_grounding.py
@@ -67,6 +69,7 @@ _MINUTE_PATTERNS = [
     re.compile(r"(?<![\d.])(\d+)['’](?![a-z])", re.I),                        # 61'
 ]
 _WORD = re.compile(r"[A-Za-z][A-Za-z'’\-]*")
+_CAPITAL_RUN = re.compile(r"[A-Z][\w'’-]*(?: [A-Z][\w'’-]*)*")
 _SENTENCE_END = re.compile(r"[.!?:;\"“(\[—–]\s*$")
 
 
@@ -86,7 +89,10 @@ def check(output, facts, extra_names=()) -> GroundingResult:
     """
     allowed_numbers, allowed_minutes, name_strings = _collect(facts)
     name_strings += list(extra_names)
-    names = [n.split() for n in name_strings if n.strip()]
+    # Only capitalised words in the facts count as names, so a phrase such as
+    # "won the ball back in midfield" doesn't make "Midfield" a name.
+    names = [[re.sub(r"['’]s?$", "", w) for w in run.split()]
+             for n in name_strings for run in _CAPITAL_RUN.findall(n)]
     name_words = {w.lower() for n in names for w in n}
 
     offending = []
@@ -124,6 +130,9 @@ def _collect(facts):
                 minutes.add(_dec(obj))
         elif isinstance(obj, str):
             strings.append(obj)
+            # numbers inside code-derived phrases, e.g. "scored 10 seconds later", "put London Blue 1-0 up"
+            for _, n in _numbers(obj):
+                numbers.add(abs(n))
         elif isinstance(obj, dict):
             for k, v in obj.items():
                 walk(v, str(k))
@@ -180,7 +189,9 @@ def _name_runs(text):
     run, runs = [], []
     for i, m in enumerate(words):
         word = re.sub(r"['’]s$|['’]$", "", m.group(0))  # Dunmore's -> Dunmore
-        joined = run and text[words[i - 1].end():m.start()] == " "
+        # A possessive ends a name: "London Blue's Bram Hollis" is two names.
+        joined = (run and text[words[i - 1].end():m.start()] == " "
+                  and not re.search(r"['’]s?$", words[i - 1].group(0)))
         if word[0].isupper() and (not run or joined):
             run.append((word, m.start()))
             continue

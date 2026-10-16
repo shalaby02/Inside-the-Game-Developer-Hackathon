@@ -19,6 +19,7 @@ REQUIRED_FACTS = {
     "biggest_threat_swing": {"xt_added", "zone_start_value", "zone_end_value",
                              "team_score", "opponent_score"},
 }
+WORD_FACTS = {"action_type", "score_effect", "build_up", "counter_label"}  # the only non-numeric facts
 
 
 @pytest.fixture(scope="module")
@@ -78,7 +79,8 @@ def test_facts_complete_and_numeric(moments):
         missing = REQUIRED_FACTS[m["category"]] - m["facts"].keys()
         assert not missing, f"{m['id']} is missing {missing}"
         for k, v in m["facts"].items():
-            if k == "action_type":
+            if k in WORD_FACTS:
+                assert isinstance(v, str) and v, f"{m['id']}.{k}={v!r}"
                 continue
             assert isinstance(v, (int, float)) and not isinstance(v, bool), f"{m['id']}.{k}={v!r}"
             assert math.isfinite(v), f"{m['id']}.{k} is {v}"
@@ -113,3 +115,73 @@ def test_selection_rules(moments):
         for b in moments:
             if a is not b and a["period"] == b["period"]:
                 assert abs(km.clock(a) - km.clock(b)) >= km.MIN_GAP_SECONDS, (a["id"], b["id"])
+
+
+def test_score_effect_on_goals_only(moments):
+    effects = {m["minute"]: m["facts"].get("score_effect") for m in moments if m["category"] == "goal"}
+    assert effects == {61: "put London Blue 1-0 up", 74: "levelled the match at 1-1", 89: "put London Red 2-1 ahead"}
+    assert all("score_effect" not in m["facts"] for m in moments if m["category"] != "goal")
+
+
+@pytest.mark.parametrize("after,expected", [
+    ({"london_red": 1, "london_blue": 0}, "put London Red 1-0 up"),
+    ({"london_red": 2, "london_blue": 1}, "put London Red 2-1 ahead"),
+    ({"london_red": 1, "london_blue": 1}, "levelled the match at 1-1"),
+    ({"london_red": 2, "london_blue": 0}, "extended London Red's lead to 2-0"),
+    ({"london_red": 1, "london_blue": 2}, "pulled London Red back to 1-2"),
+])
+def test_score_effect_wording(after, expected):
+    assert km.score_effect("london_red", after) == expected
+
+
+def test_counter_labels(moments):
+    labels = {m["minute"]: m["facts"].get("counter_label") for m in moments if "counter" in m["tags"]}
+    assert labels == {61: "the fastest of the match's two counter-attacks",
+                      74: "the second-fastest of the match's two counter-attacks"}
+    assert all("counter_label" not in m["facts"] for m in moments if "counter" not in m["tags"])
+
+
+def test_build_up_from_possession_events(moments):
+    by_minute = {m["minute"]: m["facts"].get("build_up") for m in moments}
+    assert by_minute[61] == ("won the ball back in midfield and scored 10 seconds later, "
+                             "after 2 passes and a carry from midfield into the attacking third")
+    assert by_minute[74] == ("won the ball back in the defensive third and scored 12 seconds later, "
+                             "after 3 passes and a carry from midfield into the attacking third")
+    assert by_minute[38] == "built through 3 passes"
+    assert by_minute[55] == "started after a London Blue foul"
+
+
+def test_build_up_duration_only_after_a_won_ball(moments):
+    for m in moments:
+        text = m["facts"].get("build_up", "")
+        assert ("second" in text) == text.startswith("won the ball back"), m["id"]
+        if text.startswith("won the ball back") and "possession_seconds" in m["facts"]:
+            # a shot moment's duration runs from the won ball to the shot, so it is the possession time
+            assert f" {m['facts']['possession_seconds']} second" in text, m["id"]
+    assert all("build_up" not in m["facts"] for m in moments if m["category"] == "momentum_shift")
+
+
+def ev(event_id, player, type_, outcome="complete", second=0, team="london_red", x=50.0, end_x=None):
+    return {"event_id": event_id, "player": player, "type": type_, "outcome": outcome, "team": team,
+            "minute": 10, "second": second, "start_x": x, "end_x": x if end_x is None else end_x}
+
+
+def test_build_up_one_two_and_unknown_start():
+    events = [ev(1, "A", "pass"), ev(2, "B", "pass"), ev(3, "A", "carry", x=50, end_x=75),
+              ev(4, "A", "shot", "goal")]
+    # no won ball and no opponent foul before it: no start, no duration
+    assert km.build_up(None, events, events[-1], "scored") == (
+        "built through 2 passes, a carry from midfield into the attacking third and a one-two")
+
+
+def test_build_up_ignores_short_carries_and_counts_seconds():
+    events = [ev(1, "A", "interception", "won", second=5, x=20), ev(2, "A", "carry", second=6, x=20, end_x=25),
+              ev(3, "A", "shot", "off_target", second=6)]
+    assert km.build_up(None, events, events[-1], "shot") == (
+        "won the ball back in the defensive third and shot 1 second later")
+
+
+def test_no_build_up_without_a_known_start_or_move():
+    events = [ev(1, "A", "pass", x=70)]
+    prev_own_foul = ev(0, "B", "foul", "free_kick", team="london_red")
+    assert km.build_up(prev_own_foul, events, events[0], "passed") is None
