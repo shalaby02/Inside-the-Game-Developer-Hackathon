@@ -7,10 +7,11 @@ settings). It is a direct Chat Completions call to the deployed Foundry model
 Service agent: the Agent Service needs Entra ID sign-in (az login) and the
 azure-ai-projects SDK, and this agent needs no tools or conversation history.
 
-Every narration is checked three ways: format (JSON shape, at most 2
+Every narration is checked four ways: format (JSON shape, at most 2
 sentences, the save headline pattern, the team named in every momentum-shift
-sentence), src/grounding.py (names, numbers, minutes) and src/style_check.py
-(the shared wording rules in src/style_rules.py). On a failure the model gets
+sentence, build_up used word for word, counter_label on counter goals),
+src/grounding.py (names, numbers, minutes), src/style_check.py (the shared
+wording rules in src/style_rules.py) and src/polish_check.py (writing slips). On a failure the model gets
 the offending items and tries again, up to MAX_RETRIES times; after that the
 moment is marked failed and its last narration is kept for inspection only.
 
@@ -21,12 +22,15 @@ import json
 import re
 
 import grounding
+import polish_check
 import style_check
 from key_moments import TEAM_NAMES
 from style_rules import PROMPT_RULES
 
 MAX_RETRIES = 2
 MAX_SENTENCES = 2
+FIRST_HALF_MINUTES = 45  # minute 45 and later in period 1 is stoppage time (docs/data-format.md)
+MIN_QUOTE_WORDS = 4      # this many words in a row from build_up means it is being used
 
 # gpt-5-mini is a reasoning model. Per Microsoft's reasoning-models page it
 # rejects temperature, top_p, presence/frequency penalties and max_tokens on
@@ -54,11 +58,11 @@ HIDDEN_FACTS = {"possession_seconds", "possession_start_x", "shot_x", "shot_y",
 
 ANGLES = """\
 Why it mattered, by category:
-- goal: what it did to the score. Use score_effect, e.g. "<scorer>'s goal <score_effect>".
+- goal: what it did to the score. Use score_effect, e.g. "<scorer>'s goal <score_effect>". For a counter goal, also say counter_label word for word, e.g. "..., <counter_label>".
 - save: what it denied: the shooter, how close and dangerous the shot was, and how the move was built.
 - big_chance_missed: the chance that went begging: how close and dangerous it was and how the key pass set it up.
 - biggest_threat_swing: how much more dangerous the ball became: the xT of the spot it moved from and to, and the xT added.
-- momentum_shift: which team took control and for how long. Name the team in every sentence, give the first and last minute as ordinals, and compare both teams' xT by name."""
+- momentum_shift: which team took control and for how long. Name the team in every sentence, give the first and last minute as ordinals (or "until <run_end>" when run_end is given instead of last_minute), and compare both teams' xT by name."""
 
 FIELD_NOTES = """\
 Field meanings (definitions only; never quote this list):
@@ -66,7 +70,7 @@ Field meanings (definitions only; never quote this list):
 - team_score, opponent_score: the score just after the moment, from team's side.
 - team_score_at_start, opponent_score_at_start (momentum_shift only): the score when the run started; goals may have come during the run, so never present it as the score during or after the run.
 - score_effect (goals): what the goal did to the score, ready to use as written.
-- build_up: how the attacking side's move reached the key action, ready to use word for word. For a save it describes the shooting side's move.
+- build_up: one complete sentence on how the attacking side's move reached the key action (for a save: the shooting side's move). If you use it, copy it word for word as one of your sentences; never rephrase, shorten or rebuild it.
 - counter_label (counter goals): which counter-attack it was, ready to use as written.
 - action_type: "pass" or "carry", the type of the key action. For a shot it is the key pass; for any other moment it is the action itself.
 - key_passer: the player who made the last pass before the shot.
@@ -75,6 +79,7 @@ Field meanings (definitions only; never quote this list):
 - key_pass_xt_added: xT added by the key pass.
 - xt_added: xT added by the action; zone_start_value, zone_end_value: xT of the spot the ball moved from and to.
 - momentum_shift: start_minute to last_minute, a run of blocks where team added more xT than opponent; end_period is the period it ended in.
+- run_end (momentum_shift ending in first-half stoppage time, given instead of last_minute): how to say when the run ended, e.g. "the end of the first half".
 - team_threat, opponent_threat: total xT each side added during the run.
 - opponent_blocks_ahead_before: how many blocks in a row opponent was on top just before the run; team_threat_before, opponent_threat_before: each side's xT over those blocks.
 - top_player_threat: xT added during the run by the first of top_threat_creators."""
@@ -142,6 +147,11 @@ def moment_input(moment: dict) -> dict:
         for key in ("team_score", "opponent_score"):
             if key in facts:
                 facts[f"{key}_at_start"] = facts.pop(key)
+        # A run that ends in first-half stoppage time (period 1, minute 45 or
+        # later) ends at "the end of the first half", not at "the 46th minute".
+        if facts.get("end_period") == 1 and facts.get("last_minute", 0) >= FIRST_HALF_MINUTES:
+            del facts["last_minute"]
+            facts["run_end"] = "the end of the first half"
     return {
         "category": moment["category"],
         "tags": moment["tags"],
@@ -183,11 +193,25 @@ def format_problems(narration, facts: dict = None) -> list:
         expected = save_headline(facts)
         if narration["headline"].strip().rstrip(".").replace("’", "'") != expected:
             problems.append(f'save headline must be exactly "{expected}"')
+    inner = (facts or {}).get("facts", {})
+    build_up = inner.get("build_up")
+    if build_up and _borrows(narration["explanation"], build_up) and build_up not in narration["explanation"]:
+        problems.append(f'use the build_up sentence word for word: "{build_up}"')
+    label = inner.get("counter_label")
+    if label and label not in narration["headline"] + " " + narration["explanation"]:
+        problems.append(f'say the counter_label word for word: "{label}"')
     if facts and facts["category"] == "momentum_shift":
         unnamed = [s for s in parts if facts["team"] not in s and facts["opponent"] not in s]
         if unnamed:
             problems.append(f'name the team in every sentence: "{unnamed[0]}"')
     return problems
+
+
+def _borrows(text: str, phrase: str) -> bool:
+    """text uses MIN_QUOTE_WORDS or more words in a row from phrase."""
+    words = re.findall(r"[\w'’-]+", phrase.lower())
+    text = " ".join(re.findall(r"[\w'’-]+", text.lower()))
+    return any(" ".join(words[i:i + MIN_QUOTE_WORDS]) in text for i in range(len(words) - MIN_QUOTE_WORDS + 1))
 
 
 def call_model(client, deployment: str, messages: list):
@@ -208,11 +232,36 @@ def call_model(client, deployment: str, messages: list):
         return None, "reply is not valid JSON", content
 
 
+def run_checks(narration, facts: dict) -> dict:
+    """Every check on one narration, no model calls: format (including the
+    build_up and counter_label rules), grounding, style and polish.
+    Returns {"passed", "format_problems", "grounding", "style", "polish"}."""
+    problems = format_problems(narration, facts)
+    usable = isinstance(narration, dict)
+    result = {
+        "format_problems": problems,
+        "grounding": grounding.check(narration, facts).to_dict() if usable else None,
+        "style": style_check.check(narration, facts).to_dict() if usable else None,
+        "polish": polish_check.check(narration).to_dict() if usable else None,
+    }
+    result["passed"] = not problems and all(result[k]["passed"] for k in ("grounding", "style", "polish"))
+    return result
+
+
+def flagged(checks: dict) -> list:
+    """Every flagged item of run_checks() as one line of text."""
+    lines = [f"format: {p}" for p in checks["format_problems"]]
+    for kind in ("grounding", "style", "polish"):
+        if checks[kind]:
+            lines += [f'{kind}: {o["type"]} "{o["value"]}": {o["reason"]}' for o in checks[kind]["offending"]]
+    return lines
+
+
 def narrate(client, deployment: str, moment: dict) -> dict:
-    """Narrate one moment, retrying on a format, grounding or style failure.
+    """Narrate one moment, retrying on a format, grounding, style or polish failure.
 
     Returns {"id", "status": "ok" | "failed", "narration", "grounding",
-    "style", "retries", "attempts": [...]}. A failed moment's narration must
+    "style", "polish", "retries", "attempts": [...]}. A failed moment's narration must
     not be used.
     """
     facts = moment_input(moment)
@@ -223,19 +272,16 @@ def narrate(client, deployment: str, moment: dict) -> dict:
     attempts = []
     for attempt in range(1 + MAX_RETRIES):
         narration, problem, raw = call_model(client, deployment, messages)
-        problems = [problem] if problem else format_problems(narration, facts)
-        ground = grounding.check(narration, facts).to_dict() if narration is not None else None
-        style = style_check.check(narration, facts).to_dict() if narration is not None else None
-        attempts.append({"attempt": attempt + 1, "narration": narration, "format_problems": problems,
-                         "grounding": ground, "style": style})
-        if not problems and ground["passed"] and style["passed"]:
+        checks = run_checks(narration, facts)
+        if problem:
+            checks["format_problems"], checks["passed"] = [problem], False
+        attempts.append({"attempt": attempt + 1, "narration": narration,
+                         **{k: checks[k] for k in ("format_problems", "grounding", "style", "polish")}})
+        if checks["passed"]:
             break
 
         # Tell the model exactly what failed and ask again.
-        feedback = list(problems)
-        for result in (ground, style):
-            if result:
-                feedback += [f'{o["type"]} "{o["value"]}": {o["reason"]}' for o in result["offending"]]
+        feedback = flagged(checks)
         if raw is not None:
             messages.append({"role": "assistant", "content": raw})
         messages.append({"role": "user", "content": (
@@ -244,7 +290,6 @@ def narrate(client, deployment: str, moment: dict) -> dict:
             "in the moment JSON, and leave out anything you cannot support from it.")})
 
     last = attempts[-1]
-    ok = not last["format_problems"] and last["grounding"]["passed"] and last["style"]["passed"]
-    return {"id": moment["id"], "status": "ok" if ok else "failed", "narration": last["narration"],
-            "grounding": last["grounding"], "style": last["style"], "retries": len(attempts) - 1,
-            "attempts": attempts}
+    return {"id": moment["id"], "status": "ok" if checks["passed"] else "failed", "narration": last["narration"],
+            "grounding": last["grounding"], "style": last["style"], "polish": last["polish"],
+            "retries": len(attempts) - 1, "attempts": attempts}

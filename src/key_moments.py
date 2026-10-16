@@ -36,9 +36,10 @@ docs/data-format.md for every rule):
                 last pass before it). Momentum shifts have none.
 - score_effect  goals only, e.g. "put London Blue 1-0 up".
 - build_up      how the possession got to the key action, from its events,
-                e.g. "won the ball back in midfield and scored 10 seconds
-                later, after 2 passes and a carry from midfield into the
-                attacking third". A duration only appears when the
+                as one complete sentence naming the team, e.g. "London Blue
+                won the ball back in midfield and scored 10 seconds later,
+                after 2 passes and a carry from midfield into the attacking
+                third." A duration only appears when the
                 possession starts with a won tackle or interception, the
                 only start with a recorded time.
 - counter_label counter goals only, e.g. "the fastest of the match's two
@@ -149,10 +150,13 @@ def one_two(own):
 
 
 def build_up(prev, possession, action, verb):
-    """How the possession got to action, in plain words, or None.
+    """How the possession got to action, as one complete sentence that names
+    the team, or None. E.g. "London Blue won the ball back in midfield and
+    scored 10 seconds later, after 2 passes and a carry from midfield into
+    the attacking third."
 
     prev: the event just before the possession. verb: what action did
-    ("scored", "shot", "passed", "carried"). Only what the events record:
+    ("scored", "shot", "played this pass", "made this carry"). Only what the events record:
     how the possession started (a won tackle or interception, or straight
     after an opponent foul), completed passes, forward carries of
     NOTABLE_CARRY or more, and a one-two. A duration is only given from a
@@ -165,7 +169,9 @@ def build_up(prev, possession, action, verb):
     parts = []
     passes = sum(p["type"] == "pass" and p["outcome"] == "complete" for p in before)
     if passes:
-        parts.append(f"{passes} pass" + ("es" if passes > 1 else ""))
+        # "earlier" when the key action is itself a pass or carry: "played this pass ... after 1 earlier pass"
+        earlier = " earlier" if action["type"] in ("pass", "carry") else ""
+        parts.append(f"{passes}{earlier} pass" + ("es" if passes > 1 else ""))
     carries = [p for p in before if p["type"] == "carry" and p["outcome"] == "complete"
                and p["end_x"] - p["start_x"] >= NOTABLE_CARRY]
     if len(carries) == 1:
@@ -177,15 +183,16 @@ def build_up(prev, possession, action, verb):
         parts.append("a one-two")
     middle = ", ".join(parts[:-1]) + " and " + parts[-1] if len(parts) > 1 else "".join(parts)
 
+    team = TEAM_NAMES[action["team"]]
     if first["type"] in ("tackle", "interception") and first["outcome"] == "won" and first is not action:
         seconds = clock(action) - clock(first)
-        text = (f"won the ball back in {zone(first['start_x'])} and {verb} "
+        text = (f"{team} won the ball back in {zone(first['start_x'])} and {verb} "
                 f"{seconds} second{'s' if seconds != 1 else ''} later")
-        return text + (f", after {middle}" if middle else "")
+        return text + (f", after {middle}" if middle else "") + "."
     if prev and prev["type"] == "foul" and prev["team"] != action["team"]:
-        text = f"started after a {TEAM_NAMES[prev['team']]} foul"
-        return text + (f" and was built through {middle}" if middle else "")
-    return f"built through {middle}" if middle else None
+        text = f"{team}'s move started after a {TEAM_NAMES[prev['team']]} foul"
+        return text + (f" and was built through {middle}" if middle else "") + "."
+    return f"{team} built the move through {middle}." if middle else None
 
 
 def counter_label(rank, count):
@@ -266,7 +273,7 @@ def candidates(events):
             continue
         es = possessions[e["possession_id"]]
         move = build_up(by_id.get(es[0]["event_id"] - 1), es, e,
-                        "passed" if e["type"] == "pass" else "carried")
+                        "played this pass" if e["type"] == "pass" else "made this carry")
         nxt = events[i + 1] if i + 1 < len(events) else None
         receiver = nxt["player"] if (e["type"] == "pass" and nxt and nxt["team"] == e["team"]
                                      and nxt["player"] != e["player"]) else None

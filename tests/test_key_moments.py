@@ -143,19 +143,31 @@ def test_counter_labels(moments):
 
 def test_build_up_from_possession_events(moments):
     by_minute = {m["minute"]: m["facts"].get("build_up") for m in moments}
-    assert by_minute[61] == ("won the ball back in midfield and scored 10 seconds later, "
-                             "after 2 passes and a carry from midfield into the attacking third")
-    assert by_minute[74] == ("won the ball back in the defensive third and scored 12 seconds later, "
-                             "after 3 passes and a carry from midfield into the attacking third")
-    assert by_minute[38] == "built through 3 passes"
-    assert by_minute[55] == "started after a London Blue foul"
+    assert by_minute[61] == ("London Blue won the ball back in midfield and scored 10 seconds later, "
+                             "after 2 passes and a carry from midfield into the attacking third.")
+    assert by_minute[74] == ("London Red won the ball back in the defensive third and scored 12 seconds later, "
+                             "after 3 passes and a carry from midfield into the attacking third.")
+    assert by_minute[38] == "London Red built the move through 3 passes."
+    assert by_minute[55] == "London Red's move started after a London Blue foul."
+    # a threat swing: the key action is the pass itself, so the passes before it are "earlier"
+    assert by_minute[26] == ("London Red won the ball back in midfield and played this pass 12 seconds later, "
+                             "after 1 earlier pass.")
+
+
+def test_build_up_is_a_sentence_naming_the_team(moments):
+    for m in moments:
+        text = m["facts"].get("build_up")
+        if text:
+            attacking = km.other(m["team"]) if m["category"] == "save" else m["team"]
+            assert text.startswith(km.TEAM_NAMES[attacking]), m["id"]
+            assert text.endswith("."), m["id"]
 
 
 def test_build_up_duration_only_after_a_won_ball(moments):
     for m in moments:
         text = m["facts"].get("build_up", "")
-        assert ("second" in text) == text.startswith("won the ball back"), m["id"]
-        if text.startswith("won the ball back") and "possession_seconds" in m["facts"]:
+        assert ("second" in text) == ("won the ball back" in text), m["id"]
+        if "won the ball back" in text and "possession_seconds" in m["facts"]:
             # a shot moment's duration runs from the won ball to the shot, so it is the possession time
             assert f" {m['facts']['possession_seconds']} second" in text, m["id"]
     assert all("build_up" not in m["facts"] for m in moments if m["category"] == "momentum_shift")
@@ -171,14 +183,14 @@ def test_build_up_one_two_and_unknown_start():
               ev(4, "A", "shot", "goal")]
     # no won ball and no opponent foul before it: no start, no duration
     assert km.build_up(None, events, events[-1], "scored") == (
-        "built through 2 passes, a carry from midfield into the attacking third and a one-two")
+        "London Red built the move through 2 passes, a carry from midfield into the attacking third and a one-two.")
 
 
 def test_build_up_ignores_short_carries_and_counts_seconds():
     events = [ev(1, "A", "interception", "won", second=5, x=20), ev(2, "A", "carry", second=6, x=20, end_x=25),
               ev(3, "A", "shot", "off_target", second=6)]
     assert km.build_up(None, events, events[-1], "shot") == (
-        "won the ball back in the defensive third and shot 1 second later")
+        "London Red won the ball back in the defensive third and shot 1 second later.")
 
 
 def test_no_build_up_without_a_known_start_or_move():

@@ -23,7 +23,7 @@
         "distance_to_goal_m": 8.0,
         "possession_seconds": 7,
         "possession_start_x": 94.3,
-        "build_up": "won the ball back in the attacking third and shot 7 seconds later",
+        "build_up": "London Red won the ball back in the attacking third and shot 7 seconds later.",
         "team_score": 0,
         "opponent_score": 0
       }
@@ -78,7 +78,7 @@
         "end_x": 79.6,
         "end_y": 55.9,
         "action_type": "pass",
-        "build_up": "won the ball back in midfield and passed 12 seconds later, after 1 pass",
+        "build_up": "London Red won the ball back in midfield and played this pass 12 seconds later, after 1 earlier pass.",
         "team_score": 0,
         "opponent_score": 0
       }
@@ -104,7 +104,7 @@
         "possession_start_x": 62.0,
         "action_type": "pass",
         "key_pass_xt_added": 0.2906,
-        "build_up": "built through 3 passes",
+        "build_up": "London Red built the move through 3 passes.",
         "team_score": 0,
         "opponent_score": 0
       }
@@ -130,7 +130,7 @@
         "end_x": 79.5,
         "end_y": 55.8,
         "action_type": "pass",
-        "build_up": "won the ball back in midfield and passed 1 second later",
+        "build_up": "London Red won the ball back in midfield and played this pass 1 second later.",
         "team_score": 0,
         "opponent_score": 0
       }
@@ -156,7 +156,7 @@
         "end_x": 81.7,
         "end_y": 48.7,
         "action_type": "pass",
-        "build_up": "started after a London Blue foul",
+        "build_up": "London Red's move started after a London Blue foul.",
         "team_score": 0,
         "opponent_score": 0
       }
@@ -184,7 +184,7 @@
         "possession_start_x": 44.0,
         "action_type": "pass",
         "key_pass_xt_added": 0.1392,
-        "build_up": "won the ball back in midfield and scored 10 seconds later, after 2 passes and a carry from midfield into the attacking third",
+        "build_up": "London Blue won the ball back in midfield and scored 10 seconds later, after 2 passes and a carry from midfield into the attacking third.",
         "counter_rank": 1,
         "counters_in_match": 2,
         "counter_label": "the fastest of the match's two counter-attacks",
@@ -215,7 +215,7 @@
         "possession_start_x": 60.0,
         "action_type": "pass",
         "key_pass_xt_added": 0.1415,
-        "build_up": "built through 3 passes",
+        "build_up": "London Blue built the move through 3 passes.",
         "team_score": 0,
         "opponent_score": 1
       }
@@ -272,7 +272,7 @@
         "possession_start_x": 17.0,
         "action_type": "pass",
         "key_pass_xt_added": 0.1007,
-        "build_up": "won the ball back in the defensive third and scored 12 seconds later, after 3 passes and a carry from midfield into the attacking third",
+        "build_up": "London Red won the ball back in the defensive third and scored 12 seconds later, after 3 passes and a carry from midfield into the attacking third.",
         "counter_rank": 2,
         "counters_in_match": 2,
         "counter_label": "the second-fastest of the match's two counter-attacks",
@@ -302,7 +302,7 @@
         "possession_start_x": 64.0,
         "action_type": "pass",
         "key_pass_xt_added": 0.2712,
-        "build_up": "built through 2 passes and a carry in the attacking third",
+        "build_up": "London Red built the move through 2 passes and a carry in the attacking third.",
         "score_effect": "put London Red 2-1 ahead",
         "team_score": 2,
         "opponent_score": 1
