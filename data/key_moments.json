@@ -76,6 +76,7 @@
         "start_y": 91.6,
         "end_x": 79.6,
         "end_y": 55.9,
+        "action_type": "pass",
         "team_score": 0,
         "opponent_score": 0
       }
@@ -99,6 +100,7 @@
         "distance_to_goal_m": 6.4,
         "possession_seconds": 13,
         "possession_start_x": 62.0,
+        "action_type": "pass",
         "key_pass_xt_added": 0.2906,
         "team_score": 0,
         "opponent_score": 0
@@ -124,6 +126,7 @@
         "start_y": 55.0,
         "end_x": 79.5,
         "end_y": 55.8,
+        "action_type": "pass",
         "team_score": 0,
         "opponent_score": 0
       }
@@ -148,6 +151,7 @@
         "start_y": 8.5,
         "end_x": 81.7,
         "end_y": 48.7,
+        "action_type": "pass",
         "team_score": 0,
         "opponent_score": 0
       }
@@ -173,6 +177,7 @@
         "distance_to_goal_m": 12.7,
         "possession_seconds": 10,
         "possession_start_x": 44.0,
+        "action_type": "pass",
         "key_pass_xt_added": 0.1392,
         "counter_rank": 1,
         "counters_in_match": 2,
@@ -200,6 +205,7 @@
         "distance_to_goal_m": 10.0,
         "possession_seconds": 13,
         "possession_start_x": 60.0,
+        "action_type": "pass",
         "key_pass_xt_added": 0.1415,
         "team_score": 0,
         "opponent_score": 1
@@ -255,6 +261,7 @@
         "distance_to_goal_m": 10.7,
         "possession_seconds": 12,
         "possession_start_x": 17.0,
+        "action_type": "pass",
         "key_pass_xt_added": 0.1007,
         "counter_rank": 2,
         "counters_in_match": 2,
@@ -281,6 +288,7 @@
         "distance_to_goal_m": 6.4,
         "possession_seconds": 10,
         "possession_start_x": 64.0,
+        "action_type": "pass",
         "key_pass_xt_added": 0.2712,
         "team_score": 2,
         "opponent_score": 1

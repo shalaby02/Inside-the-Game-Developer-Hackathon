@@ -118,7 +118,8 @@ def test_ungrounded_narration_fails(moment_id, output, expected):
 
 # ------------------------------------------------------------- format
 
-def test_format_needs_two_or_three_sentences():
-    assert format_problems(narration("h", "One. Two at 0.3 xT. Three.")) == []
-    assert format_problems(narration("h", "Only one sentence here.")) == ["explanation has 1 sentences, needs 2 or 3"]
+def test_format_allows_at_most_two_sentences():
+    assert format_problems(narration("h", "One at 0.3 xT. Two.")) == []
+    assert format_problems(narration("h", "Only one sentence here.")) == []
+    assert format_problems(narration("h", "One. Two. Three.")) == ["explanation has 3 sentences, at most 2 allowed"]
     assert format_problems("not a dict") == ["response is not a JSON object"]

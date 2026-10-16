@@ -142,7 +142,7 @@ Example: Quill's assist at 61' goes from `c8r6` (0.021) to `c10r4` (0.161), so `
   "moments": [
     { "id": "m10", "category": "goal", "tags": ["counter"], "period": 2, "minute": 74, "second": 22,
       "team": "london_red", "players": ["Rafael Tovey", "Theo Brannick"],
-      "facts": { "possession_seconds": 12, "possession_start_x": 17.0, "counter_rank": 2, "team_score": 1, "opponent_score": 1, "...": "..." } }
+      "facts": { "action_type": "pass", "possession_seconds": 12, "possession_start_x": 17.0, "counter_rank": 2, "team_score": 1, "opponent_score": 1, "...": "..." } }
   ]
 }
 ```
@@ -155,7 +155,8 @@ Example: Quill's assist at 61' goes from `c8r6` (0.021) to `c10r4` (0.161), so `
 | `period`, `minute`, `second` | When it happened. A momentum shift is timed at the start of its first block. |
 | `team` | The team the moment belongs to. For a `save`, that's the goalkeeper's team. |
 | `players` | Names, most important first: scorer then assist, goalkeeper then shooter, passer then receiver, or a momentum shift's top 3 threat creators. |
-| `facts` | Plain numbers only, e.g. `xt_added`, `shot_zone_value`, `possession_seconds`. `team_score` and `opponent_score` are the score just after the moment. |
+| `facts` | Plain numbers, e.g. `xt_added`, `shot_zone_value`, `possession_seconds`, plus one word: `action_type`. `team_score` and `opponent_score` are the score just after the moment (for a momentum shift: when its first block starts). |
+| `facts.action_type` | `pass` or `carry`: the type of the moment's key action. For a `biggest_threat_swing` that is the swing itself; for a shot moment it is the key pass (the last pass before the shot, so always `pass`, and present only when `key_pass_xt_added` is). Momentum shifts have no key action and no `action_type`. |
 
 | Category | Rule |
 |---|---|

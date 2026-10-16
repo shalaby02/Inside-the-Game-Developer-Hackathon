@@ -78,8 +78,27 @@ def test_facts_complete_and_numeric(moments):
         missing = REQUIRED_FACTS[m["category"]] - m["facts"].keys()
         assert not missing, f"{m['id']} is missing {missing}"
         for k, v in m["facts"].items():
+            if k == "action_type":
+                continue
             assert isinstance(v, (int, float)) and not isinstance(v, bool), f"{m['id']}.{k}={v!r}"
             assert math.isfinite(v), f"{m['id']}.{k} is {v}"
+
+
+def test_action_type_on_every_key_action(moments):
+    events = km.load(km.DATA_DIR / "match_xt.csv")
+    for m in moments:
+        has_key_action = m["category"] == "biggest_threat_swing" or "key_pass_xt_added" in m["facts"]
+        assert ("action_type" in m["facts"]) == has_key_action, m["id"]
+        if not has_key_action:
+            continue
+        assert m["facts"]["action_type"] in ("pass", "carry"), m["id"]
+        if m["category"] == "biggest_threat_swing":
+            # the swing's own event: same team, time and player
+            e = next(e for e in events if (e["period"], e["minute"], e["second"], e["team"], e["player"])
+                     == (m["period"], m["minute"], m["second"], m["team"], m["players"][0]))
+            assert m["facts"]["action_type"] == e["type"], m["id"]
+        else:
+            assert m["facts"]["action_type"] == "pass", m["id"]  # a key pass is always a pass
 
 
 def test_selection_rules(moments):

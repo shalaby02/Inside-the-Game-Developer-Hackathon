@@ -29,7 +29,9 @@ Tags (a list, can be empty):
                      (start_x < 50), ends in a shot and takes
                      MAX_COUNTER_SECONDS or less.
 
-Facts are rounded numbers. team_score and opponent_score are the score just
+Facts are rounded numbers, plus action_type ("pass" or "carry") for every
+moment with a key action: a threat swing's own pass or carry, or a shot's
+key pass (the last pass before it). Momentum shifts have none. team_score and opponent_score are the score just
 after the moment (for a momentum shift: at the start of its first block).
 
 Run:  python src/key_moments.py
@@ -141,6 +143,7 @@ def candidates(events):
             "possession_start_x": es[0]["start_x"],
         }
         if key_pass:
+            facts["action_type"] = key_pass["type"]
             facts["key_pass_xt_added"] = key_pass["xt_added"]
         players = [e["player"]] + ([key_pass["player"]] if key_pass and key_pass["player"] != e["player"] else [])
 
@@ -174,6 +177,7 @@ def candidates(events):
             "zone_end_value": value(e["end_x"], e["end_y"]),
             "start_x": e["start_x"], "start_y": e["start_y"],
             "end_x": e["end_x"], "end_y": e["end_y"],
+            "action_type": e["type"],
         }, score[e["event_id"]], e["xt_added"], tags(e)))
     return out
 

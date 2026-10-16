@@ -22,6 +22,7 @@ from openai import OpenAI, OpenAIError
 
 from hello_foundry import openai_base_url
 from narrator import INSTRUCTIONS, MODEL_PARAMS, OUTPUT_SCHEMA, moment_input, narrate
+from style_check import BLOCKED, MAX_NUMBERS
 
 ROOT = Path(__file__).resolve().parent.parent
 MOMENTS_PATH = ROOT / "data" / "key_moments.json"
@@ -29,8 +30,9 @@ OUT_PATH = ROOT / "data" / "narrations.json"
 
 
 def input_hash(moment: dict) -> str:
-    """Changes when the moment, the instructions or the model settings change."""
-    blob = json.dumps([moment_input(moment), INSTRUCTIONS, MODEL_PARAMS, OUTPUT_SCHEMA], sort_keys=True)
+    """Changes when the moment, the instructions, the model settings or the style rules change."""
+    blob = json.dumps([moment_input(moment), INSTRUCTIONS, MODEL_PARAMS, OUTPUT_SCHEMA, BLOCKED, MAX_NUMBERS],
+                      sort_keys=True)
     return hashlib.sha256(blob.encode()).hexdigest()[:16]
 
 
@@ -68,12 +70,12 @@ def main() -> None:
         try:
             result = narrate(client, deployment, moment)
         except OpenAIError as e:  # the message never includes the key
-            result = {"id": moment["id"], "status": "failed", "narration": None,
-                      "grounding": None, "attempts": [], "error": f"{type(e).__name__}: {e}"}
+            result = {"id": moment["id"], "status": "failed", "narration": None, "grounding": None,
+                      "style": None, "retries": 0, "attempts": [], "error": f"{type(e).__name__}: {e}"}
         result["input_hash"] = h
         results.append(result)
         save(results + [cache[m["id"]] for m in moments[len(results):] if m["id"] in cache], deployment)
-        print(f"{moment['id']}: {result['status']} after {len(result['attempts'])} attempt(s)")
+        print(f"{moment['id']}: {result['status']}, {result['retries']} retr{'y' if result['retries'] == 1 else 'ies'}")
 
     save(results, deployment)
     failed = [r["id"] for r in results if r["status"] != "ok"]

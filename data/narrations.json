@@ -5,256 +5,247 @@
       "id": "m01",
       "status": "ok",
       "narration": {
-        "headline": "Bram Hollis saves from Cass Dunmore in the 3rd minute to keep it 0-0",
-        "explanation": "Bram Hollis turned away Cass Dunmore's shot in the 3rd minute, a close-range effort from 8.0 metres that carried a zone xT of 0.3. The attempt came after a 7 seconds move and left the score at 0-0, preventing a clear early chance for London Red.",
+        "headline": "Bram Hollis saved from 8.0 metres in the 3rd minute",
+        "explanation": "In the 3rd minute Cass Dunmore's shot was saved by Bram Hollis from 8.0 metres after a 7-second move, with an xT of 0.3.",
         "numbers_used": [
+          "8.0",
           "3rd",
-          "0-0",
-          "8.0 metres",
-          "0.3",
-          "7 seconds"
+          "7",
+          "0.3"
         ]
       },
       "grounding": {
         "passed": true,
         "offending": []
       },
+      "style": {
+        "passed": true,
+        "offending": []
+      },
+      "retries": 1,
       "attempts": [
         {
           "attempt": 1,
           "narration": {
-            "headline": "Bram Hollis saves from Cass Dunmore in the 3rd minute to keep it 0-0",
-            "explanation": "Bram Hollis turned away Cass Dunmore's shot in the 3rd minute, a close-range effort from 8.0 metres that carried a zone xT of 0.3. The attempt came after a 7 seconds move and left the score at 0-0, preventing a clear early chance for London Red.",
+            "headline": "Bram Hollis saved from 8.0 metres in the 3rd minute",
+            "explanation": "In the 3rd minute Cass Dunmore's shot from 94.3, 57.7 and 8.0 metres was saved by Bram Hollis. It came after a 7-second move and carried an xT of 0.3.",
             "numbers_used": [
+              "8.0",
               "3rd",
-              "0-0",
-              "8.0 metres",
-              "0.3",
-              "7 seconds"
+              "94.3",
+              "57.7",
+              "7",
+              "0.3"
             ]
           },
           "format_problems": [],
           "grounding": {
             "passed": true,
             "offending": []
+          },
+          "style": {
+            "passed": false,
+            "offending": [
+              {
+                "type": "style",
+                "value": "carried",
+                "reason": "the action was not a carry (see action_type)"
+              },
+              {
+                "type": "style",
+                "value": "explanation: 6 numbers",
+                "reason": "too many numbers (at most 5)"
+              }
+            ]
+          }
+        },
+        {
+          "attempt": 2,
+          "narration": {
+            "headline": "Bram Hollis saved from 8.0 metres in the 3rd minute",
+            "explanation": "In the 3rd minute Cass Dunmore's shot was saved by Bram Hollis from 8.0 metres after a 7-second move, with an xT of 0.3.",
+            "numbers_used": [
+              "8.0",
+              "3rd",
+              "7",
+              "0.3"
+            ]
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
           }
         }
       ],
-      "input_hash": "d0f72d4b266fafcf"
+      "input_hash": "a9c07edd8927786e"
     },
     {
       "id": "m02",
       "status": "ok",
       "narration": {
-        "headline": "London Red run starts in the 20th minute",
-        "explanation": "The sequence began in the 20th minute and stretched across 6 blocks of 5 minutes to the end of period 1, with the score 0-0 at its start. It generated 1.0557 xT while London Blue managed 0.0126 xT, with Luca Merriden contributing 0.5013 xT — a decisive burst after London Blue had been ahead over 3 blocks when the xT was 0.0435 xT for London Red versus 0.1344 xT for London Blue.",
+        "headline": "London Red ran a 6-block surge from the 20th minute",
+        "explanation": "The run produced 1.0557 xT with Luca Merriden adding 0.5013.",
         "numbers_used": [
-          "20th minute",
-          "6 blocks",
-          "5 minutes",
-          "period 1",
-          "0-0",
-          "1.0557 xT",
-          "0.0126 xT",
-          "0.5013 xT",
-          "3 blocks",
-          "0.0435 xT",
-          "0.1344 xT"
+          "6",
+          "the 20th minute",
+          "1.0557",
+          "0.5013"
         ]
       },
       "grounding": {
         "passed": true,
         "offending": []
       },
+      "style": {
+        "passed": true,
+        "offending": []
+      },
+      "retries": 1,
       "attempts": [
         {
           "attempt": 1,
           "narration": {
-            "headline": "London Red run starts in the 20th minute",
-            "explanation": "The sequence began in the 20th minute and stretched across 6 blocks of 5 minutes to the end of period 1, with the score 0-0 at its start. It generated 1.0557 xT while London Blue managed 0.0126 xT, with Luca Merriden contributing 0.5013 xT — a decisive burst after London Blue had been ahead over 3 blocks when the xT was 0.0435 xT for London Red versus 0.1344 xT for London Blue.",
+            "headline": "London Red ran a 6-block xT surge from the 20th to the 46th minute",
+            "explanation": "The sequence generated 1.0557 xT across 6 blocks, flipping control through the 20th to the 46th minute. Luca Merriden was pivotal, contributing 0.5013 xT as London Blue managed only 0.0126 in response.",
             "numbers_used": [
-              "20th minute",
-              "6 blocks",
-              "5 minutes",
-              "period 1",
-              "0-0",
-              "1.0557 xT",
-              "0.0126 xT",
-              "0.5013 xT",
-              "3 blocks",
-              "0.0435 xT",
-              "0.1344 xT"
+              "6",
+              "20th",
+              "46th",
+              "1.0557",
+              "0.5013",
+              "0.0126"
             ]
           },
           "format_problems": [],
           "grounding": {
             "passed": true,
             "offending": []
+          },
+          "style": {
+            "passed": false,
+            "offending": [
+              {
+                "type": "style",
+                "value": "explanation: 6 numbers",
+                "reason": "too many numbers (at most 5)"
+              }
+            ]
+          }
+        },
+        {
+          "attempt": 2,
+          "narration": {
+            "headline": "London Red ran a 6-block surge from the 20th minute",
+            "explanation": "The run produced 1.0557 xT with Luca Merriden adding 0.5013.",
+            "numbers_used": [
+              "6",
+              "the 20th minute",
+              "1.0557",
+              "0.5013"
+            ]
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
           }
         }
       ],
-      "input_hash": "a4be27a49fe208f4"
+      "input_hash": "8233e5cf303f650f"
     },
     {
       "id": "m03",
       "status": "ok",
       "narration": {
-        "headline": "Femi Oakhurst's move sets up big xT swing for Cass Dunmore in the 26th minute",
-        "explanation": "In the 26th minute Femi Oakhurst to Cass Dunmore produced a major threat switch that left the score 0-0. The action added xT 0.0758, moving from zone xT 0.0043 to 0.0801 and shifting the ball from x 52.0 to x 79.6 to put Cass Dunmore in a far more dangerous attacking position.",
+        "headline": "Femi Oakhurst passed to Cass Dunmore in the 26th minute",
+        "explanation": "The pass raised xT from 0.0043 to 0.0801 and added 0.0758 of threat, shifting play into a far more dangerous area in the 26th minute.",
         "numbers_used": [
-          "26th minute",
-          "0-0",
-          "0.0758",
+          "the 26th minute",
           "0.0043",
           "0.0801",
-          "52.0",
-          "79.6"
+          "0.0758"
         ]
       },
       "grounding": {
         "passed": true,
         "offending": []
       },
+      "style": {
+        "passed": true,
+        "offending": []
+      },
+      "retries": 0,
       "attempts": [
         {
           "attempt": 1,
           "narration": {
-            "headline": "Femi Oakhurst's move sets up big xT swing for Cass Dunmore in the 26th minute",
-            "explanation": "In the 26th minute Femi Oakhurst to Cass Dunmore produced a major threat switch that left the score 0-0. The action added xT 0.0758, moving from zone xT 0.0043 to 0.0801 and shifting the ball from x 52.0 to x 79.6 to put Cass Dunmore in a far more dangerous attacking position.",
+            "headline": "Femi Oakhurst passed to Cass Dunmore in the 26th minute",
+            "explanation": "The pass raised xT from 0.0043 to 0.0801 and added 0.0758 of threat, shifting play into a far more dangerous area in the 26th minute.",
             "numbers_used": [
-              "26th minute",
-              "0-0",
-              "0.0758",
+              "the 26th minute",
               "0.0043",
               "0.0801",
-              "52.0",
-              "79.6"
+              "0.0758"
             ]
           },
           "format_problems": [],
           "grounding": {
             "passed": true,
             "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
           }
         }
       ],
-      "input_hash": "465898c76af7c56d"
+      "input_hash": "8d344ef6e9ca1b19"
     },
     {
       "id": "m04",
       "status": "ok",
       "narration": {
-        "headline": "Cass Dunmore misses from 6.4 metres",
-        "explanation": "In the 38th minute, Cass Dunmore missed a shot from 6.4 metres that left the score at 0-0. The sequence had lasted 13 seconds and arrived after a Luca Merriden pass that added 0.2906 xT from a zone worth 0.3 xT.",
+        "headline": "Cass Dunmore missed from 6.4 metres",
+        "explanation": "In the 38th minute a 13-second move ended with Luca Merriden's pass adding xT 0.2906 and Cass Dunmore missed from 6.4 metres.",
         "numbers_used": [
-          "6.4 metres",
-          "the 38th minute",
-          "0-0",
-          "13 seconds",
-          "0.2906 xT",
-          "0.3 xT"
+          "6.4",
+          "38th minute",
+          "13-second",
+          "0.2906"
         ]
       },
       "grounding": {
         "passed": true,
         "offending": []
       },
+      "style": {
+        "passed": true,
+        "offending": []
+      },
+      "retries": 1,
       "attempts": [
         {
           "attempt": 1,
           "narration": {
             "headline": "Cass Dunmore misses from 6.4 metres",
-            "explanation": "In the 38th minute, Cass Dunmore missed a shot from 6.4 metres that left the score at 0-0. The sequence had lasted 13 seconds and arrived after a Luca Merriden pass that added 0.2906 xT from a zone worth 0.3 xT.",
+            "explanation": "A 13-second move from 62.0 to 94.0 ended with Luca Merriden passing a ball that added xT 0.2906, leading to a shot from 6.4 metres that was missed in the 38th minute with the score 0-0.",
             "numbers_used": [
-              "6.4 metres",
-              "the 38th minute",
-              "0-0",
-              "13 seconds",
-              "0.2906 xT",
-              "0.3 xT"
-            ]
-          },
-          "format_problems": [],
-          "grounding": {
-            "passed": true,
-            "offending": []
-          }
-        }
-      ],
-      "input_hash": "e5fa02d343c0ecf8"
-    },
-    {
-      "id": "m05",
-      "status": "ok",
-      "narration": {
-        "headline": "Idris Stanbury swings play into a higher-threat area",
-        "explanation": "In the 40th minute Stanbury’s pass took London Red from a zone xT of 0.0046 to 0.0801, adding 0.0755 xT and moving the ball into a significantly more dangerous area. That sequence came with the score at 0-0 and left London Red probing a clear attacking opportunity in the 40th minute.",
-        "numbers_used": [
-          "0.0046",
-          "0.0801",
-          "0.0755",
-          "0-0",
-          "40th"
-        ]
-      },
-      "grounding": {
-        "passed": true,
-        "offending": []
-      },
-      "attempts": [
-        {
-          "attempt": 1,
-          "narration": {
-            "headline": "Idris Stanbury swings play into a higher-threat area",
-            "explanation": "In the 40th minute Stanbury’s pass took London Red from a zone xT of 0.0046 to 0.0801, adding 0.0755 xT and moving the ball into a significantly more dangerous area. That sequence came with the score at 0-0 and left London Red probing a clear attacking opportunity in the 40th minute.",
-            "numbers_used": [
-              "0.0046",
-              "0.0801",
-              "0.0755",
-              "0-0",
-              "40th"
-            ]
-          },
-          "format_problems": [],
-          "grounding": {
-            "passed": true,
-            "offending": []
-          }
-        }
-      ],
-      "input_hash": "a816ffadc77541fc"
-    },
-    {
-      "id": "m06",
-      "status": "ok",
-      "narration": {
-        "headline": "Theo Brannick's carry set up Cass Dunmore in the 55th minute",
-        "explanation": "In the 55th minute the move lifted London Red's threat from 0.0076 xT to 0.0801 xT and added 0.0725 xT, leaving the score 0-0. It reached Cass Dunmore in a much more dangerous zone and gave London Red a clear chance to test London Blue immediately afterwards.",
-        "numbers_used": [
-          "55th",
-          "55th",
-          "0.0076",
-          "0.0801",
-          "0.0725",
-          "0-0"
-        ]
-      },
-      "grounding": {
-        "passed": true,
-        "offending": []
-      },
-      "attempts": [
-        {
-          "attempt": 1,
-          "narration": {
-            "headline": "Theo Brannick's carry set up Cass Dunmore in the 55th minute",
-            "explanation": "In the 55th minute the move lifted London Red's threat from 0.0076 xT to 0.0801 xT and added 0.0725 xT, leaving the score 0-0. It reached Cass Dunmore in a much more dangerous zone and gave London Red a clear chance to test London Blue immediately afterwards.",
-            "numbers_used": [
-              "55th",
-              "55th",
-              "0.0076",
-              "0.0801",
-              "0.0725",
+              "6.4",
+              "13-second",
+              "62.0",
+              "94.0",
+              "0.2906",
+              "6.4",
+              "38th minute",
               "0-0"
             ]
           },
@@ -262,235 +253,576 @@
           "grounding": {
             "passed": true,
             "offending": []
+          },
+          "style": {
+            "passed": false,
+            "offending": [
+              {
+                "type": "style",
+                "value": "explanation: 7 numbers",
+                "reason": "too many numbers (at most 5)"
+              }
+            ]
+          }
+        },
+        {
+          "attempt": 2,
+          "narration": {
+            "headline": "Cass Dunmore missed from 6.4 metres",
+            "explanation": "In the 38th minute a 13-second move ended with Luca Merriden's pass adding xT 0.2906 and Cass Dunmore missed from 6.4 metres.",
+            "numbers_used": [
+              "6.4",
+              "38th minute",
+              "13-second",
+              "0.2906"
+            ]
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
           }
         }
       ],
-      "input_hash": "13240b0b95304779"
+      "input_hash": "725c2b95dce35943"
+    },
+    {
+      "id": "m05",
+      "status": "ok",
+      "narration": {
+        "headline": "Idris Stanbury passed in the 40th minute to add 0.0755 xT",
+        "explanation": "Stanbury passed from 47.1 to 79.5, adding 0.0755 xT and moving play into a 0.0801 xT zone at the score 0-0.",
+        "numbers_used": [
+          "40th",
+          "0.0755",
+          "47.1",
+          "79.5",
+          "0.0801",
+          "0-0"
+        ]
+      },
+      "grounding": {
+        "passed": true,
+        "offending": []
+      },
+      "style": {
+        "passed": true,
+        "offending": []
+      },
+      "retries": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "narration": {
+            "headline": "Idris Stanbury passed in the 40th minute to add 0.0755 xT",
+            "explanation": "Stanbury passed from 47.1 to 79.5, a fast ball that added 0.0755 xT and raised the threat into a 0.0801 zone while the score remained 0-0.",
+            "numbers_used": [
+              "40th",
+              "0.0755",
+              "47.1",
+              "79.5",
+              "0.0801",
+              "0-0"
+            ]
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": false,
+            "offending": [
+              {
+                "type": "style",
+                "value": "remained",
+                "reason": "claims what the score did later"
+              }
+            ]
+          }
+        },
+        {
+          "attempt": 2,
+          "narration": {
+            "headline": "Idris Stanbury passed in the 40th minute to add 0.0755 xT",
+            "explanation": "Stanbury passed from 47.1 to 79.5, adding 0.0755 xT and moving play into a 0.0801 xT zone at the score 0-0.",
+            "numbers_used": [
+              "40th",
+              "0.0755",
+              "47.1",
+              "79.5",
+              "0.0801",
+              "0-0"
+            ]
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
+          }
+        }
+      ],
+      "input_hash": "6f68643cac9154ee"
+    },
+    {
+      "id": "m06",
+      "status": "ok",
+      "narration": {
+        "headline": "Theo Brannick passed to Cass Dunmore in the 55th minute",
+        "explanation": "In a 0-0 game the pass in the 55th minute added 0.0725 xT, taking the ball from 0.0076 xT to 0.0801 xT and turning a low-threat zone into a significantly more dangerous one. This single pass rapidly shifted attacking potential for London Red. ",
+        "numbers_used": [
+          "55th minute",
+          "0-0",
+          "0.0725",
+          "0.0076",
+          "0.0801"
+        ]
+      },
+      "grounding": {
+        "passed": true,
+        "offending": []
+      },
+      "style": {
+        "passed": true,
+        "offending": []
+      },
+      "retries": 0,
+      "attempts": [
+        {
+          "attempt": 1,
+          "narration": {
+            "headline": "Theo Brannick passed to Cass Dunmore in the 55th minute",
+            "explanation": "In a 0-0 game the pass in the 55th minute added 0.0725 xT, taking the ball from 0.0076 xT to 0.0801 xT and turning a low-threat zone into a significantly more dangerous one. This single pass rapidly shifted attacking potential for London Red. ",
+            "numbers_used": [
+              "55th minute",
+              "0-0",
+              "0.0725",
+              "0.0076",
+              "0.0801"
+            ]
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
+          }
+        }
+      ],
+      "input_hash": "4d439e06db22a7f6"
     },
     {
       "id": "m07",
       "status": "ok",
       "narration": {
-        "headline": "Niko Vane finishes fastest counter to make it 1-0",
-        "explanation": "Niko Vane's goal in the 61st minute completed a lightning counter and put London Blue 1-0 up. The move lasted 10 seconds, finished from 12.7 metres after a Dario Quill pass that added 0.1392 xT, with the shot coming from a 0.1607 xT zone; it was the match's fastest counter (1 of 2).",
+        "headline": "Niko Vane scored in the 61st minute to make it 1-0",
+        "explanation": "It was a 10-second counter ranked 1 of 2 counters, Dario Quill passed adding 0.1392 xT and the shot came from a 0.1607 xT spot.",
         "numbers_used": [
+          "61",
           "1-0",
-          "the 61st minute",
-          "10 seconds",
-          "12.7 metres",
-          "0.1392 xT",
-          "0.1607 xT",
-          "(1 of 2)"
+          "10",
+          "1",
+          "2",
+          "0.1392",
+          "0.1607"
         ]
       },
       "grounding": {
         "passed": true,
         "offending": []
       },
+      "style": {
+        "passed": true,
+        "offending": []
+      },
+      "retries": 2,
       "attempts": [
         {
           "attempt": 1,
           "narration": {
-            "headline": "Niko Vane finishes fastest counter to make it 1-0",
-            "explanation": "Niko Vane's goal in the 61st minute completed a lightning counter and put London Blue 1-0 up. The move lasted 10 seconds, finished from 12.7 metres after a Dario Quill pass that added 0.1392 xT, with the shot coming from a 0.1607 xT zone; it was the match's fastest counter (1 of 2).",
+            "headline": "Niko Vane scored in the 61st minute to make it 1-0",
+            "explanation": "It was a 10-second counter (counter_rank 1) that scored after a pass adding 0.1392 xT, with the shot taken from a 0.1607 xT spot.",
             "numbers_used": [
+              "61",
               "1-0",
-              "the 61st minute",
-              "10 seconds",
-              "12.7 metres",
-              "0.1392 xT",
-              "0.1607 xT",
-              "(1 of 2)"
+              "10",
+              "1",
+              "0.1392",
+              "0.1607"
             ]
           },
           "format_problems": [],
           "grounding": {
             "passed": true,
             "offending": []
+          },
+          "style": {
+            "passed": false,
+            "offending": [
+              {
+                "type": "style",
+                "value": "counter_rank",
+                "reason": "field name in the text"
+              }
+            ]
+          }
+        },
+        {
+          "attempt": 2,
+          "narration": {
+            "headline": "Niko Vane scored in the 61st minute to make it 1-0",
+            "explanation": "It was a 10-second counter, the fastest of the 2 counters, finished after a pass that added 0.1392 xT and a shot from a 0.1607 xT spot.",
+            "numbers_used": [
+              "61",
+              "1-0",
+              "10",
+              "2",
+              "0.1392",
+              "0.1607"
+            ]
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": false,
+            "offending": [
+              {
+                "type": "style",
+                "value": "finished",
+                "reason": "outcome verb outside scored, saved, missed, passed, carried"
+              }
+            ]
+          }
+        },
+        {
+          "attempt": 3,
+          "narration": {
+            "headline": "Niko Vane scored in the 61st minute to make it 1-0",
+            "explanation": "It was a 10-second counter ranked 1 of 2 counters, Dario Quill passed adding 0.1392 xT and the shot came from a 0.1607 xT spot.",
+            "numbers_used": [
+              "61",
+              "1-0",
+              "10",
+              "1",
+              "2",
+              "0.1392",
+              "0.1607"
+            ]
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
           }
         }
       ],
-      "input_hash": "1aecdecf0b21b7c4"
+      "input_hash": "b106a58d70e1fa36"
     },
     {
       "id": "m08",
       "status": "ok",
       "narration": {
-        "headline": "Harwick denies Niko Vane from close range",
-        "explanation": "In the 67th minute Ellis Harwick pushed away Niko Vane’s shot to keep the score at 0-1. The attempt came from 10.0 metres after a 13 seconds move that featured a 0.1415 xT key pass into a 0.1607 xT zone, so it was a high-threat moment turned into a crucial save.",
+        "headline": "Ellis Harwick saved from 10.0 metres in the 67th minute",
+        "explanation": "Ellis Harwick saved Niko Vane's shot in the 67th minute; the attempt came from 10.0 metres with xT 0.1607 after a Kai Renwick pass that added 0.1415 xT, and the score was 0-1.",
         "numbers_used": [
-          "67th minute",
-          "0-1",
-          "10.0 metres",
-          "13 seconds",
-          "0.1415 xT",
-          "0.1607 xT"
+          "10.0",
+          "67th",
+          "0.1607",
+          "0.1415",
+          "0-1"
         ]
       },
       "grounding": {
         "passed": true,
         "offending": []
       },
+      "style": {
+        "passed": true,
+        "offending": []
+      },
+      "retries": 1,
       "attempts": [
         {
           "attempt": 1,
           "narration": {
-            "headline": "Harwick denies Niko Vane from close range",
-            "explanation": "In the 67th minute Ellis Harwick pushed away Niko Vane’s shot to keep the score at 0-1. The attempt came from 10.0 metres after a 13 seconds move that featured a 0.1415 xT key pass into a 0.1607 xT zone, so it was a high-threat moment turned into a crucial save.",
+            "headline": "Ellis Harwick saved from 10.0 metres in the 67th minute",
+            "explanation": "In the 67th minute Ellis Harwick saved Niko Vane's shot from 10.0 metres, a strike with xT 0.1607 after a Kai Renwick pass that added 0.1415 xT, keeping the score at 0-1.",
             "numbers_used": [
-              "67th minute",
-              "0-1",
-              "10.0 metres",
-              "13 seconds",
-              "0.1415 xT",
-              "0.1607 xT"
+              "10.0",
+              "67th",
+              "0.1607",
+              "0.1415",
+              "0-1"
             ]
           },
           "format_problems": [],
           "grounding": {
             "passed": true,
             "offending": []
+          },
+          "style": {
+            "passed": false,
+            "offending": [
+              {
+                "type": "style",
+                "value": "keeping",
+                "reason": "claims what the score did later"
+              }
+            ]
+          }
+        },
+        {
+          "attempt": 2,
+          "narration": {
+            "headline": "Ellis Harwick saved from 10.0 metres in the 67th minute",
+            "explanation": "Ellis Harwick saved Niko Vane's shot in the 67th minute; the attempt came from 10.0 metres with xT 0.1607 after a Kai Renwick pass that added 0.1415 xT, and the score was 0-1.",
+            "numbers_used": [
+              "10.0",
+              "67th",
+              "0.1607",
+              "0.1415",
+              "0-1"
+            ]
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
           }
         }
       ],
-      "input_hash": "58618032f0df57c2"
+      "input_hash": "e49e294ab0998897"
     },
     {
       "id": "m09",
       "status": "ok",
       "narration": {
-        "headline": "London Red produce 5-block momentum shift from 0-1 starting the 70th minute",
-        "explanation": "Starting the 70th minute and lasting until the 93rd minute, London Red produced a 5-block run that swung the threat to 1.2259 xT for them versus 0.0448 xT for London Blue. Theo Brannick drove the move with 0.6178 xT and the sequence unfolded over blocks of 5 minutes, overturning the match state from a 0-1 score at the start.",
+        "headline": "London Red run begins the 70th minute",
+        "explanation": "They added 1.2259 xT across 5-minute blocks, with Theo Brannick responsible for 0.6178 xT while the opponent added just 0.0448 xT.",
         "numbers_used": [
-          "5",
-          "0-1",
-          "the 70th minute",
-          "the 93rd minute",
+          "70th minute",
           "1.2259",
-          "0.0448",
+          "5-minute",
           "0.6178",
-          "5 minutes"
+          "0.0448"
         ]
       },
       "grounding": {
         "passed": true,
         "offending": []
       },
+      "style": {
+        "passed": true,
+        "offending": []
+      },
+      "retries": 0,
       "attempts": [
         {
           "attempt": 1,
           "narration": {
-            "headline": "London Red produce 5-block momentum shift from 0-1 starting the 70th minute",
-            "explanation": "Starting the 70th minute and lasting until the 93rd minute, London Red produced a 5-block run that swung the threat to 1.2259 xT for them versus 0.0448 xT for London Blue. Theo Brannick drove the move with 0.6178 xT and the sequence unfolded over blocks of 5 minutes, overturning the match state from a 0-1 score at the start.",
+            "headline": "London Red run begins the 70th minute",
+            "explanation": "They added 1.2259 xT across 5-minute blocks, with Theo Brannick responsible for 0.6178 xT while the opponent added just 0.0448 xT.",
             "numbers_used": [
-              "5",
-              "0-1",
-              "the 70th minute",
-              "the 93rd minute",
+              "70th minute",
               "1.2259",
-              "0.0448",
+              "5-minute",
               "0.6178",
-              "5 minutes"
+              "0.0448"
             ]
           },
           "format_problems": [],
           "grounding": {
             "passed": true,
             "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
           }
         }
       ],
-      "input_hash": "29b4900635355e61"
+      "input_hash": "82a27ceab6aa3d46"
     },
     {
       "id": "m10",
       "status": "ok",
       "narration": {
-        "headline": "Rafael Tovey finishes 12-second counter to make it 1-1 in the 74th minute",
-        "explanation": "The 12-second counter ended with Theo Brannick's key pass, which added 0.1007 xT and teed up Rafael Tovey for a shot from 10.7 metres in a 0.1607 xT zone. The goal left the score 1-1 in the 74th minute and was counter rank 2 of 2 counters in the match.",
+        "headline": "Rafael Tovey scored on a 12-second counter in the 74th minute",
+        "explanation": "Rafael Tovey scored in the 74th minute to make it 1-1 after a 12-second counter. Theo Brannick passed the key ball that added 0.1007 xT and the shot came from a spot with xT 0.1607.",
         "numbers_used": [
-          "12",
-          "0.1007",
-          "10.7",
-          "0.1607",
+          "12-second",
+          "74th minute",
           "1-1",
-          "74th",
-          "2",
-          "2"
+          "0.1007",
+          "0.1607"
         ]
       },
       "grounding": {
         "passed": true,
         "offending": []
       },
+      "style": {
+        "passed": true,
+        "offending": []
+      },
+      "retries": 1,
       "attempts": [
         {
           "attempt": 1,
           "narration": {
-            "headline": "Rafael Tovey finishes 12-second counter to make it 1-1 in the 74th minute",
-            "explanation": "The 12-second counter ended with Theo Brannick's key pass, which added 0.1007 xT and teed up Rafael Tovey for a shot from 10.7 metres in a 0.1607 xT zone. The goal left the score 1-1 in the 74th minute and was counter rank 2 of 2 counters in the match.",
+            "headline": "Rafael Tovey scored on a 12-second counter in the 74th minute",
+            "explanation": "Rafael Tovey scored in the 74th minute to make it 1-1, finishing a 12-second counter. Theo Brannick's key pass added 0.1007 xT and the shot came from a spot with xT 0.1607.",
             "numbers_used": [
-              "12",
-              "0.1007",
-              "10.7",
-              "0.1607",
+              "12-second",
+              "74th minute",
               "1-1",
-              "74th",
-              "2",
-              "2"
+              "0.1007",
+              "0.1607"
             ]
           },
           "format_problems": [],
           "grounding": {
             "passed": true,
             "offending": []
+          },
+          "style": {
+            "passed": false,
+            "offending": [
+              {
+                "type": "style",
+                "value": "finish",
+                "reason": "outcome verb outside scored, saved, missed, passed, carried"
+              }
+            ]
+          }
+        },
+        {
+          "attempt": 2,
+          "narration": {
+            "headline": "Rafael Tovey scored on a 12-second counter in the 74th minute",
+            "explanation": "Rafael Tovey scored in the 74th minute to make it 1-1 after a 12-second counter. Theo Brannick passed the key ball that added 0.1007 xT and the shot came from a spot with xT 0.1607.",
+            "numbers_used": [
+              "12-second",
+              "74th minute",
+              "1-1",
+              "0.1007",
+              "0.1607"
+            ]
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
           }
         }
       ],
-      "input_hash": "2c72f6cbb74fa109"
+      "input_hash": "cd3285606eee6ebb"
     },
     {
       "id": "m11",
       "status": "ok",
       "narration": {
-        "headline": "Cass Dunmore fires home to make it 2-1 in the 89th minute",
-        "explanation": "Cass Dunmore's shot from 6.4 metres after a 10 seconds move left London Red leading 2-1 and came from a dangerously central 0.3 xT zone. Theo Brannick's key pass had added 0.2712 xT to create the chance, so the finish mattered because it followed a quick sequence that produced clear scoring threat.",
+        "headline": "Cass Dunmore scored in the 89th minute",
+        "explanation": "Cass Dunmore scored in the 89th minute for London Red. Theo Brannick passed a key ball that added 0.2712 xT and produced a shot from 6.4 metres after a 10-second possession that scored, making it 2-1.",
         "numbers_used": [
-          "2-1",
-          "the 89th minute",
-          "6.4 metres",
-          "10 seconds",
-          "0.3 xT",
-          "0.2712 xT"
+          "89th",
+          "0.2712",
+          "6.4",
+          "10",
+          "2-1"
         ]
       },
       "grounding": {
         "passed": true,
         "offending": []
       },
+      "style": {
+        "passed": true,
+        "offending": []
+      },
+      "retries": 1,
       "attempts": [
         {
           "attempt": 1,
           "narration": {
-            "headline": "Cass Dunmore fires home to make it 2-1 in the 89th minute",
-            "explanation": "Cass Dunmore's shot from 6.4 metres after a 10 seconds move left London Red leading 2-1 and came from a dangerously central 0.3 xT zone. Theo Brannick's key pass had added 0.2712 xT to create the chance, so the finish mattered because it followed a quick sequence that produced clear scoring threat.",
+            "headline": "Cass Dunmore scored for London Red in the 89th minute",
+            "explanation": "Cass Dunmore scored in the 89th minute for London Red. Theo Brannick passed a key ball that added 0.2712 xT to create a shot from 94.0 x and 6.4 metres after a 10-second possession that scored, making it 2-1.",
             "numbers_used": [
-              "2-1",
-              "the 89th minute",
-              "6.4 metres",
-              "10 seconds",
-              "0.3 xT",
-              "0.2712 xT"
+              "89",
+              "0.2712",
+              "94.0",
+              "6.4",
+              "10",
+              "2-1"
             ]
           },
           "format_problems": [],
           "grounding": {
             "passed": true,
             "offending": []
+          },
+          "style": {
+            "passed": false,
+            "offending": [
+              {
+                "type": "style",
+                "value": "explanation: 6 numbers",
+                "reason": "too many numbers (at most 5)"
+              }
+            ]
+          }
+        },
+        {
+          "attempt": 2,
+          "narration": {
+            "headline": "Cass Dunmore scored in the 89th minute",
+            "explanation": "Cass Dunmore scored in the 89th minute for London Red. Theo Brannick passed a key ball that added 0.2712 xT and produced a shot from 6.4 metres after a 10-second possession that scored, making it 2-1.",
+            "numbers_used": [
+              "89th",
+              "0.2712",
+              "6.4",
+              "10",
+              "2-1"
+            ]
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
           }
         }
       ],
-      "input_hash": "17bcc8574ad47cfe"
+      "input_hash": "27528e87b7483686"
     }
   ]
 }
