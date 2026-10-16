@@ -131,3 +131,38 @@ The same move as JSON (the event and possession ids are examples):
 | `tackle`, `interception`, `foul`, `clearance` | 0 (kept for context) |
 
 Example: Quill's assist at 61' goes from `c8r6` (0.021) to `c10r4` (0.161), so `xt_added` = +0.139. Vane's goal straight after has `xt_added` = 0 and `shot_zone_value` = 0.161.
+
+## Key moments
+
+`src/key_moments.py` reads `data/match_xt.csv` and writes `data/key_moments.json`: the final score and about 10–12 moments in match order. Moments are facts only, with no prose, so the Narrator can explain them without inventing anything.
+
+```json
+{
+  "final_score": { "london_red": 2, "london_blue": 1 },
+  "moments": [
+    { "id": "m10", "category": "goal", "tags": ["counter"], "period": 2, "minute": 74, "second": 22,
+      "team": "london_red", "players": ["Rafael Tovey", "Theo Brannick"],
+      "facts": { "possession_seconds": 12, "possession_start_x": 17.0, "counter_rank": 2, "team_score": 1, "opponent_score": 1, "...": "..." } }
+  ]
+}
+```
+
+| Field | Meaning |
+|---|---|
+| `id` | `m01`, `m02`, … in match order. |
+| `category` | One per moment (see the next table). |
+| `tags` | A list, often empty. `counter` = the moment's possession starts in the team's own half (`start_x` < 50 on its first event), ends in a shot and takes 15 seconds or less. |
+| `period`, `minute`, `second` | When it happened. A momentum shift is timed at the start of its first block. |
+| `team` | The team the moment belongs to. For a `save`, that's the goalkeeper's team. |
+| `players` | Names, most important first: scorer then assist, goalkeeper then shooter, passer then receiver, or a momentum shift's top 3 threat creators. |
+| `facts` | Plain numbers only, e.g. `xt_added`, `shot_zone_value`, `possession_seconds`. `team_score` and `opponent_score` are the score just after the moment. |
+
+| Category | Rule |
+|---|---|
+| `goal` | Every goal, always included. A goal with the `counter` tag also has `counter_rank` (1 = the fastest `counter` move in the match, by `possession_seconds`) and `counters_in_match` (how many moves meet the `counter` rule). |
+| `save` | A saved shot from a big chance (`shot_zone_value` ≥ 0.15). |
+| `big_chance_missed` | An off-target or blocked shot from a big chance. |
+| `momentum_shift` | One team creates more threat than the other in at least 3 five-minute blocks in a row, after the other team was on top in the block before, and beats the other team's threat over those blocks by at least 0.25. Threat = `xt_added` of completed passes and carries only. |
+| `biggest_threat_swing` | The completed passes and carries with the most `xt_added`. |
+
+**Selection.** Goals first. Then the other categories in the order of the table, best first, with at most 3 moments per category and at most one moment per 60 seconds.

@@ -66,7 +66,8 @@ A Blue attack breaks down in Red's box, and Red go the length of the pitch in ab
 | 74:21 | Theo Brannick (7) | pass | (80, 30) → (90, 47) | complete, `is_assist` |
 | 74:22 | Rafael Tovey (10) | shot | (90, 47) → (100, 46) | goal |
 
-- **In the data:** `possession_seconds` = 12 in `data/match_xt.csv`. Red go from x = 17 to a shot at x = 90 in 12 seconds, which is one of the two fastest moves from a team's own half to a shot. The other is Blue's 61' goal, in 10 seconds from x = 44.
+- **In the data:** `possession_seconds` = 12 in `data/match_xt.csv`. Red go from x = 17 to a shot at x = 90 in 12 seconds, which is one of the two fastest moves from a team's own half to a shot. The other is Blue's 61' goal, in 10 seconds from x = 44, so this is the second fastest, not the fastest.
+- **In the key moments:** `data/key_moments.json` lists this as a `goal` (every goal is a goal moment), with the tag `counter` and counter facts: `possession_seconds` = 12, `possession_start_x` = 17, `counter_rank` = 2. There is no separate counter-attack category. Blue's 61' goal also has the `counter` tag, with `counter_rank` = 1.
 - **Why it matters:** it's a **tempo** moment, not an xT one. Most of its passes start far from goal, where zone values are tiny, so no single action ranks high for xT except Brannick's final ball. What stands out is the speed: the length of the pitch in about 12 seconds, which shows the counter-attack style clearly.
 
 ### 6. Late winner (2nd half, 89', London Red)
