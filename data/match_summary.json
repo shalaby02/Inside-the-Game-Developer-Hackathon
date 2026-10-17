@@ -1,0 +1,155 @@
+{
+  "teams": {
+    "london_red": "London Red",
+    "london_blue": "London Blue"
+  },
+  "final_score": {
+    "london_red": 2,
+    "london_blue": 1
+  },
+  "result_line": "London Red won 2-1 after trailing from the 61st minute to the 74th",
+  "goals": [
+    {
+      "moment_id": "m07",
+      "period": 2,
+      "minute": 61,
+      "second": 14,
+      "team": "london_blue",
+      "scorer": "Niko Vane",
+      "score_after": {
+        "london_red": 0,
+        "london_blue": 1
+      }
+    },
+    {
+      "moment_id": "m10",
+      "period": 2,
+      "minute": 74,
+      "second": 22,
+      "team": "london_red",
+      "scorer": "Rafael Tovey",
+      "score_after": {
+        "london_red": 1,
+        "london_blue": 1
+      }
+    },
+    {
+      "moment_id": "m11",
+      "period": 2,
+      "minute": 89,
+      "second": 30,
+      "team": "london_red",
+      "scorer": "Cass Dunmore",
+      "score_after": {
+        "london_red": 2,
+        "london_blue": 1
+      }
+    }
+  ],
+  "leads": [
+    {
+      "team": "london_blue",
+      "from_period": 2,
+      "from_minute": 61,
+      "from_second": 14,
+      "to_period": 2,
+      "to_minute": 74,
+      "to_second": 22,
+      "ends_at": "goal",
+      "seconds": 788
+    },
+    {
+      "team": "london_red",
+      "from_period": 2,
+      "from_minute": 89,
+      "from_second": 30,
+      "ends_at": "full_time"
+    }
+  ],
+  "minutes_led": {
+    "london_red": null,
+    "london_blue": 13.1
+  },
+  "first_half_summary": {
+    "london_red": {
+      "threat_created": 1.4019,
+      "shots": 9,
+      "goals": 0
+    },
+    "london_blue": {
+      "threat_created": 0.1746,
+      "shots": 2,
+      "goals": 0
+    }
+  },
+  "by_half": {
+    "first_half": {
+      "london_red": {
+        "threat_created": 1.4019,
+        "final_third_entries": 24,
+        "penalty_area_entries": 16,
+        "progressive_actions": 38,
+        "possessions_lost_in_final_third": 19,
+        "shots": 9,
+        "saves": 1
+      },
+      "london_blue": {
+        "threat_created": 0.1746,
+        "final_third_entries": 11,
+        "penalty_area_entries": 3,
+        "progressive_actions": 18,
+        "possessions_lost_in_final_third": 12,
+        "shots": 2,
+        "saves": 4
+      }
+    },
+    "second_half": {
+      "london_red": {
+        "threat_created": 1.4284,
+        "final_third_entries": 23,
+        "penalty_area_entries": 10,
+        "progressive_actions": 38,
+        "possessions_lost_in_final_third": 14,
+        "shots": 6,
+        "saves": 1
+      },
+      "london_blue": {
+        "threat_created": 0.7132,
+        "final_third_entries": 14,
+        "penalty_area_entries": 8,
+        "progressive_actions": 19,
+        "possessions_lost_in_final_third": 7,
+        "shots": 6,
+        "saves": 0
+      }
+    }
+  },
+  "momentum_runs": [
+    {
+      "moment_id": "m02",
+      "team": "london_red",
+      "goals_in_run": []
+    },
+    {
+      "moment_id": "m09",
+      "team": "london_red",
+      "goals_in_run": [
+        "m10",
+        "m11"
+      ]
+    }
+  ],
+  "moment_ids": [
+    "m01",
+    "m02",
+    "m03",
+    "m04",
+    "m05",
+    "m06",
+    "m07",
+    "m08",
+    "m09",
+    "m10",
+    "m11"
+  ]
+}

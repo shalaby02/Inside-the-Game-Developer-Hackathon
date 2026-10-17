@@ -170,3 +170,69 @@ Example: Quill's assist at 61' goes from `c8r6` (0.021) to `c10r4` (0.161), so `
 | `biggest_threat_swing` | The completed passes and carries with the most `xt_added`. |
 
 **Selection.** Goals first. Then the other categories in the order of the table, best first, with at most 3 moments per category and at most one moment per 60 seconds.
+
+## Analysis terms
+
+The Analyst may use football performance-analysis words only where code can compute the fact behind them. Every event is in the acting team's frame, attacking toward x = 100 on the 0–100 pitch. The code is in `src/match_summary.py`, the wording rules in `src/style_rules.py` (`TERMS`, `BANNED_TERMS`) and the check in `src/term_check.py`.
+
+| Term | Definition | Derivable? |
+|---|---|---|
+| defensive / middle / final third | `x < 33.3` / `33.3 ≤ x < 66.7` / `x ≥ 66.7` (exactly 100/3 and 200/3, the same edges as `build_up`'s "the defensive third", "midfield", "the attacking third"). | Yes |
+| final-third entry | A **completed** pass or carry that starts outside the final third and ends in it. | Yes |
+| penalty-area entry | A **completed** pass or carry that starts outside the penalty area (`x ≥ 83`, `21 ≤ y ≤ 79`) and ends in it. | Yes |
+| progressive action | A **completed** pass or carry that moves the ball closer to the middle of the goal (100, 50), measured in metres on a 105 × 68 m pitch, by at least **30 m** if it starts and ends in the team's own half (`x < 50`), **15 m** from its own half into the other half, or **10 m** within the other half. **These thresholds are this model's own definition**, in the style of common industry ones but not taken from any data provider, so the counts are not comparable with published "progressive pass" stats. | Yes, by this definition |
+| possessions lost in the final third | An `incomplete` pass or `lost` carry that **starts** in the final third: the team gave the ball away there. (Not called "turnover", which can also mean winning the ball; that word is blocked.) | Yes |
+| transition (counter-attack) | A moment with the `counter` tag: its possession starts in the team's own half, ends in a shot and takes 15 seconds or less. | Yes, for tagged moments only |
+| build-up phase | Only in the narrow sense of one possession's `build_up` fact: how that move reached its key action. | Partly: there is no team-level "phase of play", and restarts (goal kicks, throw-ins) have no events, so the build-up from the back can't be measured across the match |
+| threat created | `xt_added` of completed passes and carries (the same threat as the momentum shifts). | Yes |
+| shot-location value | `shot_zone_value`: the xT of the zone a shot was taken from. Used **instead of xG**. | Yes |
+
+Never used: "turnover" (ambiguous, see above), xG (there is no shot model, only zone values: say "shot-location value"), pressing (no pressure events), PPDA (left out on purpose, although tackles, interceptions and fouls could approximate it), formations, team shape, compactness and width (no player positions off the ball), and possession percentage (not computed).
+
+**Term backing** is checked **sentence by sentence**. A term is accepted only if its fact belongs to what that sentence describes. A sentence describes a moment when it names it: by one of its minutes as an ordinal ("the 61st minute"), a player's full name, one of its decimal (xT) numbers, or a fact phrase it quotes (`build_up`, `counter_label`, `score_effect`). It describes a summary stat when it gives that stat's number (scores like "2-1" and minutes like "61st" don't count as stat numbers). For a phase note, the candidates are the facts it cites; for the headline, everything in the input; the turning point's reason is always about its own moment. So "transition" in a sentence about the 70th minute fails even if the same note also cites m07.
+
+| Term | Needs |
+|---|---|
+| final-third entries | a cited `final_third_entries` |
+| final third, attacking third | a cited `final_third_entries` or `possessions_lost_in_final_third`, or a moment whose `build_up` mentions the attacking third |
+| middle third / defensive third | a moment whose `build_up` mentions midfield / the defensive third |
+| penalty-area entries, penalty area, the box | a cited `penalty_area_entries` |
+| progressive pass / carry / action | a cited `progressive_actions` |
+| possessions lost in the final third | a cited `possessions_lost_in_final_third` |
+| transition, counter-attack | a moment with the `counter` tag |
+| build-up phase | a moment with a `build_up` |
+| threat created | a cited `threat_created`, or a moment with `xt_added`, `key_pass_xt_added` or `team_threat` |
+| shot-location value | a moment with `shot_zone_value` |
+
+## Match summary
+
+`src/match_summary.py` reads `data/match_xt.csv` and `data/key_moments.json` and writes `data/match_summary.json`: whole-match facts for the Analyst, with no prose.
+
+| Field | Meaning |
+|---|---|
+| `teams` | Team id → display name. |
+| `final_score` | Goals per team. |
+| `result_line` | The result in words, built from the goal timeline: `London Red won 2-1 after trailing from the 61st minute to the 74th`. A draw is `<team> and <team> drew 1-1`; a winner that never trailed gets no "after trailing" part. |
+| `goals` | In order: `moment_id`, `period`, `minute`, `second`, `team`, `scorer`, `score_after`. |
+| `leads` | Each spell one team was ahead: `team`, `from_*` (`period`, `minute`, `second`) and `ends_at`. A lead ended by a goal (`ends_at: goal`) also has `to_*` and `seconds`, counting stoppage time (a lead across half-time adds the first half up to its last event, then from 45:00). A lead that lasts to the end (`ends_at: full_time`) has **no end time and no length**: the final whistle isn't recorded, and the last event is not the whistle. |
+| `minutes_led` | Total per team, to 1 decimal, from leads ended by a goal. `null` for a team whose lead lasted to full time (its length is unknown). |
+| `first_half_summary` | Per team: `threat_created`, `shots` and `goals` in the first half. |
+| `by_half` | `first_half` and `second_half`, per team: `threat_created`, `final_third_entries`, `penalty_area_entries`, `progressive_actions`, `possessions_lost_in_final_third`, `shots`, `saves` (shots by the other team that this team's goalkeeper saved). Definitions above. |
+| `momentum_runs` | One per `momentum_shift` moment: `moment_id`, `team` and `goals_in_run`, the ids of the goals from the start of its first block to the end of its `last_minute` (in `end_period`). |
+| `moment_ids` | The key-moment ids in match order. |
+
+## Analysis
+
+`src/run_analyst.py` sends the key moments (as the Narrator sees them: no raw coordinates or possession clock) and the match summary to the Analyst and writes `data/analysis.json`. It never reads `data/narrations.json`.
+
+| Field | Meaning |
+|---|---|
+| `match_headline` | One sentence that gives the final score (winner's goals first, e.g. `2-1`) and names the winning team (both teams for a draw). |
+| `story_arc` | `[{moment_id, role}]` in match order, each moment at most once. `role`: `opening` (at most one, first), `build_up`, `turning_point` (exactly one), `response`, `decider` (at most one, a goal), `other`. |
+| `turning_point` | `{moment_id, reason}`: the arc's turning point, and one sentence that quotes at least one xT number from that moment. It must be a moment that changed the **score state** (a goal from level to a lead, or from a lead to level) or the **threat balance** (a `momentum_shift`). The Analyst is told to prefer the first goal that changed the score state toward the result. |
+| `phase_notes` | 3–5 `{text, cites}`. `cites` are paths into the input, e.g. `m09.team_threat` or `summary.by_half.second_half.london_red.final_third_entries`. Every number and minute in `text` must be in a cited fact. At least one note cites `summary.first_half_summary`, and `result_line` is quoted word for word in the headline or a note. |
+| `moment_priority` | `{essential, supporting}`: no id in both; every goal and the turning point essential; every essential moment in `story_arc`. |
+
+**Connectors.** The headline and phase notes can't use causal or temporal connectors ("preceded", "led to", "sparked", "because", "before", "after", "ahead of", "caused"): the checks confirm facts, not that one thing caused or came before another. The list is `CONNECTORS` in `src/style_rules.py`. A fact phrase quoted **in full** (such as `result_line`'s "after trailing") is exempt; a partial quote is not. The turning point's reason may use them, because it explains why.
+
+The file also keeps `status`, `checks`, `retries`, every attempt and `input_hash` (the cache key). `python src/run_analyst.py --verify` re-checks it with no model calls.

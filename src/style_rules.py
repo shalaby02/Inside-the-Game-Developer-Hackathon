@@ -83,3 +83,79 @@ PROMPT_RULES = f"""\
 - Do not compare the moment with the rest of the match ("the best", "the clearest so far"); counter_label is the only comparison you may use.
 - Do not mention ids or field names (such as shot_zone_value or xt_added); say "xT" for threat values.
 - Use about 4 numbers, never more than {MAX_NUMBERS} in one field."""
+
+
+# ------------------------------------------------------------ analysis terms
+#
+# Football performance-analysis wording for agents that write about the whole
+# match (the Analyst). These are separate from BLOCKED so the Narrator's rules,
+# and its cache, stay as they are. src/term_check.py enforces both lists; the
+# definitions behind each term are in docs/data-format.md ("Analysis terms").
+
+# Terms the facts can't support at all: never allowed.
+BANNED_TERMS = [
+    (r"xg|expected goals?", 'not computed; say "shot-location value" (shot_zone_value)'),
+    (r"press(?:es|ed|ing)?|counter-?press(?:es|ed|ing)?|ppda|high press",
+     "pressing is not derivable from the events"),
+    (r"formations?|\d-\d-\d(?:-\d)?|back (?:three|four|five)|low block|mid-block|high line",
+     "formations and team shape are not in the data"),
+    (r"compact(?:ness)?", "compactness is not derivable from the events"),
+    (r"width|stretch(?:es|ed|ing)? the pitch", "width is not derivable from the events"),
+    (r"possession (?:percentage|share|stats?)|share of possession|\d+(?:\.\d+)?\s*%|per ?cent|"
+     r"(?:more|most|less|dominated|controlled) possession|(?:more|most) of the ball",
+     "possession percentage is not computed"),
+    # Ambiguous: it can mean winning the ball or losing it.
+    (r"turnovers?", 'say "possessions lost in the final third" (possessions_lost_in_final_third)'),
+]
+
+# Causal and temporal connectors, blocked in the headline and phase notes:
+# the checks can confirm facts, not that one thing caused or came before another.
+# A connector inside a fact phrase quoted word for word (such as result_line's
+# "after trailing") is not blocked. Edit this list to change the rule.
+# (word shown in the prompt, pattern, reason)
+CONNECTORS = [
+    ("preceded", r"preced(?:e|es|ed|ing)", "claims an order of events"),
+    ("led to", r"(?:led|lead|leads|leading) to", "claims a cause"),
+    ("sparked", r"spark(?:s|ed|ing)?", "claims a cause"),
+    ("because", r"because(?: of)?", "claims a cause"),
+    ("before", r"before", "claims an order of events"),
+    ("after", r"after(?:wards)?", "claims an order of events"),
+    ("ahead of", r"ahead of", "claims an order of events"),
+    ("caused", r"caus(?:e|es|ed|ing)", "claims a cause"),
+]
+
+# Terms that need a fact behind them: (label, pattern, backing, what it needs).
+# src/term_check.py decides what counts as that backing for the text's subject
+# (the moment it describes, or the facts a phase note cites).
+TERMS = [
+    ("final-third entry", r"final[- ]third entr(?:y|ies)", "final_third_entries",
+     "a final_third_entries fact"),
+    ("final third", r"final[- ]third|attacking third", "final_third",
+     "a final-third fact (final_third_entries, possessions_lost_in_final_third, or a build_up in the attacking third)"),
+    ("middle third", r"middle third", "middle_third", "a build_up through midfield"),
+    ("defensive third", r"defensive third", "defensive_third", "a build_up from the defensive third"),
+    ("penalty-area entry", r"(?:penalty[- ]area|box) entr(?:y|ies)", "penalty_area_entries",
+     "a penalty_area_entries fact"),
+    ("penalty area", r"penalty area|penalty box|(?:the|18-yard) box", "penalty_area",
+     "a penalty_area_entries fact"),
+    ("progressive action", r"progressive (?:pass(?:es)?|carr(?:y|ies)|actions?|play)", "progressive_actions",
+     "a progressive_actions fact"),
+    ("possessions lost in the final third",
+     r"(?:possessions?|the ball) lost in the final third|lost (?:possession|the ball) in the final third",
+     "possessions_lost", "a possessions_lost_in_final_third fact"),
+    ("transition", r"transitions?|counter[- ]attack(?:s|ing)?|counters?|on the break|breakaway", "counter",
+     "a moment with the counter tag"),
+    ("build-up phase", r"build-up(?: phase| play)?|build up phase", "build_up", "a moment with a build_up fact"),
+    ("threat created", r"threat created|created (?:\w+ )?threat", "threat",
+     "a threat fact (threat_created, xt_added, key_pass_xt_added or team_threat)"),
+    ("shot-location value", r"shot-location values?", "shot_location", "a moment with a shot_zone_value"),
+]
+
+ANALYST_PROMPT_RULES = """\
+- Analysis terms. Use each one only when the fact behind it is cited in the same phase note (for the turning point: is in that moment; for the headline: is anywhere in the input):
+""" + "\n".join(f'  - "{label}": needs {need}' for label, _, _, need in TERMS) + """
+- The backing is checked sentence by sentence: the sentence that uses a term must itself name what the term is about, by a minute ("the 61st minute"), a player's full name, an xT number of that moment, or the number of the cited stat.
+- "transition" and "counter-attack" mean only the moments tagged counter. "build-up phase" means only a moment's build_up.
+- Never use: xG or expected goals (say "shot-location value"), pressing or PPDA, formations or team shape, compactness, width, possession percentages, or "turnover" (say "possessions lost in the final third").
+- In match_headline and phase_notes, no causal or temporal connectors: """ + ", ".join(
+    f'"{word}"' for word, _, _ in CONNECTORS) + """ and the like. State facts side by side instead. Quoting a fact phrase such as result_line word for word is fine."""

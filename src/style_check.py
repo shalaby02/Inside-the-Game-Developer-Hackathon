@@ -35,8 +35,16 @@ class StyleResult:
         return {"passed": self.passed, "offending": self.offending}
 
 
-def check(output, facts: dict) -> StyleResult:
-    rules = [(_compile(p), why) for p, why in BLOCKED + fact_rules(facts)]
+def check(output, facts: dict, moment_rules: bool = True, extra_rules=()) -> StyleResult:
+    """moment_rules=False skips fact_rules(), which only make sense for a text
+    about one moment (its action_type and category); whole-match text such as
+    the Analyst's phase notes leaves them out. extra_rules: more (pattern,
+    reason) pairs, such as the Analyst's connectors. They are stricter than
+    the other rules: they only skip a fact phrase quoted in full, so "London
+    Red won 2-1 after London Blue scored first" is not excused by starting
+    like a fact phrase."""
+    rules = [(_compile(p), why) for p, why in BLOCKED + (fact_rules(facts) if moment_rules else [])]
+    strict = [(_compile(p), why) for p, why in extra_rules]
     phrases = [s.lower() for s in _fact_strings(facts)]
 
     offending = []
@@ -47,6 +55,9 @@ def check(output, facts: dict) -> StyleResult:
             offending.append(item)
 
     for key, text in _texts(output):
+        for pattern, why in strict:
+            for m in pattern.finditer(_mask_whole(text, phrases)):
+                flag(m.group(0), why)
         text = _mask_quotes(text, phrases)
         for pattern, why in rules:
             for m in pattern.finditer(text):
@@ -58,6 +69,14 @@ def check(output, facts: dict) -> StyleResult:
         if n > MAX_NUMBERS:
             flag(f"{key}: {n} numbers", f"too many numbers (at most {MAX_NUMBERS})")
     return StyleResult(passed=not offending, offending=offending)
+
+
+def _mask_whole(text, phrases):
+    """Blank out every fact phrase quoted in full (any case), longest first so
+    a short phrase ("London Red") can't break up a longer one."""
+    for phrase in sorted(phrases, key=len, reverse=True):
+        text = re.sub(re.escape(phrase), lambda m: " " * len(m.group(0)), text, flags=re.I)
+    return text
 
 
 def _mask_quotes(text, phrases):
