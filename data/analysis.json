@@ -1,24 +1,24 @@
 {
   "model_deployment": "gpt-5-mini",
-  "status": "ok",
+  "status": "failed",
   "analysis": {
     "match_headline": "London Red won 2-1 after trailing from the 61st minute to the 74th",
     "story_arc": [
       {
-        "moment_id": "m01",
+        "moment_id": "m02",
         "role": "opening"
       },
       {
-        "moment_id": "m02",
+        "moment_id": "m01",
         "role": "other"
       },
       {
         "moment_id": "m03",
-        "role": "other"
+        "role": "build_up"
       },
       {
         "moment_id": "m04",
-        "role": "other"
+        "role": "build_up"
       },
       {
         "moment_id": "m05",
@@ -30,15 +30,15 @@
       },
       {
         "moment_id": "m07",
-        "role": "build_up"
-      },
-      {
-        "moment_id": "m08",
         "role": "other"
       },
       {
+        "moment_id": "m08",
+        "role": "response"
+      },
+      {
         "moment_id": "m09",
-        "role": "build_up"
+        "role": "response"
       },
       {
         "moment_id": "m10",
@@ -51,18 +51,18 @@
     ],
     "turning_point": {
       "moment_id": "m10",
-      "reason": "Rafael Tovey's goal in the 74th minute levelled the match at 1-1 and featured xT 0.1007 and a shot-location value 0.1607."
+      "reason": "The 74th-minute goal \"levelled the match at 1-1\"; its key pass had xT 0.1007 and the shot had shot-location value 0.1607."
     },
     "phase_notes": [
       {
-        "text": "London Red created 1.4019 xT in the first half; London Blue created 0.1746 xT in the first half.",
+        "text": "London Red created 1.4019 xT in the first half while London Blue created 0.1746 xT in the first half.",
         "cites": [
           "summary.first_half_summary.london_red.threat_created",
           "summary.first_half_summary.london_blue.threat_created"
         ]
       },
       {
-        "text": "From the 70th minute to the 93rd minute London Red's momentum run shows team xT 1.2259 and opponent xT 0.0448.",
+        "text": "From the 70th minute to the 93rd minute London Red’s team_threat was 1.2259 and London Blue’s opponent_threat was 0.0448 during that momentum run.",
         "cites": [
           "m09.facts.start_minute",
           "m09.facts.last_minute",
@@ -71,19 +71,20 @@
         ]
       },
       {
-        "text": "The 74th-minute goal had xT 0.1007, a shot-location value 0.1607 and a build-up that 'won the ball back in the defensive third and scored 12 seconds later'.",
+        "text": "The equaliser was recorded as a build-up that \"won the ball back in the defensive third and scored 12 seconds later\" and involved a key pass with xT 0.1007 and a shot with shot-location value 0.1607.",
         "cites": [
-          "m10.minute",
+          "m10.facts.build_up",
           "m10.facts.key_pass_xt_added",
-          "m10.facts.shot_zone_value",
-          "m10.facts.build_up"
+          "m10.facts.shot_zone_value"
         ]
       },
       {
-        "text": "London Red made 24 final-third entries in the first half; London Blue made 11 final-third entries in the first half.",
+        "text": "In the second half London Red made 23 final-third entries and London Blue made 14 final-third entries; London Red made 10 penalty-area entries and London Blue made 8 penalty-area entries.",
         "cites": [
-          "summary.by_half.first_half.london_red.final_third_entries",
-          "summary.by_half.first_half.london_blue.final_third_entries"
+          "summary.by_half.second_half.london_red.final_third_entries",
+          "summary.by_half.second_half.london_blue.final_third_entries",
+          "summary.by_half.second_half.london_red.penalty_area_entries",
+          "summary.by_half.second_half.london_blue.penalty_area_entries"
         ]
       }
     ],
@@ -94,8 +95,8 @@
         "m11"
       ],
       "supporting": [
-        "m01",
         "m02",
+        "m01",
         "m03",
         "m04",
         "m05",
@@ -106,14 +107,27 @@
     }
   },
   "checks": {
-    "format_problems": [],
+    "format_problems": [
+      "story_arc is not in match-time order: m02 comes before m01"
+    ],
     "grounding": {
       "passed": true,
       "offending": []
     },
     "style": {
-      "passed": true,
-      "offending": []
+      "passed": false,
+      "offending": [
+        {
+          "type": "style",
+          "value": "phase_notes[1]: team_threat",
+          "reason": "field name in the text"
+        },
+        {
+          "type": "style",
+          "value": "phase_notes[1]: opponent_threat",
+          "reason": "field name in the text"
+        }
+      ]
     },
     "polish": {
       "passed": true,
@@ -124,7 +138,7 @@
       "offending": []
     }
   },
-  "retries": 1,
+  "retries": 2,
   "attempts": [
     {
       "attempt": 1,
@@ -132,20 +146,192 @@
         "match_headline": "London Red won 2-1 after trailing from the 61st minute to the 74th",
         "story_arc": [
           {
-            "moment_id": "m01",
+            "moment_id": "m02",
             "role": "opening"
           },
           {
-            "moment_id": "m02",
-            "role": "other"
-          },
-          {
             "moment_id": "m03",
-            "role": "other"
+            "role": "build_up"
           },
           {
             "moment_id": "m04",
+            "role": "build_up"
+          },
+          {
+            "moment_id": "m06",
+            "role": "build_up"
+          },
+          {
+            "moment_id": "m07",
+            "role": "build_up"
+          },
+          {
+            "moment_id": "m09",
+            "role": "build_up"
+          },
+          {
+            "moment_id": "m10",
+            "role": "turning_point"
+          },
+          {
+            "moment_id": "m08",
+            "role": "response"
+          },
+          {
+            "moment_id": "m11",
+            "role": "decider"
+          },
+          {
+            "moment_id": "m01",
             "role": "other"
+          },
+          {
+            "moment_id": "m05",
+            "role": "other"
+          }
+        ],
+        "turning_point": {
+          "moment_id": "m10",
+          "reason": "m10 was the first goal that changed the score state toward the result_line: its key pass had xT 0.1007 and the shot had a shot-location value 0.1607, and the score_effect \"levelled the match at 1-1\"."
+        },
+        "phase_notes": [
+          {
+            "text": "London Red created 1.4019 xT in the first half while London Blue created 0.1746 xT in the first half.",
+            "cites": [
+              "summary.first_half_summary.london_red.threat_created",
+              "summary.first_half_summary.london_blue.threat_created"
+            ]
+          },
+          {
+            "text": "From the 70th minute to the 93rd minute London Red’s momentum run shows team_threat 1.2259 versus opponent_threat 0.0448.",
+            "cites": [
+              "m09.facts.team_threat",
+              "m09.facts.opponent_threat",
+              "m09.facts.start_minute",
+              "m09.facts.last_minute"
+            ]
+          },
+          {
+            "text": "The 74th-minute equaliser (m10) involved a key pass with xT 0.1007 and a shot with shot-location value 0.1607 in a play described as a build-up from the defensive third into the attacking third.",
+            "cites": [
+              "m10.facts.key_pass_xt_added",
+              "m10.facts.shot_zone_value",
+              "m10.facts.build_up"
+            ]
+          },
+          {
+            "text": "London Red’s second-half final_third_entries were 23 and London Blue’s were 14; London Red also had 10 penalty_area_entries in the second half while London Blue had 8 penalty_area_entries.",
+            "cites": [
+              "summary.by_half.second_half.london_red.final_third_entries",
+              "summary.by_half.second_half.london_blue.final_third_entries",
+              "summary.by_half.second_half.london_red.penalty_area_entries",
+              "summary.by_half.second_half.london_blue.penalty_area_entries"
+            ]
+          }
+        ],
+        "moment_priority": {
+          "essential": [
+            "m07",
+            "m10",
+            "m11"
+          ],
+          "supporting": [
+            "m02",
+            "m03",
+            "m04",
+            "m05",
+            "m06",
+            "m08",
+            "m09",
+            "m01"
+          ]
+        }
+      },
+      "format_problems": [
+        "turning_point.reason: \"m10\" is an id or path; ids belong only in id fields and cites",
+        "phase_notes[2]: \"m10\" is an id or path; ids belong only in id fields and cites",
+        "story_arc is not in match-time order: m10 comes before m08",
+        "story_arc is not in match-time order: m11 comes before m01"
+      ],
+      "grounding": {
+        "passed": false,
+        "offending": [
+          {
+            "type": "number",
+            "value": "phase_notes[2]: 74",
+            "reason": "number not in facts"
+          },
+          {
+            "type": "number",
+            "value": "phase_notes[2]: 10",
+            "reason": "number not in facts"
+          }
+        ]
+      },
+      "style": {
+        "passed": false,
+        "offending": [
+          {
+            "type": "style",
+            "value": "turning_point.reason: result_line",
+            "reason": "field name in the text"
+          },
+          {
+            "type": "style",
+            "value": "turning_point.reason: score_effect",
+            "reason": "field name in the text"
+          },
+          {
+            "type": "style",
+            "value": "phase_notes[1]: team_threat",
+            "reason": "field name in the text"
+          },
+          {
+            "type": "style",
+            "value": "phase_notes[1]: opponent_threat",
+            "reason": "field name in the text"
+          },
+          {
+            "type": "style",
+            "value": "phase_notes[3]: final_third_entries",
+            "reason": "field name in the text"
+          },
+          {
+            "type": "style",
+            "value": "phase_notes[3]: penalty_area_entries",
+            "reason": "field name in the text"
+          }
+        ]
+      },
+      "polish": {
+        "passed": true,
+        "offending": []
+      },
+      "terms": {
+        "passed": true,
+        "offending": []
+      }
+    },
+    {
+      "attempt": 2,
+      "analysis": {
+        "match_headline": "London Red won 2-1 after trailing from the 61st minute to the 74th",
+        "story_arc": [
+          {
+            "moment_id": "m01",
+            "role": "other"
+          },
+          {
+            "moment_id": "m02",
+            "role": "opening"
+          },
+          {
+            "moment_id": "m03",
+            "role": "build_up"
+          },
+          {
+            "moment_id": "m04",
+            "role": "build_up"
           },
           {
             "moment_id": "m05",
@@ -161,7 +347,7 @@
           },
           {
             "moment_id": "m08",
-            "role": "other"
+            "role": "response"
           },
           {
             "moment_id": "m09",
@@ -178,29 +364,27 @@
         ],
         "turning_point": {
           "moment_id": "m10",
-          "reason": "Rafael Tovey's goal in the 74th minute levelled the match at 1-1 and featured a key-pass xT of 0.1007, a shot-location value of 0.1607 and a build-up that 'won the ball back in the defensive third and scored 12 seconds later' (key_pass xT 0.1007)."
+          "reason": "The 74th-minute goal \"levelled the match at 1-1\" and its key pass had xT 0.1007 while the shot had shot-location value 0.1607."
         },
         "phase_notes": [
           {
-            "text": "London Red created 1.4019 xT in the first half and 1.4284 xT in the second half; London Blue created 0.1746 xT in the first half and 0.7132 xT in the second half.",
+            "text": "London Red created 1.4019 xT in the first half while London Blue created 0.1746 xT in the first half.",
             "cites": [
               "summary.first_half_summary.london_red.threat_created",
-              "summary.by_half.second_half.london_red.threat_created",
-              "summary.first_half_summary.london_blue.threat_created",
-              "summary.by_half.second_half.london_blue.threat_created"
+              "summary.first_half_summary.london_blue.threat_created"
             ]
           },
           {
-            "text": "London Red made 24 final-third entries in the first half and 23 in the second half; London Blue made 11 final-third entries in the first half and 14 in the second half.",
+            "text": "From the 70th minute to the 93rd minute London Red’s team's threat was 1.2259 and London Blue’s opponent threat was 0.0448 during that momentum run.",
             "cites": [
-              "summary.by_half.first_half.london_red.final_third_entries",
-              "summary.by_half.second_half.london_red.final_third_entries",
-              "summary.by_half.first_half.london_blue.final_third_entries",
-              "summary.by_half.second_half.london_blue.final_third_entries"
+              "m09.facts.start_minute",
+              "m09.facts.last_minute",
+              "m09.facts.team_threat",
+              "m09.facts.opponent_threat"
             ]
           },
           {
-            "text": "The 74th-minute goal that levelled the match had key-pass xT 0.1007 and a shot-location value 0.1607 in a move described as a build-up from the defensive third that 'scored 12 seconds later'.",
+            "text": "The equaliser involved a key pass with xT 0.1007 and a shot with shot-location value 0.1607 recorded in the play described as a build-up from the defensive third into the attacking third.",
             "cites": [
               "m10.facts.key_pass_xt_added",
               "m10.facts.shot_zone_value",
@@ -208,12 +392,12 @@
             ]
           },
           {
-            "text": "From the 70th minute to the 93rd minute London Red's momentum run shows team xT 1.2259 versus London Blue xT 0.0448, and that run includes the goals at m10 and m11.",
+            "text": "In the second half London Red made 23 final-third entries and London Blue made 14 final-third entries; London Red made 10 penalty-area entries and London Blue made 8 penalty-area entries.",
             "cites": [
-              "m09.facts.team_threat",
-              "m09.facts.opponent_threat",
-              "summary.momentum_runs",
-              "summary.momentum_runs.1"
+              "summary.by_half.second_half.london_red.final_third_entries",
+              "summary.by_half.second_half.london_blue.final_third_entries",
+              "summary.by_half.second_half.london_red.penalty_area_entries",
+              "summary.by_half.second_half.london_blue.penalty_area_entries"
             ]
           }
         ],
@@ -236,53 +420,15 @@
         }
       },
       "format_problems": [
-        "phase_notes[3]: \"m10\" is an id or path; ids belong only in id fields and cites",
-        "phase_notes[3]: \"m11\" is an id or path; ids belong only in id fields and cites"
+        "story_arc: opening must be used at most once, on the first entry"
       ],
       "grounding": {
-        "passed": false,
-        "offending": [
-          {
-            "type": "number",
-            "value": "phase_notes[2]: 74",
-            "reason": "number not in facts"
-          },
-          {
-            "type": "minute",
-            "value": "phase_notes[3]: 70th minute",
-            "reason": "minute not in facts"
-          },
-          {
-            "type": "minute",
-            "value": "phase_notes[3]: 93rd minute",
-            "reason": "minute not in facts"
-          },
-          {
-            "type": "number",
-            "value": "phase_notes[3]: 70",
-            "reason": "number not in facts"
-          },
-          {
-            "type": "number",
-            "value": "phase_notes[3]: 93",
-            "reason": "number not in facts"
-          }
-        ]
+        "passed": true,
+        "offending": []
       },
       "style": {
-        "passed": false,
-        "offending": [
-          {
-            "type": "style",
-            "value": "turning_point.reason: key_pass",
-            "reason": "field name in the text"
-          },
-          {
-            "type": "style",
-            "value": "phase_notes[3]: 6 numbers",
-            "reason": "too many numbers (at most 5)"
-          }
-        ]
+        "passed": true,
+        "offending": []
       },
       "polish": {
         "passed": true,
@@ -294,25 +440,25 @@
       }
     },
     {
-      "attempt": 2,
+      "attempt": 3,
       "analysis": {
         "match_headline": "London Red won 2-1 after trailing from the 61st minute to the 74th",
         "story_arc": [
           {
-            "moment_id": "m01",
+            "moment_id": "m02",
             "role": "opening"
           },
           {
-            "moment_id": "m02",
+            "moment_id": "m01",
             "role": "other"
           },
           {
             "moment_id": "m03",
-            "role": "other"
+            "role": "build_up"
           },
           {
             "moment_id": "m04",
-            "role": "other"
+            "role": "build_up"
           },
           {
             "moment_id": "m05",
@@ -328,7 +474,7 @@
           },
           {
             "moment_id": "m08",
-            "role": "other"
+            "role": "response"
           },
           {
             "moment_id": "m09",
@@ -345,18 +491,18 @@
         ],
         "turning_point": {
           "moment_id": "m10",
-          "reason": "Rafael Tovey's goal in the 74th minute levelled the match at 1-1 and featured xT 0.1007 and a shot-location value 0.1607."
+          "reason": "The 74th-minute goal \"levelled the match at 1-1\"; its key pass had xT 0.1007 and the shot had shot-location value 0.1607."
         },
         "phase_notes": [
           {
-            "text": "London Red created 1.4019 xT in the first half; London Blue created 0.1746 xT in the first half.",
+            "text": "London Red created 1.4019 xT in the first half while London Blue created 0.1746 xT in the first half.",
             "cites": [
               "summary.first_half_summary.london_red.threat_created",
               "summary.first_half_summary.london_blue.threat_created"
             ]
           },
           {
-            "text": "From the 70th minute to the 93rd minute London Red's momentum run shows team xT 1.2259 and opponent xT 0.0448.",
+            "text": "From the 70th minute to the 93rd minute London Red’s team_threat was 1.2259 and London Blue’s opponent_threat was 0.0448 during that momentum run.",
             "cites": [
               "m09.facts.start_minute",
               "m09.facts.last_minute",
@@ -365,19 +511,20 @@
             ]
           },
           {
-            "text": "The 74th-minute goal had xT 0.1007, a shot-location value 0.1607 and a build-up that 'won the ball back in the defensive third and scored 12 seconds later'.",
+            "text": "The equaliser was recorded as a build-up that \"won the ball back in the defensive third and scored 12 seconds later\" and involved a key pass with xT 0.1007 and a shot with shot-location value 0.1607.",
             "cites": [
-              "m10.minute",
+              "m10.facts.build_up",
               "m10.facts.key_pass_xt_added",
-              "m10.facts.shot_zone_value",
-              "m10.facts.build_up"
+              "m10.facts.shot_zone_value"
             ]
           },
           {
-            "text": "London Red made 24 final-third entries in the first half; London Blue made 11 final-third entries in the first half.",
+            "text": "In the second half London Red made 23 final-third entries and London Blue made 14 final-third entries; London Red made 10 penalty-area entries and London Blue made 8 penalty-area entries.",
             "cites": [
-              "summary.by_half.first_half.london_red.final_third_entries",
-              "summary.by_half.first_half.london_blue.final_third_entries"
+              "summary.by_half.second_half.london_red.final_third_entries",
+              "summary.by_half.second_half.london_blue.final_third_entries",
+              "summary.by_half.second_half.london_red.penalty_area_entries",
+              "summary.by_half.second_half.london_blue.penalty_area_entries"
             ]
           }
         ],
@@ -388,8 +535,8 @@
             "m11"
           ],
           "supporting": [
-            "m01",
             "m02",
+            "m01",
             "m03",
             "m04",
             "m05",
@@ -399,14 +546,27 @@
           ]
         }
       },
-      "format_problems": [],
+      "format_problems": [
+        "story_arc is not in match-time order: m02 comes before m01"
+      ],
       "grounding": {
         "passed": true,
         "offending": []
       },
       "style": {
-        "passed": true,
-        "offending": []
+        "passed": false,
+        "offending": [
+          {
+            "type": "style",
+            "value": "phase_notes[1]: team_threat",
+            "reason": "field name in the text"
+          },
+          {
+            "type": "style",
+            "value": "phase_notes[1]: opponent_threat",
+            "reason": "field name in the text"
+          }
+        ]
       },
       "polish": {
         "passed": true,
