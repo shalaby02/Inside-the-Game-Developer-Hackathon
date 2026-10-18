@@ -5,11 +5,11 @@
     "match_headline": "London Red won 2-1 after trailing from the 61st minute to the 74th",
     "story_arc": [
       {
-        "moment_id": "m02",
+        "moment_id": "m01",
         "role": "opening"
       },
       {
-        "moment_id": "m01",
+        "moment_id": "m02",
         "role": "other"
       },
       {
@@ -62,7 +62,7 @@
         ]
       },
       {
-        "text": "From the 70th minute to the 93rd minute London Red’s team_threat was 1.2259 and London Blue’s opponent_threat was 0.0448 during that momentum run.",
+        "text": "From the 70th minute to the 93rd minute London Red created 1.2259 xT to London Blue's 0.0448.",
         "cites": [
           "m09.facts.start_minute",
           "m09.facts.last_minute",
@@ -145,50 +145,17 @@
       "analysis": {
         "match_headline": "London Red won 2-1 after trailing from the 61st minute to the 74th",
         "story_arc": [
-          {
-            "moment_id": "m02",
-            "role": "opening"
-          },
-          {
-            "moment_id": "m03",
-            "role": "build_up"
-          },
-          {
-            "moment_id": "m04",
-            "role": "build_up"
-          },
-          {
-            "moment_id": "m06",
-            "role": "build_up"
-          },
-          {
-            "moment_id": "m07",
-            "role": "build_up"
-          },
-          {
-            "moment_id": "m09",
-            "role": "build_up"
-          },
-          {
-            "moment_id": "m10",
-            "role": "turning_point"
-          },
-          {
-            "moment_id": "m08",
-            "role": "response"
-          },
-          {
-            "moment_id": "m11",
-            "role": "decider"
-          },
-          {
-            "moment_id": "m01",
-            "role": "other"
-          },
-          {
-            "moment_id": "m05",
-            "role": "other"
-          }
+          { "moment_id": "m01", "role": "opening" },
+          { "moment_id": "m02", "role": "other" },
+          { "moment_id": "m03", "role": "other" },
+          { "moment_id": "m04", "role": "other" },
+          { "moment_id": "m05", "role": "other" },
+          { "moment_id": "m06", "role": "other" },
+          { "moment_id": "m07", "role": "other" },
+          { "moment_id": "m08", "role": "other" },
+          { "moment_id": "m09", "role": "response" },
+          { "moment_id": "m10", "role": "turning_point" },
+          { "moment_id": "m11", "role": "decider" }
         ],
         "turning_point": {
           "moment_id": "m10",
@@ -319,11 +286,11 @@
         "story_arc": [
           {
             "moment_id": "m01",
-            "role": "other"
+            "role": "opening"
           },
           {
             "moment_id": "m02",
-            "role": "opening"
+            "role": "other"
           },
           {
             "moment_id": "m03",
@@ -375,7 +342,7 @@
             ]
           },
           {
-            "text": "From the 70th minute to the 93rd minute London Red’s team's threat was 1.2259 and London Blue’s opponent threat was 0.0448 during that momentum run.",
+            "text": "From the 70th minute to the 93rd minute London Red created 1.2259 xT to London Blue's 0.0448.",
             "cites": [
               "m09.facts.start_minute",
               "m09.facts.last_minute",
@@ -445,11 +412,11 @@
         "match_headline": "London Red won 2-1 after trailing from the 61st minute to the 74th",
         "story_arc": [
           {
-            "moment_id": "m02",
+            "moment_id": "m01",
             "role": "opening"
           },
           {
-            "moment_id": "m01",
+            "moment_id": "m02",
             "role": "other"
           },
           {

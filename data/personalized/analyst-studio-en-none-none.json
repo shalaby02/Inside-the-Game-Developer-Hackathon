@@ -1,0 +1,791 @@
+{
+  "model_deployment": "gpt-5-mini",
+  "profile": {
+    "mode": "analyst",
+    "voice": "studio",
+    "language": "en",
+    "favourite_team": "none",
+    "focus_player": "none"
+  },
+  "profile_key": "analyst-studio-en-none-none",
+  "status": "ok",
+  "selection": [
+    "m01",
+    "m02",
+    "m03",
+    "m04",
+    "m05",
+    "m06",
+    "m07",
+    "m08",
+    "m09",
+    "m10",
+    "m11"
+  ],
+  "player": null,
+  "moments": [
+    {
+      "id": "m01",
+      "status": "ok",
+      "output": {
+        "headline": "Hollis denies Dunmore from 8.0 metres in the 3rd minute",
+        "text": "London Red won the ball back in the attacking third and shot 7 seconds later. Bram Hollis denied Cass Dunmore from 8.0 metres; the shot came from a spot with xT 0.3 in the 3rd minute while the score was 0-0."
+      },
+      "checks": {
+        "format_problems": [],
+        "grounding": {
+          "passed": true,
+          "offending": []
+        },
+        "style": {
+          "passed": true,
+          "offending": []
+        },
+        "polish": {
+          "passed": true,
+          "offending": []
+        },
+        "terms": {
+          "passed": true,
+          "offending": []
+        }
+      },
+      "retries": 0,
+      "attempts": [
+        {
+          "attempt": 1,
+          "output": {
+            "headline": "Hollis denies Dunmore from 8.0 metres in the 3rd minute",
+            "text": "London Red won the ball back in the attacking third and shot 7 seconds later. Bram Hollis denied Cass Dunmore from 8.0 metres; the shot came from a spot with xT 0.3 in the 3rd minute while the score was 0-0."
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
+          },
+          "polish": {
+            "passed": true,
+            "offending": []
+          },
+          "terms": {
+            "passed": true,
+            "offending": []
+          }
+        }
+      ],
+      "input_hash": "eecd255cfeab3731"
+    },
+    {
+      "id": "m02",
+      "status": "ok",
+      "output": {
+        "headline": "London Red add 1.0557 xT across six blocks from the 20th minute",
+        "text": "From the 20th minute to the end of the first half, London Red added 1.0557 xT across 6 blocks while London Blue added 0.0126 xT. Luca Merriden contributed 0.5013 xT in that surge."
+      },
+      "checks": {
+        "format_problems": [],
+        "grounding": {
+          "passed": true,
+          "offending": []
+        },
+        "style": {
+          "passed": true,
+          "offending": []
+        },
+        "polish": {
+          "passed": true,
+          "offending": []
+        },
+        "terms": {
+          "passed": true,
+          "offending": []
+        }
+      },
+      "retries": 0,
+      "attempts": [
+        {
+          "attempt": 1,
+          "output": {
+            "headline": "London Red add 1.0557 xT across six blocks from the 20th minute",
+            "text": "From the 20th minute to the end of the first half, London Red added 1.0557 xT across 6 blocks while London Blue added 0.0126 xT. Luca Merriden contributed 0.5013 xT in that surge."
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
+          },
+          "polish": {
+            "passed": true,
+            "offending": []
+          },
+          "terms": {
+            "passed": true,
+            "offending": []
+          }
+        }
+      ],
+      "input_hash": "c3a47936e3e15d82"
+    },
+    {
+      "id": "m03",
+      "status": "ok",
+      "output": {
+        "headline": "Femi Oakhurst's pass added xT 0.0758 in the 26th minute",
+        "text": "London Red won the ball back in midfield and played this pass 12 seconds later, after 1 earlier pass. Femi Oakhurst passed to Cass Dunmore, moving xT from 0.0043 to 0.0801 and adding xT 0.0758 in the 26th minute."
+      },
+      "checks": {
+        "format_problems": [],
+        "grounding": {
+          "passed": true,
+          "offending": []
+        },
+        "style": {
+          "passed": true,
+          "offending": []
+        },
+        "polish": {
+          "passed": true,
+          "offending": []
+        },
+        "terms": {
+          "passed": true,
+          "offending": []
+        }
+      },
+      "retries": 0,
+      "attempts": [
+        {
+          "attempt": 1,
+          "output": {
+            "headline": "Femi Oakhurst's pass added xT 0.0758 in the 26th minute",
+            "text": "London Red won the ball back in midfield and played this pass 12 seconds later, after 1 earlier pass. Femi Oakhurst passed to Cass Dunmore, moving xT from 0.0043 to 0.0801 and adding xT 0.0758 in the 26th minute."
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
+          },
+          "polish": {
+            "passed": true,
+            "offending": []
+          },
+          "terms": {
+            "passed": true,
+            "offending": []
+          }
+        }
+      ],
+      "input_hash": "339a062bd8f917b5"
+    },
+    {
+      "id": "m04",
+      "status": "ok",
+      "output": {
+        "headline": "Cass Dunmore misses from 6.4 metres after Merriden's pass",
+        "text": "London Red built the move through 3 passes. Cass Dunmore missed from 6.4 metres in the 38th minute after Luca Merriden's pass added 0.2906 xT to a 0.3 xT spot."
+      },
+      "checks": {
+        "format_problems": [],
+        "grounding": {
+          "passed": true,
+          "offending": []
+        },
+        "style": {
+          "passed": true,
+          "offending": []
+        },
+        "polish": {
+          "passed": true,
+          "offending": []
+        },
+        "terms": {
+          "passed": true,
+          "offending": []
+        }
+      },
+      "retries": 0,
+      "attempts": [
+        {
+          "attempt": 1,
+          "output": {
+            "headline": "Cass Dunmore misses from 6.4 metres after Merriden's pass",
+            "text": "London Red built the move through 3 passes. Cass Dunmore missed from 6.4 metres in the 38th minute after Luca Merriden's pass added 0.2906 xT to a 0.3 xT spot."
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
+          },
+          "polish": {
+            "passed": true,
+            "offending": []
+          },
+          "terms": {
+            "passed": true,
+            "offending": []
+          }
+        }
+      ],
+      "input_hash": "c85764f7b5e3be79"
+    },
+    {
+      "id": "m05",
+      "status": "ok",
+      "output": {
+        "headline": "Idris Stanbury's pass raised xT from 0.0046 to 0.0801",
+        "text": "London Red won the ball back in midfield and played this pass 1 second later. Idris Stanbury passed to Cass Dunmore in the 40th minute, moving xT from 0.0046 to 0.0801 and adding 0.0755 xT to London Red's immediate threat."
+      },
+      "checks": {
+        "format_problems": [],
+        "grounding": {
+          "passed": true,
+          "offending": []
+        },
+        "style": {
+          "passed": true,
+          "offending": []
+        },
+        "polish": {
+          "passed": true,
+          "offending": []
+        },
+        "terms": {
+          "passed": true,
+          "offending": []
+        }
+      },
+      "retries": 0,
+      "attempts": [
+        {
+          "attempt": 1,
+          "output": {
+            "headline": "Idris Stanbury's pass raised xT from 0.0046 to 0.0801",
+            "text": "London Red won the ball back in midfield and played this pass 1 second later. Idris Stanbury passed to Cass Dunmore in the 40th minute, moving xT from 0.0046 to 0.0801 and adding 0.0755 xT to London Red's immediate threat."
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
+          },
+          "polish": {
+            "passed": true,
+            "offending": []
+          },
+          "terms": {
+            "passed": true,
+            "offending": []
+          }
+        }
+      ],
+      "input_hash": "54963a45db5ede3a"
+    },
+    {
+      "id": "m06",
+      "status": "ok",
+      "output": {
+        "headline": "Brannick pass raises xT from 0.0076 to 0.0801",
+        "text": "London Red's move started after a London Blue foul. In the 55th minute Theo Brannick passed to Cass Dunmore; the ball's xT moved from 0.0076 to 0.0801, an xT added of 0.0725 that represented a measurable threat created for London Red."
+      },
+      "checks": {
+        "format_problems": [],
+        "grounding": {
+          "passed": true,
+          "offending": []
+        },
+        "style": {
+          "passed": true,
+          "offending": []
+        },
+        "polish": {
+          "passed": true,
+          "offending": []
+        },
+        "terms": {
+          "passed": true,
+          "offending": []
+        }
+      },
+      "retries": 0,
+      "attempts": [
+        {
+          "attempt": 1,
+          "output": {
+            "headline": "Brannick pass raises xT from 0.0076 to 0.0801",
+            "text": "London Red's move started after a London Blue foul. In the 55th minute Theo Brannick passed to Cass Dunmore; the ball's xT moved from 0.0076 to 0.0801, an xT added of 0.0725 that represented a measurable threat created for London Red."
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
+          },
+          "polish": {
+            "passed": true,
+            "offending": []
+          },
+          "terms": {
+            "passed": true,
+            "offending": []
+          }
+        }
+      ],
+      "input_hash": "1f0e4925f6962038"
+    },
+    {
+      "id": "m07",
+      "status": "ok",
+      "output": {
+        "headline": "Niko Vane put London Blue 1-0 up in the 61st minute",
+        "text": "Niko Vane scored in the 61st minute to put London Blue 1-0 up; the shot came from a 0.1607 xT location from 12.7 metres after Dario Quill's pass added 0.1392 xT. London Blue won the ball back in midfield and scored 10 seconds later, after 2 passes and a carry from midfield into the attacking third."
+      },
+      "checks": {
+        "format_problems": [],
+        "grounding": {
+          "passed": true,
+          "offending": []
+        },
+        "style": {
+          "passed": true,
+          "offending": []
+        },
+        "polish": {
+          "passed": true,
+          "offending": []
+        },
+        "terms": {
+          "passed": true,
+          "offending": []
+        }
+      },
+      "retries": 0,
+      "attempts": [
+        {
+          "attempt": 1,
+          "output": {
+            "headline": "Niko Vane put London Blue 1-0 up in the 61st minute",
+            "text": "Niko Vane scored in the 61st minute to put London Blue 1-0 up; the shot came from a 0.1607 xT location from 12.7 metres after Dario Quill's pass added 0.1392 xT. London Blue won the ball back in midfield and scored 10 seconds later, after 2 passes and a carry from midfield into the attacking third."
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
+          },
+          "polish": {
+            "passed": true,
+            "offending": []
+          },
+          "terms": {
+            "passed": true,
+            "offending": []
+          }
+        }
+      ],
+      "input_hash": "a4d3c11bcec5546d"
+    },
+    {
+      "id": "m08",
+      "status": "ok",
+      "output": {
+        "headline": "Ellis Harwick denied Niko Vane from 10.0 metres",
+        "text": "In the 67th minute Ellis Harwick denied Niko Vane's shot from 10.0 metres after a Kai Renwick pass; the shot came from a spot with xT 0.1607 and the key pass added 0.1415. London Blue built the move through 3 passes."
+      },
+      "checks": {
+        "format_problems": [],
+        "grounding": {
+          "passed": true,
+          "offending": []
+        },
+        "style": {
+          "passed": true,
+          "offending": []
+        },
+        "polish": {
+          "passed": true,
+          "offending": []
+        },
+        "terms": {
+          "passed": true,
+          "offending": []
+        }
+      },
+      "retries": 0,
+      "attempts": [
+        {
+          "attempt": 1,
+          "output": {
+            "headline": "Ellis Harwick denied Niko Vane from 10.0 metres",
+            "text": "In the 67th minute Ellis Harwick denied Niko Vane's shot from 10.0 metres after a Kai Renwick pass; the shot came from a spot with xT 0.1607 and the key pass added 0.1415. London Blue built the move through 3 passes."
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
+          },
+          "polish": {
+            "passed": true,
+            "offending": []
+          },
+          "terms": {
+            "passed": true,
+            "offending": []
+          }
+        }
+      ],
+      "input_hash": "18708b303fcdc9c5"
+    },
+    {
+      "id": "m09",
+      "status": "ok",
+      "output": {
+        "headline": "London Red control the game from the 70th to the 93rd minute",
+        "text": "From the 70th minute to the 93rd minute, London Red added 1.2259 xT while London Blue added 0.0448 xT. Theo Brannick supplied 0.6178 xT to spark that run."
+      },
+      "checks": {
+        "format_problems": [],
+        "grounding": {
+          "passed": true,
+          "offending": []
+        },
+        "style": {
+          "passed": true,
+          "offending": []
+        },
+        "polish": {
+          "passed": true,
+          "offending": []
+        },
+        "terms": {
+          "passed": true,
+          "offending": []
+        }
+      },
+      "retries": 0,
+      "attempts": [
+        {
+          "attempt": 1,
+          "output": {
+            "headline": "London Red control the game from the 70th to the 93rd minute",
+            "text": "From the 70th minute to the 93rd minute, London Red added 1.2259 xT while London Blue added 0.0448 xT. Theo Brannick supplied 0.6178 xT to spark that run."
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
+          },
+          "polish": {
+            "passed": true,
+            "offending": []
+          },
+          "terms": {
+            "passed": true,
+            "offending": []
+          }
+        }
+      ],
+      "input_hash": "1565605739ec7a53"
+    },
+    {
+      "id": "m10",
+      "status": "ok",
+      "output": {
+        "headline": "Rafael Tovey scored in the 74th minute to level the match at 1-1",
+        "text": "The attack came from 10.7 metres with shot-zone xT 0.1607 after Theo Brannick's key pass that added 0.1007, and it was the second-fastest of the match's 2 counter-attacks. London Red won the ball back in the defensive third and scored 12 seconds later, after 3 passes and a carry from midfield into the attacking third."
+      },
+      "checks": {
+        "format_problems": [],
+        "grounding": {
+          "passed": true,
+          "offending": []
+        },
+        "style": {
+          "passed": true,
+          "offending": []
+        },
+        "polish": {
+          "passed": true,
+          "offending": []
+        },
+        "terms": {
+          "passed": true,
+          "offending": []
+        }
+      },
+      "retries": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "output": {
+            "headline": "Rafael Tovey scored to level the match at 1-1",
+            "text": "Rafael Tovey scored in the 74th minute to level the match at 1-1; it was the second-fastest of the match's two counter-attacks, from 10.7 metres with a shot-zone xT of 0.1607 after Theo Brannick's key pass added 0.1007. London Red won the ball back in the defensive third and scored 12 seconds later, after 3 passes and a carry from midfield into the attacking third."
+          },
+          "format_problems": [
+            "text has 65 words, analyst mode allows 60"
+          ],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
+          },
+          "polish": {
+            "passed": true,
+            "offending": []
+          },
+          "terms": {
+            "passed": true,
+            "offending": []
+          }
+        },
+        {
+          "attempt": 2,
+          "output": {
+            "headline": "Rafael Tovey scored to level the match at 1-1",
+            "text": "Rafael Tovey scored in the 74th minute to level the match at 1-1; it was the second-fastest of the match's two counter-attacks. London Red won the ball back in the defensive third and scored 12 seconds later, after 3 passes and a carry from midfield into the attacking third."
+          },
+          "format_problems": [
+            "analyst mode: keep at least as many numbers as the narration (5, the narration has 7)"
+          ],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
+          },
+          "polish": {
+            "passed": true,
+            "offending": []
+          },
+          "terms": {
+            "passed": true,
+            "offending": []
+          }
+        },
+        {
+          "attempt": 3,
+          "output": {
+            "headline": "Rafael Tovey scored in the 74th minute to level the match at 1-1",
+            "text": "The attack came from 10.7 metres with shot-zone xT 0.1607 after Theo Brannick's key pass that added 0.1007, and it was the second-fastest of the match's 2 counter-attacks. London Red won the ball back in the defensive third and scored 12 seconds later, after 3 passes and a carry from midfield into the attacking third."
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
+          },
+          "polish": {
+            "passed": true,
+            "offending": []
+          },
+          "terms": {
+            "passed": true,
+            "offending": []
+          }
+        }
+      ],
+      "input_hash": "c6b5a2c140d0612b"
+    },
+    {
+      "id": "m11",
+      "status": "ok",
+      "output": {
+        "headline": "Cass Dunmore scores to put London Red 2-1 ahead",
+        "text": "Cass Dunmore scored to put London Red 2-1 ahead in the 89th minute from 6.4 metres after a pass that added 0.2712 xT. London Red built the move through 2 passes and a carry in the attacking third."
+      },
+      "checks": {
+        "format_problems": [],
+        "grounding": {
+          "passed": true,
+          "offending": []
+        },
+        "style": {
+          "passed": true,
+          "offending": []
+        },
+        "polish": {
+          "passed": true,
+          "offending": []
+        },
+        "terms": {
+          "passed": true,
+          "offending": []
+        }
+      },
+      "retries": 0,
+      "attempts": [
+        {
+          "attempt": 1,
+          "output": {
+            "headline": "Cass Dunmore scores to put London Red 2-1 ahead",
+            "text": "Cass Dunmore scored to put London Red 2-1 ahead in the 89th minute from 6.4 metres after a pass that added 0.2712 xT. London Red built the move through 2 passes and a carry in the attacking third."
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
+          },
+          "polish": {
+            "passed": true,
+            "offending": []
+          },
+          "terms": {
+            "passed": true,
+            "offending": []
+          }
+        }
+      ],
+      "input_hash": "5ec75dc69aba02b5"
+    }
+  ],
+  "recap": {
+    "status": "ok",
+    "output": {
+      "text": "London Red won 2-1 after trailing from the 61st minute to the 74th. Bram Hollis denied Cass Dunmore in the 3rd minute and Niko Vane scored in the 61st minute to put London Blue 1-0 up. Rafael Tovey scored in the 74th minute from a Theo Brannick key pass with xT 0.1007 and shot-location value 0.1607 and Cass Dunmore scored in the 89th minute to put London Red 2-1 ahead."
+    },
+    "checks": {
+      "format_problems": [],
+      "grounding": {
+        "passed": true,
+        "offending": []
+      },
+      "style": {
+        "passed": true,
+        "offending": []
+      },
+      "polish": {
+        "passed": true,
+        "offending": []
+      },
+      "terms": {
+        "passed": true,
+        "offending": []
+      }
+    },
+    "retries": 2,
+    "attempts": [
+      {
+        "attempt": 1,
+        "output": {
+          "text": "London Red won 2-1 after trailing from the 61st minute to the 74th. Bram Hollis denied Cass Dunmore in the 3rd minute and London Red had a momentum_shift from the 20th minute to the end of the first half featuring Luca Merriden, Femi Oakhurst and Theo Brannick. Rafael Tovey scored in the 74th minute from a Theo Brannick key pass with xT 0.1007 and shot-location value 0.1607, the goal \"levelled the match at 1-1\" and Cass Dunmore scored in the 89th minute to put London Red 2-1 up."
+        },
+        "format_problems": [],
+        "grounding": {
+          "passed": true,
+          "offending": []
+        },
+        "style": {
+          "passed": false,
+          "offending": [
+            {
+              "type": "style",
+              "value": "momentum_shift",
+              "reason": "field name in the text"
+            }
+          ]
+        },
+        "polish": {
+          "passed": true,
+          "offending": []
+        },
+        "terms": {
+          "passed": true,
+          "offending": []
+        }
+      },
+      {
+        "attempt": 2,
+        "output": {
+          "text": "London Red won 2-1 after trailing from the 61st minute to the 74th. Rafael Tovey scored in the 74th minute from a Theo Brannick key pass with xT 0.1007 and shot-location value 0.1607 and the goal \"levelled the match at 1-1\"."
+        },
+        "format_problems": [
+          "recap has 2 sentences, it needs 3 to 5"
+        ],
+        "grounding": {
+          "passed": true,
+          "offending": []
+        },
+        "style": {
+          "passed": true,
+          "offending": []
+        },
+        "polish": {
+          "passed": true,
+          "offending": []
+        },
+        "terms": {
+          "passed": true,
+          "offending": []
+        }
+      },
+      {
+        "attempt": 3,
+        "output": {
+          "text": "London Red won 2-1 after trailing from the 61st minute to the 74th. Bram Hollis denied Cass Dunmore in the 3rd minute and Niko Vane scored in the 61st minute to put London Blue 1-0 up. Rafael Tovey scored in the 74th minute from a Theo Brannick key pass with xT 0.1007 and shot-location value 0.1607 and Cass Dunmore scored in the 89th minute to put London Red 2-1 ahead."
+        },
+        "format_problems": [],
+        "grounding": {
+          "passed": true,
+          "offending": []
+        },
+        "style": {
+          "passed": true,
+          "offending": []
+        },
+        "polish": {
+          "passed": true,
+          "offending": []
+        },
+        "terms": {
+          "passed": true,
+          "offending": []
+        }
+      }
+    ],
+    "input_hash": "35118c6378c77a8a"
+  }
+}

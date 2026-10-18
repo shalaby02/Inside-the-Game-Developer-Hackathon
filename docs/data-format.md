@@ -236,3 +236,42 @@ Never used: "turnover" (ambiguous, see above), xG (there is no shot model, only 
 **Connectors.** The headline and phase notes can't use causal or temporal connectors ("preceded", "led to", "sparked", "because", "before", "after", "ahead of", "caused"): the checks confirm facts, not that one thing caused or came before another. The list is `CONNECTORS` in `src/style_rules.py`. A fact phrase quoted **in full** (such as `result_line`'s "after trailing") is exempt; a partial quote is not. The turning point's reason may use them, because it explains why.
 
 The file also keeps `status`, `checks`, `retries`, every attempt and `input_hash` (the cache key). `python src/run_analyst.py --verify` re-checks it with no model calls.
+
+## Player summaries
+
+`src/player_summary.py` reads `data/match_xt.csv` and `data/key_moments.json` and writes `data/player_summaries.json`: `{"players": {name: facts}}` for every player who appears in a key moment or took a shot, by team (London Red first) then shirt number. Facts only.
+
+| Field | Meaning |
+|---|---|
+| `team` | Team id. |
+| `passes_completed`, `passes_attempted` | Pass events, and the complete ones. |
+| `xt_added` | `xt_added` of the player's completed passes and carries (threat created), to 4 decimals. |
+| `final_third_entries` | Completed passes and carries from outside the final third into it. |
+| `shots` | Shots taken. |
+| `saves` | Goalkeepers only: the other team's saved shots (saves have no event of their own). |
+| `moment_ids` | Key moments whose `players` list names the player, in match order. |
+
+## Personalized recaps
+
+`src/run_personalizer.py` writes `data/personalized/<profile_key>.json`, one file per reader profile. The code is in `src/profiles.py` (profile, selection), `src/voices.py` and `src/personalizer.py` (instructions, checks). It reads the frozen files above and never changes them.
+
+**Profile.** `{mode: analyst|fan, voice: studio|stadium, language: en|ar, favourite_team: london_red|london_blue|none, focus_player: <name>|none}`, validated in code (`focus_player` must be in `player_summaries.json`). The key is the five values joined by `-`, with the player as a slug: `fan-stadium-en-none-cass_dunmore`. Arabic is not built yet.
+
+**Selection** (code, no model calls). Story order is match order (the frozen `story_arc` has m02 before m01, so only its roles are used).
+- `analyst`: every moment. `fan`: the essential moments plus supporting moments that involve the favourite team or the focus player. A moment involves a team when it is that team's moment or names one of its players.
+- `focus_player`: only moments whose `players` list names that player, in either mode.
+- `favourite_team`: that team's moments (`team`) first, then the rest, each group in story order.
+
+**Per moment**, one model call with the moment's narration, its facts (`narrator.moment_input` without the clock's `second`) and the reader; it returns `headline`, `text`. **Recap**, one call: 3-5 sentences from `match_headline`, the arc roles, `turning_point` (its reason in analyst mode only) and `result_line`, over the selected moments plus every essential one, plus the focus player's facts (without `xt_added` in fan mode).
+
+**Checks**, all in code, with up to 2 retries: grounding, style (`BLOCKED`, plus `PERSONALIZER_BLOCKED` always and `FAN_BLOCKED` in fan mode; the recap also `CONNECTORS`), polish and term backing, as for the Narrator and Analyst. Plus: sentence, word and exclamation limits per mode and voice; `build_up` word for word if used; the focus player named. Numbers against the narration: analyst mode at least as many, fan mode fewer and no xT number (any value of an xT fact), so a fan version always has fewer numbers than the analyst one. Recap: at most `MAX_NUMBERS` numbers per sentence (per field elsewhere), the final score winner first, the winning team, and the favourite team named first.
+
+| Field | Meaning |
+|---|---|
+| `profile`, `profile_key` | The profile and its key (the file name). |
+| `selection` | The moment ids, in the order shown. |
+| `player` | The focus player's facts, or `null`. |
+| `moments` | Per moment: `id`, `status`, `output` (`headline`, `text`), `checks`, `retries`, `attempts`, `input_hash`. |
+| `recap` | The same, with `output.text`. |
+
+`python src/run_personalizer.py --verify` re-checks every file with no model calls.

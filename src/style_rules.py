@@ -159,3 +159,31 @@ ANALYST_PROMPT_RULES = """\
 - Never use: xG or expected goals (say "shot-location value"), pressing or PPDA, formations or team shape, compactness, width, possession percentages, or "turnover" (say "possessions lost in the final third").
 - In match_headline and phase_notes, no causal or temporal connectors: """ + ", ".join(
     f'"{word}"' for word, _, _ in CONNECTORS) + """ and the like. State facts side by side instead. Quoting a fact phrase such as result_line word for word is fine."""
+
+
+# ------------------------------------------------------------ personalizer
+#
+# Extra rules for the Personalizer only (src/personalizer.py). They are kept
+# out of BLOCKED on purpose: BLOCKED is part of the Narrator's and Analyst's
+# cache keys, so changing it would mark their frozen outputs stale.
+
+# Every profile is told from the neutral view, a favourite team included, and
+# says nothing the facts don't: no player's gender (docs/teams.md gives none)
+# and no claim about what the score did later.
+PERSONALIZER_BLOCKED = [
+    (r"he|him|his|himself|she|her|hers|herself", "the facts give no gender; use the player's name"),
+    (r"we|us|our|ours|ourselves|i|i'm|me|my|mine", "first person takes a side; stay neutral"),
+    (r"come on|get in|the lads|the boys|sadly|unfortunately|thankfully|luckily|heartbreak\w*|"
+     r"cruel(?:ly)?|robbed|deserv\w*|should have|unlucky", "takes a side; stay neutral"),
+    # Not in BLOCKED (see above), so blocked here: the result is known only at the end.
+    (r"wins? it|won it|seal(?:s|ed)? it|wrap(?:s|ped)? it up|it's over|secur(?:e|es|ed|ing)",
+     "claims what the score did later"),
+]
+
+# Fan mode: no xT, "danger" instead, and no analyst jargon.
+FAN_BLOCKED = [
+    (r"xt|expected threat|threat created|threat values?", 'fan mode: say "danger", not xT'),
+    (r"shot-location values?|progressive (?:pass(?:es)?|carr(?:y|ies)|actions?|play)|"
+     r"(?:final[- ]third|penalty[- ]area|box) entr(?:y|ies)|build-up phase",
+     "fan mode: analyst jargon"),
+]

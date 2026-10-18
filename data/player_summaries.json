@@ -1,0 +1,141 @@
+{
+  "players": {
+    "Ellis Harwick": {
+      "team": "london_red",
+      "passes_completed": 3,
+      "passes_attempted": 5,
+      "xt_added": 0.0018,
+      "final_third_entries": 0,
+      "shots": 0,
+      "saves": 2,
+      "moment_ids": [
+        "m08"
+      ]
+    },
+    "Idris Stanbury": {
+      "team": "london_red",
+      "passes_completed": 21,
+      "passes_attempted": 24,
+      "xt_added": 0.5643,
+      "final_third_entries": 13,
+      "shots": 0,
+      "moment_ids": [
+        "m05"
+      ]
+    },
+    "Theo Brannick": {
+      "team": "london_red",
+      "passes_completed": 19,
+      "passes_attempted": 25,
+      "xt_added": 0.9809,
+      "final_third_entries": 8,
+      "shots": 0,
+      "moment_ids": [
+        "m02",
+        "m06",
+        "m09",
+        "m10",
+        "m11"
+      ]
+    },
+    "Luca Merriden": {
+      "team": "london_red",
+      "passes_completed": 25,
+      "passes_attempted": 30,
+      "xt_added": 0.8062,
+      "final_third_entries": 13,
+      "shots": 0,
+      "moment_ids": [
+        "m02",
+        "m04",
+        "m09"
+      ]
+    },
+    "Cass Dunmore": {
+      "team": "london_red",
+      "passes_completed": 28,
+      "passes_attempted": 34,
+      "xt_added": 0.075,
+      "final_third_entries": 1,
+      "shots": 7,
+      "moment_ids": [
+        "m01",
+        "m03",
+        "m04",
+        "m05",
+        "m06",
+        "m09",
+        "m11"
+      ]
+    },
+    "Rafael Tovey": {
+      "team": "london_red",
+      "passes_completed": 26,
+      "passes_attempted": 39,
+      "xt_added": -0.2346,
+      "final_third_entries": 4,
+      "shots": 8,
+      "moment_ids": [
+        "m10"
+      ]
+    },
+    "Femi Oakhurst": {
+      "team": "london_red",
+      "passes_completed": 14,
+      "passes_attempted": 21,
+      "xt_added": 0.5387,
+      "final_third_entries": 7,
+      "shots": 0,
+      "moment_ids": [
+        "m02",
+        "m03"
+      ]
+    },
+    "Bram Hollis": {
+      "team": "london_blue",
+      "passes_completed": 3,
+      "passes_attempted": 5,
+      "xt_added": 0.0086,
+      "final_third_entries": 0,
+      "shots": 0,
+      "saves": 4,
+      "moment_ids": [
+        "m01"
+      ]
+    },
+    "Niko Vane": {
+      "team": "london_blue",
+      "passes_completed": 11,
+      "passes_attempted": 15,
+      "xt_added": -0.268,
+      "final_third_entries": 1,
+      "shots": 8,
+      "moment_ids": [
+        "m07",
+        "m08"
+      ]
+    },
+    "Kai Renwick": {
+      "team": "london_blue",
+      "passes_completed": 17,
+      "passes_attempted": 23,
+      "xt_added": 0.3584,
+      "final_third_entries": 6,
+      "shots": 0,
+      "moment_ids": [
+        "m08"
+      ]
+    },
+    "Dario Quill": {
+      "team": "london_blue",
+      "passes_completed": 10,
+      "passes_attempted": 16,
+      "xt_added": 0.3415,
+      "final_third_entries": 5,
+      "shots": 0,
+      "moment_ids": [
+        "m07"
+      ]
+    }
+  }
+}
