@@ -257,21 +257,27 @@ The file also keeps `status`, `checks`, `retries`, every attempt and `input_hash
 
 **Profile.** `{mode: analyst|fan, voice: studio|stadium, language: en|ar, favourite_team: london_red|london_blue|none, focus_player: <name>|none}`, validated in code (`focus_player` must be in `player_summaries.json`). The key is the five values joined by `-`, with the player as a slug: `fan-stadium-en-none-cass_dunmore`. Arabic is not built yet.
 
-**Selection** (code, no model calls). Story order is match order (the frozen `story_arc` has m02 before m01, so only its roles are used).
-- `analyst`: every moment. `fan`: the essential moments plus supporting moments that involve the favourite team or the focus player. A moment involves a team when it is that team's moment or names one of its players.
-- `focus_player`: only moments whose `players` list names that player, in either mode.
-- `favourite_team`: that team's moments (`team`) first, then the rest, each group in story order.
+**Selection** (code, no model calls), always in match order (the story order; `story_arc` is in match order).
+- `focus_player`, either mode: every moment whose `players` list names that player, and only those, with no cap.
+- `analyst`: every moment.
+- `fan`: every goal and the Analyst's turning point; with a favourite team, also up to 3 other moments that involve it, ranked by `xt_added`, highest first, at most 7 in all. Only `biggest_threat_swing` moments have `xt_added`; the others rank after them, in match order.
+- `favourite_team`: no reordering. Each saved moment has `involves_favourite`. A moment involves a team when it is that team's moment or names one of its players.
 
-**Per moment**, one model call with the moment's narration, its facts (`narrator.moment_input` without the clock's `second`) and the reader; it returns `headline`, `text`. **Recap**, one call: 3-5 sentences from `match_headline`, the arc roles, `turning_point` (its reason in analyst mode only) and `result_line`, over the selected moments plus every essential one, plus the focus player's facts (without `xt_added` in fan mode).
+**Per moment**, one model call with the moment's narration, its facts (`narrator.moment_input` without the clock's `second`) and the reader; it returns `headline` and `lines`.
 
-**Checks**, all in code, with up to 2 retries: grounding, style (`BLOCKED`, plus `PERSONALIZER_BLOCKED` always and `FAN_BLOCKED` in fan mode; the recap also `CONNECTORS`), polish and term backing, as for the Narrator and Analyst. Plus: sentence, word and exclamation limits per mode and voice; `build_up` word for word if used; the focus player named. Numbers against the narration: analyst mode at least as many, fan mode fewer and no xT number (any value of an xT fact), so a fan version always has fewer numbers than the analyst one. Recap: at most `MAX_NUMBERS` numbers per sentence (per field elsewhere), the final score winner first, the winning team, and the favourite team named first.
+**Recap.** Code writes the facts as a skeleton (`personalizer.recap_skeleton`), in match order: `result_line` (with a favourite team: "London Blue and London Red met, and <result_line>."), one sentence per goal from `score_effect` ("Niko Vane's goal in the 61st minute put London Blue 1-0 up."), the turning point (analyst mode adds its key pass and shot xT), and for a focus player one sentence of `player_summaries.json` stats (analyst mode adds final-third entries and xT). The model only rewords it, returning `lines`; the Stadium voice may add up to 3 bursts of at most 3 words with no facts ("Goal!").
+
+**Checks**, all in code, with up to 2 retries: grounding, style (`BLOCKED`, plus `PERSONALIZER_BLOCKED` always and `FAN_BLOCKED` in fan mode; `CONNECTORS` and `PERSONALIZER_CONNECTORS` in the recap and in analyst-mode moments), polish and term backing, as for the Narrator and Analyst. Plus:
+- every text: line, sentence, word and exclamation limits per mode and voice; no line break inside a line; a distance in metres only in a sentence with a shot verb (`SHOT_VERBS`: scored, missed, denied, saved, stopped, shot, and their present tense).
+- moments: `build_up` word for word if used; the focus player named; numbers against the narration: analyst mode at least as many, fan mode fewer and no xT number (any value of an xT fact), so a fan version always has fewer numbers than the analyst one.
+- recap: grounded only in the skeleton (nothing added); each skeleton sentence's anchor (`result_line`, each `score_effect`, "turning point", the stats phrase) word for word and in skeleton order (nothing dropped or reordered), with its names, minute and stats phrases in the same sentence; the final score winner first; the favourite team named first; at most `MAX_NUMBERS` numbers per sentence.
 
 | Field | Meaning |
 |---|---|
 | `profile`, `profile_key` | The profile and its key (the file name). |
-| `selection` | The moment ids, in the order shown. |
+| `selection` | The moment ids, in match order. |
 | `player` | The focus player's facts, or `null`. |
-| `moments` | Per moment: `id`, `status`, `output` (`headline`, `text`), `checks`, `retries`, `attempts`, `input_hash`. |
-| `recap` | The same, with `output.text`. |
+| `moments` | Per moment: `id`, `involves_favourite`, `status`, `output` (`headline`, `lines`: an array, one display line each), `checks`, `retries`, `attempts`, `input_hash`. |
+| `recap` | The same, with `output.lines`. |
 
 `python src/run_personalizer.py --verify` re-checks every file with no model calls.

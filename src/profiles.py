@@ -11,22 +11,22 @@ A profile is {mode, voice, language, favourite_team, focus_player}:
 
 Profile.key() names the profile's output file and is part of every cache key.
 
-Selection (select()), in code:
+Selection (select()), in code, always in match order (the story order:
+analysis.json's story_arc is in match order):
+- focus_player (either mode): every moment whose players list names that
+  player, and only those, with no cap.
 - analyst mode: every key moment.
-- fan mode: the Analyst's essential moments, plus supporting moments that
-  involve the favourite team or the focus player.
-- focus_player: only moments whose players list names that player (this
-  narrows either mode).
-- favourite_team: that team's moments first, then the rest; each group keeps
-  the story order.
+- fan mode: every goal and the Analyst's turning point, plus, with a
+  favourite team, up to FAN_MAX_SUPPORTING other moments that involve it,
+  ranked by xt_added (highest first), at most FAN_MAX_MOMENTS in all. Only
+  threat swings have an xt_added fact; moments without one rank after those
+  with one, in match order.
+- favourite_team: no reordering. involves_favourite() flags the moments that
+  involve it, and the recap names that team first.
 
 A moment involves a team when it is that team's moment (moment["team"]) or
 names one of its players (so a save involves the goalkeeper's team and the
 shooter's team). A moment involves a player when its players list names them.
-
-The story order is match order. analysis.json's story_arc should be the same
-order, but the frozen file has m02 before m01 (its own check flags this), so
-the order is taken from key_moments.json and only the arc's roles are used.
 """
 
 import re
@@ -39,6 +39,8 @@ VOICES = ("studio", "stadium")
 LANGUAGES = ("en", "ar")
 FAVOURITE_TEAMS = TEAMS + ("none",)
 NONE = "none"
+FAN_MAX_MOMENTS = 7
+FAN_MAX_SUPPORTING = 3
 FIELDS = ("mode", "voice", "language", "favourite_team", "focus_player")
 
 
@@ -112,35 +114,40 @@ def involves_player(moment: dict, player: str) -> bool:
     return player in moment["players"]
 
 
-def select(profile: Profile, moments: list, priority: dict, players: dict) -> list:
-    """The ids of the moments this profile gets, in the order they are shown.
-
-    moments: key_moments.json's moments (match order). priority: analysis.json's
-    moment_priority. players: player_summaries.json's players."""
-    essential = set(priority["essential"])
-    fav, focus = profile.favourite_team, profile.focus_player
-
-    def wanted(m):
-        if focus != NONE and not involves_player(m, focus):
-            return False
-        if profile.mode == "analyst" or m["id"] in essential:
-            return True
-        return (fav != NONE and involves_team(m, fav, players)) or (focus != NONE and involves_player(m, focus))
-
-    chosen = [m for m in moments if wanted(m)]
-    if fav != NONE:
-        chosen = [m for m in chosen if m["team"] == fav] + [m for m in chosen if m["team"] != fav]
-    return [m["id"] for m in chosen]
+def involves_favourite(profile: Profile, moment: dict, players: dict) -> bool:
+    return profile.favourite_team != NONE and involves_team(moment, profile.favourite_team, players)
 
 
-def selection_problems(profile: Profile, ids: list, moments: list, priority: dict, players: dict) -> list:
+def select(profile: Profile, moments: list, analysis: dict, players: dict) -> list:
+    """The ids of the moments this profile gets, in match order.
+
+    moments: key_moments.json's moments (match order). analysis: analysis.json's
+    analysis (its turning_point). players: player_summaries.json's players."""
+    if profile.focus_player != NONE:
+        return [m["id"] for m in moments if involves_player(m, profile.focus_player)]
+    if profile.mode == "analyst":
+        return [m["id"] for m in moments]
+
+    turning = analysis["turning_point"]["moment_id"]
+    core = [m for m in moments if m["category"] == "goal" or m["id"] == turning]
+    others = [m for m in moments if m not in core and involves_favourite(profile, m, players)]
+    # Highest xt_added first; moments without one after, in match order (sorted() is stable).
+    others.sort(key=lambda m: (m["facts"].get("xt_added") is None, -m["facts"].get("xt_added", 0)))
+    room = max(0, min(FAN_MAX_SUPPORTING, FAN_MAX_MOMENTS - len(core)))
+    chosen = {m["id"] for m in core + others[:room]}
+    return [m["id"] for m in moments if m["id"] in chosen]
+
+
+def selection_problems(profile: Profile, ids: list, moments: list, analysis: dict, players: dict) -> list:
     """What is wrong with a saved selection for this profile (empty if it is right)."""
     by_id = {m["id"]: m for m in moments}
     problems = [f'"{i}" is not a moment id' for i in ids if i not in by_id]
     if profile.focus_player != NONE:
         problems += [f"{i} does not involve the focus player {profile.focus_player}"
                      for i in ids if i in by_id and not involves_player(by_id[i], profile.focus_player)]
-    expected = select(profile, moments, priority, players)
+    if profile.mode == "fan" and profile.focus_player == NONE and len(ids) > FAN_MAX_MOMENTS:
+        problems.append(f"fan mode has {len(ids)} moments, at most {FAN_MAX_MOMENTS}")
+    expected = select(profile, moments, analysis, players)
     if not problems and ids != expected:
         problems.append(f"selection is {', '.join(ids)}; this profile selects {', '.join(expected)}")
     return problems

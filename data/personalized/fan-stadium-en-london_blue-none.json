@@ -20,10 +20,16 @@
   "moments": [
     {
       "id": "m01",
+      "involves_favourite": true,
       "status": "ok",
       "output": {
-        "headline": "Bram Hollis denies Cass Dunmore in the 3rd minute",
-        "text": "What a save! Bram Hollis denies Cass Dunmore from 8.0 metres. London Red won the ball back in the attacking third and shot 7 seconds later."
+        "headline": "Bram Hollis saves Cass Dunmore's 8.0-metre shot",
+        "lines": [
+          "What a save!",
+          "Bram Hollis denies Cass Dunmore from 8.0 metres.",
+          "The 3rd minute, 0-0.",
+          "London Red won the ball back in the attacking third and shot 7 seconds later."
+        ]
       },
       "checks": {
         "format_problems": [],
@@ -49,8 +55,13 @@
         {
           "attempt": 1,
           "output": {
-            "headline": "Bram Hollis denies Cass Dunmore in the 3rd minute",
-            "text": "What a save! Bram Hollis denies Cass Dunmore from 8.0 metres. London Red won the ball back in the attacking third and shot 7 seconds later."
+            "headline": "Bram Hollis saves Cass Dunmore's 8.0-metre shot",
+            "lines": [
+              "What a save!",
+              "Bram Hollis denies Cass Dunmore from 8.0 metres.",
+              "The 3rd minute, 0-0.",
+              "London Red won the ball back in the attacking third and shot 7 seconds later."
+            ]
           },
           "format_problems": [],
           "grounding": {
@@ -71,14 +82,151 @@
           }
         }
       ],
-      "input_hash": "bca9eafbfb39d5b0"
+      "input_hash": "c443999842cffdf9"
     },
     {
       "id": "m07",
+      "involves_favourite": true,
       "status": "ok",
       "output": {
-        "headline": "Niko Vane scores in the 61st minute",
-        "text": "Goal! Niko Vane scores! London Blue won the ball back in midfield and scored 10 seconds later, after 2 passes and a carry from midfield into the attacking third. London Blue lead 1-0."
+        "headline": "Niko Vane scores in the fastest counter.",
+        "lines": [
+          "Goal!",
+          "Niko Vane scores!",
+          "London Blue lead 1-0.",
+          "London Blue won the ball back in midfield and scored 10 seconds later, after 2 passes and a carry from midfield into the attacking third."
+        ]
+      },
+      "checks": {
+        "format_problems": [],
+        "grounding": {
+          "passed": true,
+          "offending": []
+        },
+        "style": {
+          "passed": true,
+          "offending": []
+        },
+        "polish": {
+          "passed": true,
+          "offending": []
+        },
+        "terms": {
+          "passed": true,
+          "offending": []
+        }
+      },
+      "retries": 0,
+      "attempts": [
+        {
+          "attempt": 1,
+          "output": {
+            "headline": "Niko Vane scores in the fastest counter.",
+            "lines": [
+              "Goal!",
+              "Niko Vane scores!",
+              "London Blue lead 1-0.",
+              "London Blue won the ball back in midfield and scored 10 seconds later, after 2 passes and a carry from midfield into the attacking third."
+            ]
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
+          },
+          "polish": {
+            "passed": true,
+            "offending": []
+          },
+          "terms": {
+            "passed": true,
+            "offending": []
+          }
+        }
+      ],
+      "input_hash": "578cdf1d35c20361"
+    },
+    {
+      "id": "m08",
+      "involves_favourite": true,
+      "status": "ok",
+      "output": {
+        "headline": "Harwick denies Vane from 10.0 metres.",
+        "lines": [
+          "What a save!",
+          "Ellis Harwick denies Niko Vane from 10.0 metres.",
+          "The 67th minute.",
+          "London Blue built the move through 3 passes."
+        ]
+      },
+      "checks": {
+        "format_problems": [],
+        "grounding": {
+          "passed": true,
+          "offending": []
+        },
+        "style": {
+          "passed": true,
+          "offending": []
+        },
+        "polish": {
+          "passed": true,
+          "offending": []
+        },
+        "terms": {
+          "passed": true,
+          "offending": []
+        }
+      },
+      "retries": 0,
+      "attempts": [
+        {
+          "attempt": 1,
+          "output": {
+            "headline": "Harwick denies Vane from 10.0 metres.",
+            "lines": [
+              "What a save!",
+              "Ellis Harwick denies Niko Vane from 10.0 metres.",
+              "The 67th minute.",
+              "London Blue built the move through 3 passes."
+            ]
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
+          },
+          "polish": {
+            "passed": true,
+            "offending": []
+          },
+          "terms": {
+            "passed": true,
+            "offending": []
+          }
+        }
+      ],
+      "input_hash": "0645ee9ba5b89529"
+    },
+    {
+      "id": "m10",
+      "involves_favourite": false,
+      "status": "ok",
+      "output": {
+        "headline": "Tovey levels it for London Red.",
+        "lines": [
+          "Goal!",
+          "Rafael Tovey scores.",
+          "London Red level 1-1 in the 74th minute."
+        ]
       },
       "checks": {
         "format_problems": [],
@@ -104,11 +252,18 @@
         {
           "attempt": 1,
           "output": {
-            "headline": "Niko Vane scores in the 61st minute",
-            "text": "Goal! Niko Vane scores! London Blue lead 1-0. Dario Quill's pass set it up in the 61st minute. It was the fastest of the match's two counter-attacks."
+            "headline": "Tovey levels it for London Red.",
+            "lines": [
+              "Goal!",
+              "Rafael Tovey scores!",
+              "London Red level 1-1 in the 74th minute.",
+              "London Red won the ball back in the defensive third and scored 12 seconds later, after 3 passes and a carry from midfield into the attacking third.",
+              "It was the second-fastest of the match's two counter-attacks."
+            ]
           },
           "format_problems": [
-            "text has 5 sentences, the stadium voice allows at most 4"
+            "text has 5 sentences, the stadium voice allows at most 4",
+            "text has 48 words, fan mode allows 35"
           ],
           "grounding": {
             "passed": true,
@@ -130,8 +285,12 @@
         {
           "attempt": 2,
           "output": {
-            "headline": "Niko Vane scores in the 61st minute",
-            "text": "Goal! Niko Vane scores! London Blue won the ball back in midfield and scored 10 seconds later, after 2 passes and a carry from midfield into the attacking third. London Blue lead 1-0."
+            "headline": "Tovey levels it for London Red.",
+            "lines": [
+              "Goal!",
+              "Rafael Tovey scores.",
+              "London Red level 1-1 in the 74th minute."
+            ]
           },
           "format_problems": [],
           "grounding": {
@@ -152,124 +311,20 @@
           }
         }
       ],
-      "input_hash": "7cef518c478dd46b"
-    },
-    {
-      "id": "m08",
-      "status": "ok",
-      "output": {
-        "headline": "Ellis Harwick denies Niko Vane in the 67th minute",
-        "text": "What a save! Ellis Harwick denies Niko Vane in the 67th minute. London Blue built the move through 3 passes."
-      },
-      "checks": {
-        "format_problems": [],
-        "grounding": {
-          "passed": true,
-          "offending": []
-        },
-        "style": {
-          "passed": true,
-          "offending": []
-        },
-        "polish": {
-          "passed": true,
-          "offending": []
-        },
-        "terms": {
-          "passed": true,
-          "offending": []
-        }
-      },
-      "retries": 0,
-      "attempts": [
-        {
-          "attempt": 1,
-          "output": {
-            "headline": "Ellis Harwick denies Niko Vane in the 67th minute",
-            "text": "What a save! Ellis Harwick denies Niko Vane in the 67th minute. London Blue built the move through 3 passes."
-          },
-          "format_problems": [],
-          "grounding": {
-            "passed": true,
-            "offending": []
-          },
-          "style": {
-            "passed": true,
-            "offending": []
-          },
-          "polish": {
-            "passed": true,
-            "offending": []
-          },
-          "terms": {
-            "passed": true,
-            "offending": []
-          }
-        }
-      ],
-      "input_hash": "466de93e518dd38a"
-    },
-    {
-      "id": "m10",
-      "status": "ok",
-      "output": {
-        "headline": "Rafael Tovey levels it for London Red",
-        "text": "Goal! Rafael Tovey scores! London Red level 1-1. London Red won the ball back in the defensive third and scored 12 seconds later, after 3 passes and a carry from midfield into the attacking third."
-      },
-      "checks": {
-        "format_problems": [],
-        "grounding": {
-          "passed": true,
-          "offending": []
-        },
-        "style": {
-          "passed": true,
-          "offending": []
-        },
-        "polish": {
-          "passed": true,
-          "offending": []
-        },
-        "terms": {
-          "passed": true,
-          "offending": []
-        }
-      },
-      "retries": 0,
-      "attempts": [
-        {
-          "attempt": 1,
-          "output": {
-            "headline": "Rafael Tovey levels it for London Red",
-            "text": "Goal! Rafael Tovey scores! London Red level 1-1. London Red won the ball back in the defensive third and scored 12 seconds later, after 3 passes and a carry from midfield into the attacking third."
-          },
-          "format_problems": [],
-          "grounding": {
-            "passed": true,
-            "offending": []
-          },
-          "style": {
-            "passed": true,
-            "offending": []
-          },
-          "polish": {
-            "passed": true,
-            "offending": []
-          },
-          "terms": {
-            "passed": true,
-            "offending": []
-          }
-        }
-      ],
-      "input_hash": "6c1a57d15b13d9d6"
+      "input_hash": "87eec9abdf74d924"
     },
     {
       "id": "m11",
+      "involves_favourite": false,
       "status": "ok",
       "output": {
-        "headline": "Cass Dunmore gives London Red the lead",
-        "text": "Goal! Cass Dunmore scores in the 89th minute. London Red lead 2-1. London Red built the move through 2 passes and a carry in the attacking third."
+        "headline": "Cass Dunmore scores in the 89th minute",
+        "lines": [
+          "Goal!",
+          "Cass Dunmore scores from 6.4 metres in the 89th minute!",
+          "London Red lead 2-1.",
+          "London Red built the move through 2 passes and a carry in the attacking third."
+        ]
       },
       "checks": {
         "format_problems": [],
@@ -295,8 +350,13 @@
         {
           "attempt": 1,
           "output": {
-            "headline": "Cass Dunmore gives London Red the lead",
-            "text": "Goal! Cass Dunmore scores in the 89th minute. London Red lead 2-1. London Red built the move through 2 passes and a carry in the attacking third."
+            "headline": "Cass Dunmore scores in the 89th minute",
+            "lines": [
+              "Goal!",
+              "Cass Dunmore scores from 6.4 metres in the 89th minute!",
+              "London Red lead 2-1.",
+              "London Red built the move through 2 passes and a carry in the attacking third."
+            ]
           },
           "format_problems": [],
           "grounding": {
@@ -317,13 +377,19 @@
           }
         }
       ],
-      "input_hash": "cb7efbe08d5984e0"
+      "input_hash": "bf35b33b5734ed4c"
     }
   ],
   "recap": {
     "status": "ok",
     "output": {
-      "text": "London Blue, Bram Hollis denies Cass Dunmore in the 3rd minute! Niko Vane scored at the 61st minute, Dario Quill the key passer. Rafael Tovey scored at the 74th minute, Theo Brannick the key passer! Cass Dunmore scored at the 89th minute and London Red won 2-1 after trailing from the 61st minute to the 74th."
+      "lines": [
+        "London Blue and London Red met; London Red won 2-1 after trailing from the 61st minute to the 74th.",
+        "Goal! Niko Vane's goal in the 61st minute put London Blue 1-0 up.",
+        "Rafael Tovey's goal in the 74th minute levelled the match at 1-1.",
+        "Goal! Cass Dunmore's goal in the 89th minute put London Red 2-1 ahead.",
+        "The turning point was Rafael Tovey's goal in the 74th minute."
+      ]
     },
     "checks": {
       "format_problems": [],
@@ -349,7 +415,13 @@
       {
         "attempt": 1,
         "output": {
-          "text": "London Blue, Bram Hollis denies Cass Dunmore in the 3rd minute! Niko Vane scored at the 61st minute, Dario Quill the key passer. Rafael Tovey scored at the 74th minute, Theo Brannick the key passer! Cass Dunmore scored at the 89th minute and London Red won 2-1 after trailing from the 61st minute to the 74th."
+          "lines": [
+            "London Blue and London Red met; London Red won 2-1 after trailing from the 61st minute to the 74th.",
+            "Goal! Niko Vane's goal in the 61st minute put London Blue 1-0 up.",
+            "Rafael Tovey's goal in the 74th minute levelled the match at 1-1.",
+            "Goal! Cass Dunmore's goal in the 89th minute put London Red 2-1 ahead.",
+            "The turning point was Rafael Tovey's goal in the 74th minute."
+          ]
         },
         "format_problems": [],
         "grounding": {
@@ -370,6 +442,6 @@
         }
       }
     ],
-    "input_hash": "b41c2806e2ed2543"
+    "input_hash": "8b7995b3de8f5d9d"
   }
 }

@@ -38,7 +38,7 @@ from personalizer import (CHECK_KEYS, MODEL_PARAMS, MOMENT_SCHEMA, RECAP_SCHEMA,
                           build_recap_input, flagged, moment_instructions, personalize_moment,
                           personalize_recap, player_card, recap_context, recap_instructions,
                           run_moment_checks, run_recap_checks)
-from profiles import Profile, ProfileError, select, selection_problems
+from profiles import Profile, ProfileError, involves_favourite, select, selection_problems
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
@@ -84,7 +84,7 @@ def plan(profile: Profile, data: dict) -> dict:
     """Everything a profile needs, computed in code: the selection, each
     moment's input, the recap's input and context, and their cache keys."""
     moments = {m["id"]: m for m in data["moments"]}
-    selected = select(profile, data["moments"], data["analysis"]["moment_priority"], data["players"])
+    selected = select(profile, data["moments"], data["analysis"], data["players"])
     items = []
     for i in selected:
         narration = data["narrations"][i]
@@ -92,9 +92,10 @@ def plan(profile: Profile, data: dict) -> dict:
             sys.exit(f"narration {i} has status {narration['status']}; the Personalizer only uses checked narrations")
         inputs = build_moment_input(moments[i], narration["narration"], profile)
         items.append({"id": i, "inputs": inputs,
+                      "involves_favourite": involves_favourite(profile, moments[i], data["players"]),
                       "hash": input_hash(profile, inputs, moment_instructions(profile), MOMENT_SCHEMA)})
-    args = (profile, data["analysis"], data["summary"], data["moments"], selected)
-    recap_inputs = build_recap_input(*args, data["players"])
+    args = (profile, data["analysis"], data["summary"], data["moments"], data["players"])
+    recap_inputs = build_recap_input(*args)
     return {"selected": selected, "moments": items, "recap_inputs": recap_inputs,
             "recap_context": recap_context(*args),
             "recap_hash": input_hash(profile, recap_inputs, recap_instructions(profile), RECAP_SCHEMA),
@@ -154,6 +155,9 @@ def run(profile: Profile, data: dict, cached, moment_one, recap_one, force=False
         if entry is None:
             entry = {"id": i, **attempt(lambda: moment_one(i)), "input_hash": item["hash"]}
             log(f"{i}: {entry['status']}, {entry['retries']} retr{'y' if entry['retries'] == 1 else 'ies'}")
+        # Selection metadata, computed in code; not part of the model's input or cache key.
+        entry = {"id": i, "involves_favourite": item["involves_favourite"],
+                 **{k: v for k, v in entry.items() if k not in ("id", "involves_favourite")}}
         doc["moments"].append(entry)
         save_fn(doc)
 
@@ -179,8 +183,8 @@ def verify(path: Path, data: dict) -> tuple:
     if path.stem != profile.key():
         lines.append(f"file name {path.name} does not match the profile key {profile.key()}")
     ids = [e.get("id") for e in doc.get("moments", [])]
-    lines += [f"selection: {p}" for p in selection_problems(profile, ids, data["moments"],
-                                                            data["analysis"]["moment_priority"], data["players"])]
+    lines += [f"selection: {p}" for p in selection_problems(profile, ids, data["moments"], data["analysis"],
+                                                            data["players"])]
     if doc.get("selection") != ids:
         lines.append("selection list does not match the saved moments")
     p = plan(profile, data)
@@ -192,6 +196,8 @@ def verify(path: Path, data: dict) -> tuple:
         i = entry.get("id")
         if i not in moments or i not in data["narrations"]:
             continue
+        if entry.get("involves_favourite") != involves_favourite(profile, moments[i], data["players"]):
+            lines.append(f"{i}: involves_favourite should be {involves_favourite(profile, moments[i], data['players'])}")
         inputs = build_moment_input(moments[i], data["narrations"][i]["narration"], profile)
         lines += [f"{i}: {line}" for line in flagged(run_moment_checks(entry.get("output"), inputs, profile))]
     recap = doc.get("recap") or {}
@@ -250,8 +256,6 @@ def main() -> int:
     ok = True
     for profile in profiles:
         print(f"\n{profile.key()}")
-        selected = select(profile, data["moments"], data["analysis"]["moment_priority"], data["players"])
-
         def save(doc, profile=profile):
             out_path(profile).write_text(json.dumps({"model_deployment": deployment, **doc}, indent=2,
                                                     ensure_ascii=False) + "\n", encoding="utf-8")
@@ -259,9 +263,9 @@ def main() -> int:
         doc = run(profile, data, load_cache(profile),
                   lambda i, profile=profile: personalize_moment(get_client(), deployment, moments[i],
                                                                 data["narrations"][i]["narration"], profile),
-                  lambda profile=profile, selected=selected: personalize_recap(
+                  lambda profile=profile: personalize_recap(
                       get_client(), deployment, profile, data["analysis"], data["summary"], data["moments"],
-                      selected, data["players"]),
+                      data["players"]),
                   force="--force" in args, save_fn=save)
         failed = [e["id"] for e in doc["moments"] if e["status"] != "ok"] + (
             ["recap"] if doc["recap"]["status"] != "ok" else [])

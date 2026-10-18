@@ -29,10 +29,15 @@
   "moments": [
     {
       "id": "m01",
+      "involves_favourite": false,
       "status": "ok",
       "output": {
-        "headline": "Bram Hollis denies Cass Dunmore",
-        "text": "What a save! Bram Hollis denies Cass Dunmore in the 3rd minute. London Red won the ball back in the attacking third and shot 7 seconds later."
+        "headline": "Hollis denies Cass Dunmore in the 3rd minute.",
+        "lines": [
+          "What a chance!",
+          "Cass Dunmore shoots from 8.0 metres and Bram Hollis denies.",
+          "London Red won the ball back in the attacking third and shot 7 seconds later."
+        ]
       },
       "checks": {
         "format_problems": [],
@@ -58,8 +63,12 @@
         {
           "attempt": 1,
           "output": {
-            "headline": "Bram Hollis denies Cass Dunmore",
-            "text": "What a save! Bram Hollis denies Cass Dunmore in the 3rd minute. London Red won the ball back in the attacking third and shot 7 seconds later."
+            "headline": "Hollis denies Cass Dunmore in the 3rd minute.",
+            "lines": [
+              "What a chance!",
+              "Cass Dunmore shoots from 8.0 metres and Bram Hollis denies.",
+              "London Red won the ball back in the attacking third and shot 7 seconds later."
+            ]
           },
           "format_problems": [],
           "grounding": {
@@ -80,14 +89,20 @@
           }
         }
       ],
-      "input_hash": "a359e16d7729449f"
+      "input_hash": "6c3435b97608844e"
     },
     {
       "id": "m03",
+      "involves_favourite": false,
       "status": "ok",
       "output": {
-        "headline": "Cass Dunmore receives a dangerous pass",
-        "text": "Femi Oakhurst passed to Cass Dunmore in the 26th minute. London Red won the ball back in midfield and played this pass 12 seconds later, after 1 earlier pass. London Red piled on the danger."
+        "headline": "Cass Dunmore receives Femi Oakhurst's dangerous pass.",
+        "lines": [
+          "What a pass!",
+          "Femi Oakhurst to Cass Dunmore.",
+          "London Red won the ball back in midfield and played this pass 12 seconds later, after 1 earlier pass.",
+          "Danger from the 26th minute."
+        ]
       },
       "checks": {
         "format_problems": [],
@@ -113,8 +128,13 @@
         {
           "attempt": 1,
           "output": {
-            "headline": "Cass Dunmore receives a dangerous pass",
-            "text": "Femi Oakhurst passed to Cass Dunmore in the 26th minute. London Red won the ball back in midfield and played this pass 12 seconds later, after 1 earlier pass. London Red piled on the danger."
+            "headline": "Cass Dunmore receives Femi Oakhurst's dangerous pass.",
+            "lines": [
+              "What a pass!",
+              "Femi Oakhurst to Cass Dunmore.",
+              "London Red won the ball back in midfield and played this pass 12 seconds later, after 1 earlier pass.",
+              "Danger from the 26th minute."
+            ]
           },
           "format_problems": [],
           "grounding": {
@@ -135,14 +155,20 @@
           }
         }
       ],
-      "input_hash": "53fd0245c32f78e9"
+      "input_hash": "3b238ebae89b300d"
     },
     {
       "id": "m04",
+      "involves_favourite": false,
       "status": "ok",
       "output": {
-        "headline": "Cass Dunmore misses from 6.4 metres",
-        "text": "What a chance! Cass Dunmore misses from 6.4 metres in the 38th minute. London Red built the move through 3 passes. Luca Merriden passed to Cass Dunmore."
+        "headline": "Cass Dunmore misses from 6.4 metres.",
+        "lines": [
+          "Cass Dunmore bursts into the area.",
+          "London Red built the move through 3 passes.",
+          "Luca Merriden passed to Cass Dunmore.",
+          "Cass Dunmore missed from 6.4 metres in the 38th minute."
+        ]
       },
       "checks": {
         "format_problems": [],
@@ -168,8 +194,13 @@
         {
           "attempt": 1,
           "output": {
-            "headline": "Cass Dunmore misses from 6.4 metres",
-            "text": "What a chance! Cass Dunmore misses from 6.4 metres in the 38th minute. London Red built the move through 3 passes. Luca Merriden passed to Cass Dunmore."
+            "headline": "Cass Dunmore misses from 6.4 metres.",
+            "lines": [
+              "Cass Dunmore bursts into the area.",
+              "London Red built the move through 3 passes.",
+              "Luca Merriden passed to Cass Dunmore.",
+              "Cass Dunmore missed from 6.4 metres in the 38th minute."
+            ]
           },
           "format_problems": [],
           "grounding": {
@@ -190,14 +221,19 @@
           }
         }
       ],
-      "input_hash": "46efcb7cd11a89bb"
+      "input_hash": "9125c391aaba2755"
     },
     {
       "id": "m05",
+      "involves_favourite": false,
       "status": "ok",
       "output": {
-        "headline": "Stanbury finds Dunmore with dangerous pass",
-        "text": "What a ball! Idris Stanbury passed to Cass Dunmore in the 40th minute. London Red won the ball back in midfield and played this pass 1 second later."
+        "headline": "Idris Stanbury passes to Cass Dunmore in the 40th minute.",
+        "lines": [
+          "London Red won the ball back in midfield and played this pass 1 second later.",
+          "Idris Stanbury passed to Cass Dunmore in the 40th minute.",
+          "Cass Dunmore is in a dangerous spot."
+        ]
       },
       "checks": {
         "format_problems": [],
@@ -223,8 +259,12 @@
         {
           "attempt": 1,
           "output": {
-            "headline": "Stanbury finds Dunmore with dangerous pass",
-            "text": "What a ball! Idris Stanbury passed to Cass Dunmore in the 40th minute. London Red won the ball back in midfield and played this pass 1 second later."
+            "headline": "Idris Stanbury passes to Cass Dunmore in the 40th minute.",
+            "lines": [
+              "London Red won the ball back in midfield and played this pass 1 second later.",
+              "Idris Stanbury passed to Cass Dunmore in the 40th minute.",
+              "Cass Dunmore is in a dangerous spot."
+            ]
           },
           "format_problems": [],
           "grounding": {
@@ -245,14 +285,20 @@
           }
         }
       ],
-      "input_hash": "fe9086a81296f436"
+      "input_hash": "0a16531989389c8f"
     },
     {
       "id": "m06",
+      "involves_favourite": false,
       "status": "ok",
       "output": {
-        "headline": "Theo Brannick's pass puts Cass Dunmore into danger",
-        "text": "London Red's move started after a London Blue foul.\nTheo Brannick passed to Cass Dunmore.\nCass Dunmore brings the danger."
+        "headline": "Brannick's pass finds Cass Dunmore in the 55th minute.",
+        "lines": [
+          "What a ball!",
+          "Cass Dunmore receives Theo Brannick's pass in the 55th minute.",
+          "London Red pile on danger.",
+          "London Red's move started after a London Blue foul."
+        ]
       },
       "checks": {
         "format_problems": [],
@@ -273,13 +319,52 @@
           "offending": []
         }
       },
-      "retries": 0,
+      "retries": 1,
       "attempts": [
         {
           "attempt": 1,
           "output": {
-            "headline": "Theo Brannick's pass puts Cass Dunmore into danger",
-            "text": "London Red's move started after a London Blue foul.\nTheo Brannick passed to Cass Dunmore.\nCass Dunmore brings the danger."
+            "headline": "Brannick finds Cass Dunmore to spark danger.",
+            "lines": [
+              "What a ball!",
+              "Cass Dunmore gets Theo Brannick's pass and London Red pile on danger.",
+              "London Red's move started after a London Blue foul."
+            ]
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": false,
+            "offending": [
+              {
+                "type": "style",
+                "value": "spark",
+                "reason": "claims a cause"
+              }
+            ]
+          },
+          "polish": {
+            "passed": true,
+            "offending": []
+          },
+          "terms": {
+            "passed": true,
+            "offending": []
+          }
+        },
+        {
+          "attempt": 2,
+          "output": {
+            "headline": "Brannick's pass finds Cass Dunmore in the 55th minute.",
+            "lines": [
+              "What a ball!",
+              "Cass Dunmore receives Theo Brannick's pass in the 55th minute.",
+              "London Red pile on danger.",
+              "London Red's move started after a London Blue foul."
+            ]
           },
           "format_problems": [],
           "grounding": {
@@ -300,14 +385,20 @@
           }
         }
       ],
-      "input_hash": "fb49bab2d6afc8d3"
+      "input_hash": "145b0935cdac1d4c"
     },
     {
       "id": "m09",
+      "involves_favourite": false,
       "status": "ok",
       "output": {
-        "headline": "Cass Dunmore helps London Red dominate from the 70th to the 93rd minute",
-        "text": "Cass Dunmore is in the thick of it! London Red pile on danger from the 70th minute to the 93rd minute. Theo Brannick also supplies danger."
+        "headline": "Cass Dunmore helps London Red seize control.",
+        "lines": [
+          "Cass Dunmore leading the charge!",
+          "London Red pile on the danger.",
+          "From the 70th minute to the 93rd minute.",
+          "London Blue add little danger."
+        ]
       },
       "checks": {
         "format_problems": [],
@@ -333,8 +424,13 @@
         {
           "attempt": 1,
           "output": {
-            "headline": "Cass Dunmore helps London Red dominate from the 70th to the 93rd minute",
-            "text": "Cass Dunmore is in the thick of it! London Red pile on danger from the 70th minute to the 93rd minute. Theo Brannick also supplies danger."
+            "headline": "Cass Dunmore helps London Red seize control.",
+            "lines": [
+              "Cass Dunmore leading the charge!",
+              "London Red pile on the danger.",
+              "From the 70th minute to the 93rd minute.",
+              "London Blue add little danger."
+            ]
           },
           "format_problems": [],
           "grounding": {
@@ -355,14 +451,20 @@
           }
         }
       ],
-      "input_hash": "e9ea43cb47e90fd7"
+      "input_hash": "0def4542a98db7fd"
     },
     {
       "id": "m11",
+      "involves_favourite": false,
       "status": "ok",
       "output": {
-        "headline": "Cass Dunmore's late goal puts London Red ahead",
-        "text": "Goal! Cass Dunmore scores in the 89th minute. London Red lead 2-1. London Red built the move through 2 passes and a carry in the attacking third."
+        "headline": "Cass Dunmore puts London Red 2-1 ahead.",
+        "lines": [
+          "Goal!",
+          "Cass Dunmore scored in the 89th minute from 6.4 metres.",
+          "London Red built the move through 2 passes and a carry in the attacking third.",
+          "Theo Brannick passed the key ball."
+        ]
       },
       "checks": {
         "format_problems": [],
@@ -388,8 +490,13 @@
         {
           "attempt": 1,
           "output": {
-            "headline": "Cass Dunmore's late goal puts London Red ahead",
-            "text": "Goal! Cass Dunmore scores in the 89th minute. London Red lead 2-1. London Red built the move through 2 passes and a carry in the attacking third."
+            "headline": "Cass Dunmore puts London Red 2-1 ahead.",
+            "lines": [
+              "Goal!",
+              "Cass Dunmore scored in the 89th minute from 6.4 metres.",
+              "London Red built the move through 2 passes and a carry in the attacking third.",
+              "Theo Brannick passed the key ball."
+            ]
           },
           "format_problems": [],
           "grounding": {
@@ -410,13 +517,20 @@
           }
         }
       ],
-      "input_hash": "9fe4589435f2fcf1"
+      "input_hash": "d01aa305ce4200b2"
     }
   ],
   "recap": {
     "status": "ok",
     "output": {
-      "text": "Goal! London Red 2-1, trailing from the 61st to the 74th. Bram Hollis denies Cass Dunmore in the 3rd minute. Rafael Tovey scores in the 74th minute, levelled the match at 1-1. Cass Dunmore scores in the 89th minute and completes 28 of 34 passes."
+      "lines": [
+        "London Red won 2-1 after trailing from the 61st minute to the 74th.",
+        "Goal! Niko Vane's goal in the 61st minute put London Blue 1-0 up.",
+        "What a strike! Rafael Tovey's goal in the 74th minute levelled the match at 1-1.",
+        "Goal! Cass Dunmore's goal in the 89th minute put London Red 2-1 ahead.",
+        "The turning point was Rafael Tovey's goal in the 74th minute.",
+        "Cass Dunmore completed 28 of 34 passes and took 7 shots."
+      ]
     },
     "checks": {
       "format_problems": [],
@@ -442,29 +556,25 @@
       {
         "attempt": 1,
         "output": {
-          "text": "Goal! London Red won 2-1 after trailing from the 61st minute to the 74th. Bram Hollis denied Cass Dunmore in the 3rd minute. Cass Dunmore scored in the 89th minute. Cass Dunmore finished with 28 passes completed from 34 attempted, 1 final_third_entries and 7 shots."
+          "lines": [
+            "London Red won 2-1 after trailing from the 61st minute to the 74th.",
+            "Goal! Niko Vane's goal in the 61st minute put London Blue 1-0 up.",
+            "What a strike! Rafael Tovey's goal in the 74th minute levelled the match at 1-1.",
+            "Goal! Cass Dunmore's goal in the 89th minute put London Red 2-1 ahead.",
+            "Turning point: Rafael Tovey's goal in the 74th minute.",
+            "Cass Dunmore completed 28 of 34 passes and took 7 shots."
+          ]
         },
         "format_problems": [
-          "recap: \"Cass Dunmore finished with 28 passes completed from 34 attempted, 1 final_third_entries and 7 shots.\" has 15 words of its own, the stadium voice allows 14 per sentence"
+          "skeleton sentence 5 is missing: keep \"turning point\" word for word, in skeleton order (\"The turning point was Rafael Tovey's goal in the 74th minute.\")"
         ],
         "grounding": {
           "passed": true,
           "offending": []
         },
         "style": {
-          "passed": false,
-          "offending": [
-            {
-              "type": "style",
-              "value": "finished",
-              "reason": "outcome verb outside scored, saved, missed, passed, carried, denied, stopped"
-            },
-            {
-              "type": "style",
-              "value": "final_third_entries",
-              "reason": "field name in the text"
-            }
-          ]
+          "passed": true,
+          "offending": []
         },
         "polish": {
           "passed": true,
@@ -478,7 +588,14 @@
       {
         "attempt": 2,
         "output": {
-          "text": "Goal! London Red 2-1, trailing from the 61st to the 74th. Bram Hollis denies Cass Dunmore in the 3rd minute. Rafael Tovey scores in the 74th minute, levelled the match at 1-1. Cass Dunmore scores in the 89th minute and completes 28 of 34 passes."
+          "lines": [
+            "London Red won 2-1 after trailing from the 61st minute to the 74th.",
+            "Goal! Niko Vane's goal in the 61st minute put London Blue 1-0 up.",
+            "What a strike! Rafael Tovey's goal in the 74th minute levelled the match at 1-1.",
+            "Goal! Cass Dunmore's goal in the 89th minute put London Red 2-1 ahead.",
+            "The turning point was Rafael Tovey's goal in the 74th minute.",
+            "Cass Dunmore completed 28 of 34 passes and took 7 shots."
+          ]
         },
         "format_problems": [],
         "grounding": {
@@ -499,6 +616,6 @@
         }
       }
     ],
-    "input_hash": "37c58e5447fc0be5"
+    "input_hash": "3e20c6264d1f5104"
   }
 }

@@ -178,7 +178,21 @@ PERSONALIZER_BLOCKED = [
     # Not in BLOCKED (see above), so blocked here: the result is known only at the end.
     (r"wins? it|won it|seal(?:s|ed)? it|wrap(?:s|ped)? it up|it's over|secur(?:e|es|ed|ing)",
      "claims what the score did later"),
+    (r"spark(?:s|ed|ing)?", "claims a cause"),
 ]
+
+# Analyst-mode moment texts and every recap: CONNECTORS plus these. Kept out of
+# CONNECTORS, which is part of the Analyst's cache key.
+PERSONALIZER_CONNECTORS = [
+    ("earlier", r"earlier", "claims an order of events"),
+]
+
+# A distance in metres belongs to a shot: it is allowed only in a sentence with
+# one of these verbs, so "passed to Cass Dunmore from 6.4 metres" fails. The
+# present tense is included for the Stadium voice ("denies", "scores").
+DISTANCE = r"\d+(?:\.\d+)?(?:\s*-?\s*)metres?"
+SHOT_VERBS = (r"scored|scores|missed|misses|denied|denies|saved|saves|stopped|stops|"
+              r"shot|shots|shoots")
 
 # Fan mode: no xT, "danger" instead, and no analyst jargon.
 FAN_BLOCKED = [

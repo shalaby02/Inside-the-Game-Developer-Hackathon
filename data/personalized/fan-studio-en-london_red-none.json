@@ -10,111 +10,25 @@
   "profile_key": "fan-studio-en-london_red-none",
   "status": "ok",
   "selection": [
-    "m02",
     "m03",
-    "m04",
     "m05",
     "m06",
-    "m08",
-    "m09",
+    "m07",
     "m10",
-    "m11",
-    "m01",
-    "m07"
+    "m11"
   ],
   "player": null,
   "moments": [
     {
-      "id": "m02",
-      "status": "ok",
-      "output": {
-        "headline": "London Red control the game from the 20th minute",
-        "text": "From the 20th minute to the end of the first half, London Red produced six blocks of play. Luca Merriden, Femi Oakhurst and Theo Brannick created the most danger in that run."
-      },
-      "checks": {
-        "format_problems": [],
-        "grounding": {
-          "passed": true,
-          "offending": []
-        },
-        "style": {
-          "passed": true,
-          "offending": []
-        },
-        "polish": {
-          "passed": true,
-          "offending": []
-        },
-        "terms": {
-          "passed": true,
-          "offending": []
-        }
-      },
-      "retries": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "output": {
-            "headline": "London Red control the game from the 20th minute",
-            "text": "From the 20th minute to the end of the first half, London Red dominated possession across six blocks. Luca Merriden, Femi Oakhurst and Theo Brannick created the most danger during that run."
-          },
-          "format_problems": [],
-          "grounding": {
-            "passed": true,
-            "offending": []
-          },
-          "style": {
-            "passed": true,
-            "offending": []
-          },
-          "polish": {
-            "passed": true,
-            "offending": []
-          },
-          "terms": {
-            "passed": false,
-            "offending": [
-              {
-                "type": "term",
-                "value": "text: dominated possession",
-                "reason": "possession percentage is not computed"
-              }
-            ]
-          }
-        },
-        {
-          "attempt": 2,
-          "output": {
-            "headline": "London Red control the game from the 20th minute",
-            "text": "From the 20th minute to the end of the first half, London Red produced six blocks of play. Luca Merriden, Femi Oakhurst and Theo Brannick created the most danger in that run."
-          },
-          "format_problems": [],
-          "grounding": {
-            "passed": true,
-            "offending": []
-          },
-          "style": {
-            "passed": true,
-            "offending": []
-          },
-          "polish": {
-            "passed": true,
-            "offending": []
-          },
-          "terms": {
-            "passed": true,
-            "offending": []
-          }
-        }
-      ],
-      "input_hash": "6c0800d42baa5676"
-    },
-    {
       "id": "m03",
+      "involves_favourite": true,
       "status": "ok",
       "output": {
-        "headline": "Femi Oakhurst passed to Cass Dunmore to add danger",
-        "text": "London Red won the ball back in midfield and played this pass 12 seconds later, after 1 earlier pass. Femi Oakhurst passed to Cass Dunmore, adding danger in the 26th minute with the score 0-0."
+        "headline": "Femi Oakhurst passed to Cass Dunmore, creating danger.",
+        "lines": [
+          "London Red won the ball back in midfield and played this pass 12 seconds later, after 1 earlier pass.",
+          "Femi Oakhurst passed to Cass Dunmore in the 26th minute, creating danger for London Red."
+        ]
       },
       "checks": {
         "format_problems": [],
@@ -140,8 +54,11 @@
         {
           "attempt": 1,
           "output": {
-            "headline": "Femi Oakhurst passed to Cass Dunmore to add danger",
-            "text": "London Red won the ball back in midfield and played this pass 12 seconds later, after 1 earlier pass. Femi Oakhurst passed to Cass Dunmore, adding danger in the 26th minute with the score 0-0."
+            "headline": "Femi Oakhurst passed to Cass Dunmore, creating danger.",
+            "lines": [
+              "London Red won the ball back in midfield and played this pass 12 seconds later, after 1 earlier pass.",
+              "Femi Oakhurst passed to Cass Dunmore in the 26th minute, creating danger for London Red."
+            ]
           },
           "format_problems": [],
           "grounding": {
@@ -162,69 +79,18 @@
           }
         }
       ],
-      "input_hash": "ced749328d8a91ee"
-    },
-    {
-      "id": "m04",
-      "status": "ok",
-      "output": {
-        "headline": "Cass Dunmore misses from 6.4 metres",
-        "text": "London Red built the move through 3 passes. Cass Dunmore missed from 6.4 metres in the 38th minute after Luca Merriden's pass added danger; the score was 0-0."
-      },
-      "checks": {
-        "format_problems": [],
-        "grounding": {
-          "passed": true,
-          "offending": []
-        },
-        "style": {
-          "passed": true,
-          "offending": []
-        },
-        "polish": {
-          "passed": true,
-          "offending": []
-        },
-        "terms": {
-          "passed": true,
-          "offending": []
-        }
-      },
-      "retries": 0,
-      "attempts": [
-        {
-          "attempt": 1,
-          "output": {
-            "headline": "Cass Dunmore misses from 6.4 metres",
-            "text": "London Red built the move through 3 passes. Cass Dunmore missed from 6.4 metres in the 38th minute after Luca Merriden's pass added danger; the score was 0-0."
-          },
-          "format_problems": [],
-          "grounding": {
-            "passed": true,
-            "offending": []
-          },
-          "style": {
-            "passed": true,
-            "offending": []
-          },
-          "polish": {
-            "passed": true,
-            "offending": []
-          },
-          "terms": {
-            "passed": true,
-            "offending": []
-          }
-        }
-      ],
-      "input_hash": "ea7d677f0a2eeb39"
+      "input_hash": "e51c84f99ecf5ad1"
     },
     {
       "id": "m05",
+      "involves_favourite": true,
       "status": "ok",
       "output": {
-        "headline": "Stanbury's pass pushed London Red into a dangerous position",
-        "text": "London Red won the ball back in midfield and played this pass 1 second later. Idris Stanbury passed to Cass Dunmore in the 40th minute, moving play into a dangerous spot."
+        "headline": "Stanbury's pass put London Red into danger.",
+        "lines": [
+          "London Red won the ball back in midfield and played this pass 1 second later.",
+          "At the 40th minute, Idris Stanbury passed to Cass Dunmore, moving play from low danger to danger for London Red."
+        ]
       },
       "checks": {
         "format_problems": [],
@@ -250,199 +116,11 @@
         {
           "attempt": 1,
           "output": {
-            "headline": "Stanbury's pass pushed London Red into a dangerous position",
-            "text": "London Red won the ball back in midfield and played this pass 1 second later. Idris Stanbury passed to Cass Dunmore in the 40th minute, moving play into a more dangerous spot and raising the immediate scoring threat."
-          },
-          "format_problems": [
-            "text has 38 words, fan mode allows 35"
-          ],
-          "grounding": {
-            "passed": true,
-            "offending": []
-          },
-          "style": {
-            "passed": true,
-            "offending": []
-          },
-          "polish": {
-            "passed": true,
-            "offending": []
-          },
-          "terms": {
-            "passed": true,
-            "offending": []
-          }
-        },
-        {
-          "attempt": 2,
-          "output": {
-            "headline": "Stanbury's pass pushed London Red into a dangerous position",
-            "text": "London Red won the ball back in midfield and played this pass 1 second later. Idris Stanbury passed to Cass Dunmore in the 40th minute, moving play into a dangerous spot."
-          },
-          "format_problems": [],
-          "grounding": {
-            "passed": true,
-            "offending": []
-          },
-          "style": {
-            "passed": true,
-            "offending": []
-          },
-          "polish": {
-            "passed": true,
-            "offending": []
-          },
-          "terms": {
-            "passed": true,
-            "offending": []
-          }
-        }
-      ],
-      "input_hash": "f2f12c52bd2eadb5"
-    },
-    {
-      "id": "m06",
-      "status": "ok",
-      "output": {
-        "headline": "Brannick pass swings danger toward London Blue",
-        "text": "London Red's move started after a London Blue foul. In the 55th minute Theo Brannick passed to Cass Dunmore, shifting possession into a dangerous attack for London Red."
-      },
-      "checks": {
-        "format_problems": [],
-        "grounding": {
-          "passed": true,
-          "offending": []
-        },
-        "style": {
-          "passed": true,
-          "offending": []
-        },
-        "polish": {
-          "passed": true,
-          "offending": []
-        },
-        "terms": {
-          "passed": true,
-          "offending": []
-        }
-      },
-      "retries": 0,
-      "attempts": [
-        {
-          "attempt": 1,
-          "output": {
-            "headline": "Brannick pass swings danger toward London Blue",
-            "text": "London Red's move started after a London Blue foul. In the 55th minute Theo Brannick passed to Cass Dunmore, shifting possession into a dangerous attack for London Red."
-          },
-          "format_problems": [],
-          "grounding": {
-            "passed": true,
-            "offending": []
-          },
-          "style": {
-            "passed": true,
-            "offending": []
-          },
-          "polish": {
-            "passed": true,
-            "offending": []
-          },
-          "terms": {
-            "passed": true,
-            "offending": []
-          }
-        }
-      ],
-      "input_hash": "3e12220b0f0b907a"
-    },
-    {
-      "id": "m08",
-      "status": "ok",
-      "output": {
-        "headline": "Ellis Harwick denied Niko Vane in the 67th minute",
-        "text": "London Blue built the move through 3 passes. In the 67th minute Ellis Harwick denied Niko Vane's shot from 10.0 metres, and the score was London Red 0-1 London Blue."
-      },
-      "checks": {
-        "format_problems": [],
-        "grounding": {
-          "passed": true,
-          "offending": []
-        },
-        "style": {
-          "passed": true,
-          "offending": []
-        },
-        "polish": {
-          "passed": true,
-          "offending": []
-        },
-        "terms": {
-          "passed": true,
-          "offending": []
-        }
-      },
-      "retries": 0,
-      "attempts": [
-        {
-          "attempt": 1,
-          "output": {
-            "headline": "Ellis Harwick denied Niko Vane in the 67th minute",
-            "text": "London Blue built the move through 3 passes. In the 67th minute Ellis Harwick denied Niko Vane's shot from 10.0 metres, and the score was London Red 0-1 London Blue."
-          },
-          "format_problems": [],
-          "grounding": {
-            "passed": true,
-            "offending": []
-          },
-          "style": {
-            "passed": true,
-            "offending": []
-          },
-          "polish": {
-            "passed": true,
-            "offending": []
-          },
-          "terms": {
-            "passed": true,
-            "offending": []
-          }
-        }
-      ],
-      "input_hash": "cb340c234f6afef8"
-    },
-    {
-      "id": "m09",
-      "status": "ok",
-      "output": {
-        "headline": "London Red control the game from the 70th to the 93rd minute",
-        "text": "From the 70th minute to the 93rd minute, London Red dominated a run of play while trailing 0-1 at the start. Theo Brannick was the main spark among the top creators."
-      },
-      "checks": {
-        "format_problems": [],
-        "grounding": {
-          "passed": true,
-          "offending": []
-        },
-        "style": {
-          "passed": true,
-          "offending": []
-        },
-        "polish": {
-          "passed": true,
-          "offending": []
-        },
-        "terms": {
-          "passed": true,
-          "offending": []
-        }
-      },
-      "retries": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "output": {
-            "headline": "London Red control the game from the 70th to the 93rd minute",
-            "text": "From the 70th minute to the 93rd minute, London Red dominated a run of play while trailing 0-1 at the start. London Red piled on the danger and Theo Brannick was the main spark among top creators."
+            "headline": "Stanbury's pass put London Red into danger.",
+            "lines": [
+              "London Red won the ball back in midfield and played this pass 1 second later.",
+              "At the 40th minute, Idris Stanbury's pass to Cass Dunmore moved play from low danger to a dangerous area for London Red."
+            ]
           },
           "format_problems": [
             "text has 37 words, fan mode allows 35"
@@ -467,8 +145,11 @@
         {
           "attempt": 2,
           "output": {
-            "headline": "London Red control the game from the 70th to the 93rd minute",
-            "text": "From the 70th minute to the 93rd minute, London Red dominated a run of play while trailing 0-1 at the start. Theo Brannick was the main spark among the top creators."
+            "headline": "Stanbury's pass put London Red into danger.",
+            "lines": [
+              "London Red won the ball back in midfield and played this pass 1 second later.",
+              "At the 40th minute, Idris Stanbury passed to Cass Dunmore, moving play from low danger to danger for London Red."
+            ]
           },
           "format_problems": [],
           "grounding": {
@@ -489,14 +170,18 @@
           }
         }
       ],
-      "input_hash": "f2d025ee7d878ae6"
+      "input_hash": "4ea27f8434ab768d"
     },
     {
-      "id": "m10",
+      "id": "m06",
+      "involves_favourite": true,
       "status": "ok",
       "output": {
-        "headline": "Rafael Tovey levels match at 1-1",
-        "text": "Rafael Tovey scored to level the match at 1-1. It was the second-fastest of the match's two counter-attacks."
+        "headline": "Brannick pass opened a dangerous attack for London Red.",
+        "lines": [
+          "London Red's move started after a London Blue foul.",
+          "In the 55th minute Theo Brannick passed to Cass Dunmore, swinging possession into a dangerous attack for London Red."
+        ]
       },
       "checks": {
         "format_problems": [],
@@ -522,8 +207,11 @@
         {
           "attempt": 1,
           "output": {
-            "headline": "Rafael Tovey levels match at 1-1",
-            "text": "Rafael Tovey scored to level the match at 1-1. It was the second-fastest of the match's two counter-attacks."
+            "headline": "Brannick pass opened a dangerous attack for London Red.",
+            "lines": [
+              "London Red's move started after a London Blue foul.",
+              "In the 55th minute Theo Brannick passed to Cass Dunmore, swinging possession into a dangerous attack for London Red."
+            ]
           },
           "format_problems": [],
           "grounding": {
@@ -544,69 +232,18 @@
           }
         }
       ],
-      "input_hash": "98eb0e6d68fb9fe3"
+      "input_hash": "863a072c02e1901b"
     },
     {
-      "id": "m11",
+      "id": "m07",
+      "involves_favourite": false,
       "status": "ok",
       "output": {
-        "headline": "Cass Dunmore's goal put London Red 2-1 ahead",
-        "text": "Cass Dunmore scored to put London Red 2-1 ahead in the 89th minute. London Red built the move through 2 passes and a carry in the attacking third."
-      },
-      "checks": {
-        "format_problems": [],
-        "grounding": {
-          "passed": true,
-          "offending": []
-        },
-        "style": {
-          "passed": true,
-          "offending": []
-        },
-        "polish": {
-          "passed": true,
-          "offending": []
-        },
-        "terms": {
-          "passed": true,
-          "offending": []
-        }
-      },
-      "retries": 0,
-      "attempts": [
-        {
-          "attempt": 1,
-          "output": {
-            "headline": "Cass Dunmore's goal put London Red 2-1 ahead",
-            "text": "Cass Dunmore scored to put London Red 2-1 ahead in the 89th minute. London Red built the move through 2 passes and a carry in the attacking third."
-          },
-          "format_problems": [],
-          "grounding": {
-            "passed": true,
-            "offending": []
-          },
-          "style": {
-            "passed": true,
-            "offending": []
-          },
-          "polish": {
-            "passed": true,
-            "offending": []
-          },
-          "terms": {
-            "passed": true,
-            "offending": []
-          }
-        }
-      ],
-      "input_hash": "9751ebcf1ebc0f44"
-    },
-    {
-      "id": "m01",
-      "status": "ok",
-      "output": {
-        "headline": "Bram Hollis denied Cass Dunmore in the 3rd minute",
-        "text": "Bram Hollis denied Cass Dunmore in the 3rd minute, with the score 0-0. London Red won the ball back in the attacking third and shot 7 seconds later."
+        "headline": "Niko Vane put London Blue 1-0 up.",
+        "lines": [
+          "Niko Vane scored in the 61st minute to put London Blue 1-0 up.",
+          "It was the fastest of the match's two counter-attacks."
+        ]
       },
       "checks": {
         "format_problems": [],
@@ -632,23 +269,22 @@
         {
           "attempt": 1,
           "output": {
-            "headline": "Bram Hollis denies Cass Dunmore in the 3rd minute",
-            "text": "Bram Hollis denied Cass Dunmore in the 3rd minute to keep the score 0-0. London Red won the ball back in the attacking third and shot 7 seconds later."
+            "headline": "Niko Vane put London Blue 1-0 up.",
+            "lines": [
+              "Niko Vane scored in the 61st minute to put London Blue 1-0 up.",
+              "London Blue won the ball back in midfield and scored 10 seconds later, after 2 passes and a carry from midfield into the attacking third."
+            ]
           },
-          "format_problems": [],
+          "format_problems": [
+            "text has 38 words, fan mode allows 35"
+          ],
           "grounding": {
             "passed": true,
             "offending": []
           },
           "style": {
-            "passed": false,
-            "offending": [
-              {
-                "type": "style",
-                "value": "keep",
-                "reason": "claims what the score did later"
-              }
-            ]
+            "passed": true,
+            "offending": []
           },
           "polish": {
             "passed": true,
@@ -662,8 +298,11 @@
         {
           "attempt": 2,
           "output": {
-            "headline": "Bram Hollis denied Cass Dunmore in the 3rd minute",
-            "text": "Bram Hollis denied Cass Dunmore in the 3rd minute, with the score 0-0. London Red won the ball back in the attacking third and shot 7 seconds later."
+            "headline": "Niko Vane put London Blue 1-0 up.",
+            "lines": [
+              "Niko Vane scored in the 61st minute to put London Blue 1-0 up.",
+              "It was the fastest of the match's two counter-attacks."
+            ]
           },
           "format_problems": [],
           "grounding": {
@@ -684,14 +323,17 @@
           }
         }
       ],
-      "input_hash": "b9eaa7ade1006558"
+      "input_hash": "34b000cbacdcd930"
     },
     {
-      "id": "m07",
+      "id": "m10",
+      "involves_favourite": true,
       "status": "ok",
       "output": {
-        "headline": "Niko Vane's goal put London Blue 1-0 up in the 61st minute",
-        "text": "Niko Vane scored to put London Blue 1-0 up. London Blue won the ball back in midfield and scored 10 seconds later, after 2 passes and a carry from midfield into the attacking third."
+        "headline": "Rafael Tovey levelled the match at 1-1.",
+        "lines": [
+          "Rafael Tovey scored to level the match at 1-1 for London Red in the 74th minute."
+        ]
       },
       "checks": {
         "format_problems": [],
@@ -712,13 +354,44 @@
           "offending": []
         }
       },
-      "retries": 0,
+      "retries": 1,
       "attempts": [
         {
           "attempt": 1,
           "output": {
-            "headline": "Niko Vane's goal put London Blue 1-0 up in the 61st minute",
-            "text": "Niko Vane scored to put London Blue 1-0 up. London Blue won the ball back in midfield and scored 10 seconds later, after 2 passes and a carry from midfield into the attacking third."
+            "headline": "Rafael Tovey levelled the match at 1-1.",
+            "lines": [
+              "Rafael Tovey scored to level the match at 1-1 for London Red in the 74th minute, the second-fastest of the match's two counter-attacks.",
+              "London Red won the ball back in the defensive third and scored 12 seconds later, after 3 passes and a carry from midfield into the attacking third."
+            ]
+          },
+          "format_problems": [
+            "text has 50 words, fan mode allows 35"
+          ],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
+          },
+          "polish": {
+            "passed": true,
+            "offending": []
+          },
+          "terms": {
+            "passed": true,
+            "offending": []
+          }
+        },
+        {
+          "attempt": 2,
+          "output": {
+            "headline": "Rafael Tovey levelled the match at 1-1.",
+            "lines": [
+              "Rafael Tovey scored to level the match at 1-1 for London Red in the 74th minute."
+            ]
           },
           "format_problems": [],
           "grounding": {
@@ -739,13 +412,110 @@
           }
         }
       ],
-      "input_hash": "491521b0a5a4b586"
+      "input_hash": "ec36fe6ca68ff21e"
+    },
+    {
+      "id": "m11",
+      "involves_favourite": true,
+      "status": "ok",
+      "output": {
+        "headline": "Cass Dunmore puts London Red 2-1 ahead.",
+        "lines": [
+          "Cass Dunmore scored to put London Red 2-1 ahead in the 89th minute from 6.4 metres.",
+          "London Red built the move through 2 passes and a carry in the attacking third."
+        ]
+      },
+      "checks": {
+        "format_problems": [],
+        "grounding": {
+          "passed": true,
+          "offending": []
+        },
+        "style": {
+          "passed": true,
+          "offending": []
+        },
+        "polish": {
+          "passed": true,
+          "offending": []
+        },
+        "terms": {
+          "passed": true,
+          "offending": []
+        }
+      },
+      "retries": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "output": {
+            "headline": "Cass Dunmore puts London Red 2-1 ahead.",
+            "lines": [
+              "Cass Dunmore scored to put London Red 2-1 ahead in the 89th minute from 6.4 metres, following a pass from Theo Brannick.",
+              "London Red built the move through 2 passes and a carry in the attacking third."
+            ]
+          },
+          "format_problems": [
+            "text has 37 words, fan mode allows 35"
+          ],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
+          },
+          "polish": {
+            "passed": true,
+            "offending": []
+          },
+          "terms": {
+            "passed": true,
+            "offending": []
+          }
+        },
+        {
+          "attempt": 2,
+          "output": {
+            "headline": "Cass Dunmore puts London Red 2-1 ahead.",
+            "lines": [
+              "Cass Dunmore scored to put London Red 2-1 ahead in the 89th minute from 6.4 metres.",
+              "London Red built the move through 2 passes and a carry in the attacking third."
+            ]
+          },
+          "format_problems": [],
+          "grounding": {
+            "passed": true,
+            "offending": []
+          },
+          "style": {
+            "passed": true,
+            "offending": []
+          },
+          "polish": {
+            "passed": true,
+            "offending": []
+          },
+          "terms": {
+            "passed": true,
+            "offending": []
+          }
+        }
+      ],
+      "input_hash": "8e309979f1e2c1fe"
     }
   ],
   "recap": {
     "status": "ok",
     "output": {
-      "text": "London Red won 2-1 after trailing from the 61st minute to the 74th. Bram Hollis denied Cass Dunmore in the 3rd minute. Niko Vane scored to put London Blue 1-0 up in the 61st minute. Rafael Tovey scored to level the match at 1-1 in the 74th minute. Cass Dunmore scored to put London Red 2-1 ahead in the 89th minute."
+      "lines": [
+        "London Red won 2-1 after trailing from the 61st minute to the 74th.",
+        "Niko Vane's goal in the 61st minute put London Blue 1-0 up.",
+        "Rafael Tovey's goal in the 74th minute levelled the match at 1-1.",
+        "Cass Dunmore's goal in the 89th minute put London Red 2-1 ahead.",
+        "The turning point was Rafael Tovey's goal in the 74th minute."
+      ]
     },
     "checks": {
       "format_problems": [],
@@ -766,37 +536,18 @@
         "offending": []
       }
     },
-    "retries": 1,
+    "retries": 0,
     "attempts": [
       {
         "attempt": 1,
         "output": {
-          "text": "London Red won 2-1 after trailing from the 61st minute to the 74th. Niko Vane scored to put London Blue 1-0 up in the 61st minute; Rafael Tovey scored to level the match at 1-1 in the 74th minute; Cass Dunmore scored to put London Red 2-1 ahead in the 89th minute."
-        },
-        "format_problems": [
-          "recap has 2 sentences, it needs 3 to 5"
-        ],
-        "grounding": {
-          "passed": true,
-          "offending": []
-        },
-        "style": {
-          "passed": true,
-          "offending": []
-        },
-        "polish": {
-          "passed": true,
-          "offending": []
-        },
-        "terms": {
-          "passed": true,
-          "offending": []
-        }
-      },
-      {
-        "attempt": 2,
-        "output": {
-          "text": "London Red won 2-1 after trailing from the 61st minute to the 74th. Bram Hollis denied Cass Dunmore in the 3rd minute. Niko Vane scored to put London Blue 1-0 up in the 61st minute. Rafael Tovey scored to level the match at 1-1 in the 74th minute. Cass Dunmore scored to put London Red 2-1 ahead in the 89th minute."
+          "lines": [
+            "London Red won 2-1 after trailing from the 61st minute to the 74th.",
+            "Niko Vane's goal in the 61st minute put London Blue 1-0 up.",
+            "Rafael Tovey's goal in the 74th minute levelled the match at 1-1.",
+            "Cass Dunmore's goal in the 89th minute put London Red 2-1 ahead.",
+            "The turning point was Rafael Tovey's goal in the 74th minute."
+          ]
         },
         "format_problems": [],
         "grounding": {
@@ -817,6 +568,6 @@
         }
       }
     ],
-    "input_hash": "20ca2908db2986d9"
+    "input_hash": "c925de078dd091e5"
   }
 }
