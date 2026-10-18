@@ -139,6 +139,20 @@ def test_spark_is_blocked_in_every_mode():
         assert '"sparked": claims a cause' in flags(c)
 
 
+def test_movement_and_shot_quality_inventions_are_blocked():
+    for text, reason in (("Cass Dunmore bursts into the area.", "describes movement or a location"),
+                         ("Theo Brannick darts forward.", "describes movement or a location"),
+                         ("London Red surge forward.", "describes movement or a location"),
+                         ("Cass Dunmore pounces.", "describes movement or a location"),
+                         ("What a strike!", "describes how the shot looked"),
+                         ("What a hit!", "describes how the shot looked"),
+                         ("A thunderous effort.", "describes how the shot looked")):
+        for profile in (FAN, ANALYST):
+            assert reason in flags(moment_checks("m11", profile, "Cass Dunmore scores", text)), text
+    assert "describes movement" not in flags(moment_checks("m11", FAN, "Cass Dunmore scores",
+                                                            "Cass Dunmore scored in the 89th minute."))
+
+
 def test_connectors_blocked_in_analyst_moments_but_quoted_build_up_is_fine():
     c = moment_checks("m04", ANALYST, "Cass Dunmore misses",
                       "Cass Dunmore missed from 6.4 metres after Luca Merriden's pass added 0.2906 xT.")

@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inside the Game</title>
+  <meta name="description" content="A synthetic London Red v London Blue match replayed with Expected Threat and checked, personalised commentary.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#commentary">Skip to commentary</a>
+
+  <header class="top">
+    <div class="wrap top-inner">
+      <div>
+        <h1>Inside the Game</h1>
+        <p class="sub">London Red v London Blue · a synthetic match</p>
+      </div>
+      <div class="score" aria-live="polite" aria-atomic="true">
+        <span class="team"><span class="dot red" aria-hidden="true"></span>London Red</span>
+        <span class="score-num" id="score">0–0</span>
+        <span class="team">London Blue<span class="dot blue" aria-hidden="true"></span></span>
+      </div>
+      <a class="about-link" href="#about">About</a>
+    </div>
+  </header>
+
+  <section class="controls" aria-label="Match clock">
+    <div class="wrap controls-inner">
+      <button type="button" id="play" class="btn primary" aria-label="Play">
+        <span aria-hidden="true" id="play-icon">▶</span><span id="play-text">Play</span>
+      </button>
+      <div class="clock" aria-hidden="true">
+        <span id="clock">00:00</span>
+        <span id="half" class="half">1st half</span>
+      </div>
+      <div class="speed" role="group" aria-label="Speed">
+        <button type="button" class="seg" data-speed="1" aria-pressed="false">1x</button>
+        <button type="button" class="seg" data-speed="10" aria-pressed="false">10x</button>
+        <button type="button" class="seg" data-speed="60" aria-pressed="true">60x</button>
+      </div>
+      <label class="scrub">
+        <span class="visually-hidden">Match time</span>
+        <input type="range" id="scrubber" min="0" max="5760" step="1" value="0">
+      </label>
+    </div>
+  </section>
+
+  <main class="wrap layout">
+    <section class="card profile-card" aria-labelledby="profile-h">
+      <h2 id="profile-h">Who is watching?</h2>
+      <fieldset class="choices" id="profiles">
+        <legend class="visually-hidden">Profile</legend>
+      </fieldset>
+      <fieldset class="choices lang" id="languages">
+        <legend>Language</legend>
+      </fieldset>
+    </section>
+
+    <section class="card chart-card" aria-labelledby="chart-h">
+      <h2 id="chart-h">Threat by 5-minute block</h2>
+      <p class="hint">Revealed as the clock runs. Markers show this profile's moments.</p>
+      <div class="legend" id="legend">
+        <span><span class="swatch red" aria-hidden="true"></span>London Red</span>
+        <span><span class="swatch blue" aria-hidden="true"></span>London Blue</span>
+        <span><span class="mk goal" aria-hidden="true"></span>Goal</span>
+        <span><span class="mk other" aria-hidden="true"></span>Other moment</span>
+      </div>
+      <div class="chart" id="chart">
+        <div class="tooltip" id="tooltip" role="status" hidden></div>
+      </div>
+      <p class="xt-note"><strong>xT</strong>: how likely the move leads to a goal soon; the best zone is about 0.30.</p>
+      <details class="table-view">
+        <summary>Show the chart as a table</summary>
+        <div class="table-scroll">
+          <table id="threat-table">
+            <caption class="visually-hidden">Threat created per 5-minute block, so far</caption>
+            <thead><tr><th scope="col">Minutes</th><th scope="col">London Red xT</th><th scope="col">London Blue xT</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+
+    <section class="card commentary-card" id="commentary" aria-labelledby="commentary-h" tabindex="-1">
+      <h2 id="commentary-h">Commentary <span class="profile-name" id="commentary-profile"></span></h2>
+      <p class="empty" id="feed-empty">Press Play. Each moment appears when the clock reaches it.</p>
+      <ol class="feed" id="feed" aria-live="polite" reversed></ol>
+    </section>
+
+    <section class="card recap-card" aria-labelledby="recap-h">
+      <h2 id="recap-h">Recap <span class="profile-name" id="recap-profile"></span></h2>
+      <div id="recap-locked">
+        <p>The recap gives the final result, so it opens at full time.</p>
+        <button type="button" class="btn" id="recap-show">Show it now</button>
+      </div>
+      <ul class="recap" id="recap" hidden></ul>
+    </section>
+
+    <section class="card about-card" id="about" aria-labelledby="about-h" tabindex="-1">
+      <h2 id="about-h">About</h2>
+      <h3>Synthetic data</h3>
+      <p>The match, both teams and every player are made up. A script generated about 700 events with a
+        fixed seed, so it is the same match every time. It is not real Premier League data.</p>
+      <h3>How it works</h3>
+      <ol class="steps">
+        <li><strong>Code computes the facts.</strong> Plain Python scores every pass and carry with a simple
+          Expected Threat (xT) grid, finds the key moments and counts the stats. No model touches a number.</li>
+        <li><strong>A model words them.</strong> Three agents on Microsoft Foundry (Analyst, Narrator,
+          Personalizer) turn those facts into sentences for each reader.</li>
+        <li><strong>Every sentence is checked.</strong> Code checks each name and number against the data and
+          blocks wording the facts can't support, such as how a shot looked or what the score did later.
+          Text that fails is retried or fixed by hand, and re-checked.</li>
+      </ol>
+      <p id="check-status" class="check-status"></p>
+      <h3>Honest limits</h3>
+      <ul>
+        <li>The xT grid is a simple distance-to-goal model, not one trained on real matches.</li>
+        <li>The checks catch known ways of inventing facts. They can't prove every sentence is perfect.</li>
+        <li>All text was generated before you opened the page; nothing is written live.</li>
+        <li>Some texts were edited by hand while proofreading. Edited texts pass the same checks.</li>
+        <li>A "spell on top" moment covers a stretch of play, so it appears when that stretch ends.</li>
+        <li>Arabic is planned but not written yet.</li>
+      </ul>
+    </section>
+  </main>
+
+  <noscript><p class="wrap">This page needs JavaScript to replay the match.</p></noscript>
+  <script src="app.js"></script>
+</body>
+</html>

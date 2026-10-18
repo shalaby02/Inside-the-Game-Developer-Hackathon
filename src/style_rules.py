@@ -179,6 +179,11 @@ PERSONALIZER_BLOCKED = [
     (r"wins? it|won it|seal(?:s|ed)? it|wrap(?:s|ped)? it up|it's over|secur(?:e|es|ed|ing)",
      "claims what the score did later"),
     (r"spark(?:s|ed|ing)?", "claims a cause"),
+    # How or where a player moved: the facts give the action, not how it looked.
+    (r"burst(?:s|ing)?|the area|dart(?:s|ed|ing)?|surg(?:e|es|ed|ing)|pounc(?:e|es|ed|ing)",
+     "describes movement or a location the facts don't give"),
+    # How good a shot looked: the facts only say scored, saved or missed.
+    (r"what a (?:strike|hit)|thunderous", "describes how the shot looked"),
 ]
 
 # Analyst-mode moment texts and every recap: CONNECTORS plus these. Kept out of
