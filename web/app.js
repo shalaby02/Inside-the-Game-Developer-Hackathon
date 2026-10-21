@@ -1,4 +1,4 @@
-// Inside the Game: replays the match from web/data/ (built by src/build_site.py).
+// xT Match Assistant: replays the match from web/data/ (built by src/build_site.py).
 // No build step, no external services. Optional URL parameters, handy for
 // screenshots: ?t=<timeline seconds>&profile=<profile key>&recap=1
 
@@ -17,7 +17,7 @@
   const svgNS = "http://www.w3.org/2000/svg";
   const params = new URLSearchParams(location.search);
 
-  const state = { t: 0, playing: false, speed: 60, profile: null, recapOpen: false, lastFrame: 0, shown: -1 };
+  const state = { t: 0, playing: false, speed: 60, profile: null, recapOpen: false, lastFrame: 0, shown: -1, mapId: null };
   let D; // loaded data
 
   // ------------------------------------------------------------ helpers
@@ -87,6 +87,9 @@
       const b = out.blocks.find((x) => t >= x.t_start && t < x.t_end);
       if (b) b.events.push({ t, team: row[ix.team], xt: row[ix.xt_added] });
     }
+    out.rows = out.events.rows.map((r) => Object.fromEntries(cols.map((c, i) => [c, r[i]])));
+    out.possessions = {};
+    for (const e of out.rows) (out.possessions[e.possession_id] ||= []).push(e);
     out.moments = Object.fromEntries(out.key_moments.moments.map((m) => [m.id, m]));
     D = out; // timelineSeconds() reads D
     out.goals = out.match.goals.map((g) => ({ ...g, t: timelineSeconds(g.period, g.minute, g.second) }));
@@ -198,15 +201,12 @@
       box.append(label);
     }
     const langs = $("languages");
-    for (const l of D.meta.languages) {
+    for (const l of D.meta.languages.filter((x) => x.available)) {
       const label = el("label", { class: "choice" });
       const input = el("input", { type: "radio", name: "language", value: l.code });
       if (l.code === "en") input.checked = true;
-      if (!l.available) input.disabled = true;
       const span = el("span", {});
-      const name = el("span", l.code === "ar" ? { lang: "ar", dir: "rtl" } : {}, l.name);
-      span.append(name);
-      if (!l.available) span.append(el("span", { class: "soon" }, "coming soon"));
+      span.append(el("span", l.code === "ar" ? { lang: "ar", dir: "rtl" } : {}, l.name));
       label.append(input, span);
       langs.append(label);
     }
@@ -221,6 +221,7 @@
     const name = `· ${profile().label}`;
     $("commentary-profile").textContent = name;
     $("recap-profile").textContent = name;
+    $("voice").textContent = `Voice: ${profile().voice_label}`;
     state.shown = -1;
     renderChart();
     renderFeed();
@@ -407,13 +408,17 @@
     const list = overlays();
     const revealed = list.filter((o) => o.start_seconds <= state.t);
     if (revealed.length === state.shown) return;
+    // A newly revealed card takes over the pass map; otherwise keep the chosen one while it is shown.
+    const ids = revealed.map((o) => o.moment_id);
+    if (revealed.length > state.shown || !ids.includes(state.mapId)) state.mapId = ids.length ? ids[ids.length - 1] : null;
     state.shown = revealed.length;
     const favourite = Object.fromEntries(profile().moments.map((x) => [x.id, x.involves_favourite]));
     const fav = profile().profile.favourite_team;
     $("feed-empty").hidden = revealed.length > 0;
     $("feed").replaceChildren(...revealed.slice().reverse().map((o, i) => {
       const mo = D.moments[o.moment_id];
-      const li = el("li", { class: `moment ${mo.team}${i === 0 ? " latest" : ""}` });
+      const li = el("li", { class: `moment ${mo.team}${i === 0 ? " latest" : ""}`, "data-id": o.moment_id });
+      li.addEventListener("click", () => showMove(o.moment_id));
       const meta = el("div", { class: "moment-meta" });
       const time = mo.category === "momentum_shift" ? `${clockText(mo.t)}–${clockText(mo.reveal_t)}` : clockText(mo.t);
       meta.append(el("span", { class: "time" }, time),
@@ -422,8 +427,219 @@
       if (fav !== "none" && favourite[o.moment_id]) meta.append(el("span", {}, `★ involves ${teamName(fav)}`));
       li.append(meta, el("h3", {}, displayHeadline(o.headline)));
       for (const line of o.lines) li.append(el("p", {}, line));
+      li.append(el("button", { type: "button", class: "show-move", "aria-pressed": "false" }, "Show the move"));
       return li;
     }));
+    markSelected();
+    renderMap();
+  }
+
+  // ------------------------------------------------------------ pass map
+
+  // The pitch is drawn in metres (105 x 68), attacking left to right. Events
+  // are 0-100 in the acting team's frame, attacking x = 100, with y = 0 on the
+  // attacker's right, so y = 0 is the bottom edge here.
+  const PW = 105, PH = 68;
+  const px = (x) => (x * PW) / 100;
+  const py = (y) => ((100 - y) * PH) / 100;
+  // xT levels for passes and carries: colour (a colour-blind-safe purple-orange
+  // scale) and line width. Analyst views show the numbers, fan views the words.
+  const XT_LEVELS = [
+    { key: "big", min: 0.05, range: "xT +0.050 or more", words: "Much more dangerous", width: 1.1 },
+    { key: "gain", min: 0.005, range: "xT +0.005 to +0.050", words: "More dangerous", width: 0.75 },
+    { key: "flat", min: -0.005, range: "xT within ±0.005", words: "Little change", width: 0.6 },
+    { key: "loss", min: -Infinity, range: "xT below −0.005", words: "Less dangerous", width: 0.6 },
+  ];
+  const xtLevel = (v) => XT_LEVELS.find((l) => v >= l.min);
+  const OUTCOME_WORDS = { off_target: "off target", free_kick: "free kick", yellow_card: "yellow card" };
+  const SHOT_LABELS = { goal: "Goal", saved: "Saved", off_target: "Off target", blocked: "Blocked" };
+  const signed = (v) => `${v >= 0 ? "+" : "−"}${Math.abs(v).toFixed(3)}`;
+  const isMoveLine = (e) => ["pass", "carry", "shot"].includes(e.type);
+  const failed = (e) => ["incomplete", "lost"].includes(e.outcome);
+
+  function momentTitle(mo) {
+    const time = mo.category === "momentum_shift" ? `${clockText(mo.t)}–${clockText(mo.reveal_t)}` : clockText(mo.t);
+    return `${time} ${TYPE_LABELS[mo.category] || mo.category}, ${teamName(mo.team)}`;
+  }
+
+  function eventWords(e, withTeam) {
+    return `${e.player}${withTeam ? ` (${teamName(e.team)})` : ""} ${e.type}, ${OUTCOME_WORDS[e.outcome] || e.outcome}`;
+  }
+
+  function drawPitch(s) {
+    s.append(svg("rect", { class: "turf", x: -2.5, y: 0, width: PW + 5, height: PH }));
+    const line = (attrs, tag = "rect") => s.append(svg(tag, { class: "line", ...attrs }));
+    line({ x: 0, y: 0, width: PW, height: PH });
+    line({ x1: PW / 2, x2: PW / 2, y1: 0, y2: PH }, "line");
+    line({ cx: PW / 2, cy: PH / 2, r: 9.15 }, "circle");
+    for (const [x0, dir] of [[0, 1], [PW, -1]]) {
+      line({ x: Math.min(x0, x0 + dir * 16.5), y: PH / 2 - 20.16, width: 16.5, height: 40.32 });
+      line({ x: Math.min(x0, x0 + dir * 5.5), y: PH / 2 - 9.16, width: 5.5, height: 18.32 });
+      line({ x: Math.min(x0, x0 - dir * 2), y: PH / 2 - 3.66, width: 2, height: 7.32 });
+      s.append(svg("circle", { class: "spot", cx: x0 + dir * 11, cy: PH / 2, r: 0.45 }));
+    }
+    s.append(svg("circle", { class: "spot", cx: PW / 2, cy: PH / 2, r: 0.45 }));
+  }
+
+  function arrowHead(x1, y1, x2, y2, size) {
+    const a = Math.atan2(y2 - y1, x2 - x1);
+    const pt = (da) => `${x2 - size * Math.cos(a + da)},${y2 - size * Math.sin(a + da)}`;
+    return `M${x2},${y2}L${pt(0.45)}L${pt(-0.45)}Z`;
+  }
+
+  // Text in pitch units, k times larger on narrow screens so it stays readable.
+  const text = (cls, x, y, size, content, anchor = "middle") => {
+    const t = svg("text", { class: cls, x, y, "text-anchor": anchor, style: `font-size:${size}px` });
+    t.textContent = content;
+    return t;
+  };
+
+  function drawMove(s, own, keyId, analyst, k) {
+    const lines = svg("g");
+    const marks = svg("g");
+    const badges = svg("g");
+    s.append(lines, marks, badges);
+    const R = (analyst ? 5.2 : 4.2) * k;
+    // A shot's outcome sits just above the goal it was aimed at, kept clear of the badges.
+    const outcomeY = PH / 2 - 3.66 - 1.6;
+    const placed = own.some((e) => e.type === "shot") ? [{ x: PW - 1, y: outcomeY - k }, { x: PW - 4 * k, y: outcomeY - k }] : [];
+    const free = (x, y) => !placed.some((p) => Math.hypot(p.x - x, p.y - y) < R);
+    own.forEach((e, i) => {
+      const x1 = px(e.x), y1 = py(e.y), x2 = px(e.end_x), y2 = py(e.end_y);
+      const arrow = isMoveLine(e) && Math.hypot(x2 - x1, y2 - y1) > 0.5;
+      const shot = e.type === "shot";
+      const level = xtLevel(e.xt_added);
+      const color = shot ? "var(--text)" : `var(--xt-${level.key})`;
+      const width = shot ? 0.9 : level.width;
+      let bx = x1, by = y1 - 3;
+      if (arrow) {
+        if (e.event_id === keyId) {
+          lines.append(svg("line", { class: "halo", x1, y1, x2, y2, "stroke-width": width + 2.4 }));
+        }
+        const len = Math.hypot(x2 - x1, y2 - y1);
+        const head = Math.min(2.4, len / 2);
+        const cut = failed(e) ? 0 : head * 0.8;
+        const ex = x2 - ((x2 - x1) / len) * cut, ey = y2 - ((y2 - y1) / len) * cut;
+        lines.append(svg("line", { x1, y1, x2: ex, y2: ey, stroke: color, "stroke-width": width,
+          "stroke-linecap": "round", ...(e.type === "carry" ? { "stroke-dasharray": "1.6 1.2" } : {}) }));
+        if (failed(e)) { // the ball did not reach its end: a cross, no arrowhead
+          const c = 1.2;
+          marks.append(svg("path", { d: `M${x2 - c},${y2 - c}L${x2 + c},${y2 + c}M${x2 - c},${y2 + c}L${x2 + c},${y2 - c}`,
+            stroke: color, "stroke-width": 0.7, fill: "none" }));
+        } else {
+          marks.append(svg("path", { d: arrowHead(x1, y1, x2, y2, head), fill: color }));
+        }
+        if (shot) {
+          marks.append(text("outcome", PW + 2.5, outcomeY, 2.6 * k, SHOT_LABELS[e.outcome] || e.outcome, "end"));
+        }
+        bx = x1 + (x2 - x1) * 0.45;
+        by = y1 + (y2 - y1) * 0.45;
+      } else {
+        const d = 1.4;
+        if (e.event_id === keyId) marks.append(svg("circle", { class: "halo", cx: x1, cy: y1, r: 2.6, "stroke-width": 1.6 }));
+        marks.append(svg("path", { class: "won", d: `M${x1},${y1 - d}L${x1 + d},${y1}L${x1},${y1 + d}L${x1 - d},${y1}Z` }));
+      }
+      // Nudge the badge (and its xT label) off earlier ones, staying inside the drawing.
+      const hw = (analyst ? 4.4 : 2) * k;
+      const clampX = (x) => Math.min(PW + 3 - hw, Math.max(-3 + hw, x));
+      const clampY = (y) => Math.min(PH - 2 * k, Math.max(2 * k, y));
+      const tries = [[0, 0], [0, -R], [0, R], [-R, 0], [R, 0], [-R, -R], [-R, R], [R, -R], [R, R], [0, -2 * R], [0, 2 * R],
+        [-2 * R, 0], [-2 * R, -R], [-2 * R, R]].map(([tx, ty]) => [clampX(bx + tx), clampY(by + ty)]);
+      [bx, by] = tries.find(([x, y]) => free(x, y)) || tries[0];
+      placed.push({ x: bx, y: by });
+      badges.append(svg("circle", { class: "badge-dot", cx: bx, cy: by, r: 1.9 * k }));
+      badges.append(text("badge-num", bx, by + 0.95 * k, 2.6 * k, String(i + 1)));
+      if (analyst && ["pass", "carry"].includes(e.type)) {
+        const below = by + 4.4 * k <= PH; // above the badge if below would leave the pitch
+        badges.append(text("xt-label", bx, below ? by + 4.4 * k : by - 2.6 * k, 2.3 * k, signed(e.xt_added)));
+      }
+    });
+  }
+
+  function renderLegend(analyst) {
+    const item = (cls, text) => {
+      const s = el("span");
+      s.append(el("span", { class: `ln ${cls}`, "aria-hidden": "true" }), el("span", {}, text));
+      return s;
+    };
+    $("map-legend").replaceChildren(
+      item("", "Pass"), item("dashed", "Carry"), item("shot", analyst ? "Shot (no xT)" : "Shot"),
+      ...XT_LEVELS.map((l) => item(l.key, analyst ? l.range : l.words)),
+      el("span", {}, "× ball not kept · ◇ won the ball"));
+  }
+
+  function renderMap() {
+    if (!state.profile) return;
+    const mo = state.mapId ? D.moments[state.mapId] : null;
+    $("map-empty").hidden = !!mo;
+    $("map-body").hidden = !mo;
+    const key = mo ? `${state.profile}|${mo.id}` : "";
+    if ($("pitch").dataset.key === key) return;
+    $("pitch").dataset.key = key;
+    $("map-moment").textContent = mo ? `· ${momentTitle(mo)}` : "";
+    if (!mo) return;
+    const reason = mo.map.reason;
+    $("map-reason").hidden = !reason;
+    $("map-reason").textContent = reason || "";
+    for (const id of ["pitch", "map-legend", "map-list-h", "move-list"]) $(id).hidden = !!reason;
+    $("move-others").hidden = true;
+    if (reason) {
+      $("pitch").replaceChildren();
+      $("move-list").replaceChildren();
+      return;
+    }
+
+    const analyst = profile().profile.mode === "analyst";
+    const team = mo.map.team;
+    const all = D.possessions[mo.map.possession_id];
+    const own = all.filter((e) => e.team === team);
+    const others = all.filter((e) => e.team !== team);
+
+    const k = Math.min(1.8, Math.max(1, 560 / ($("pitch").clientWidth || 560)));
+    const top = 2.5 + 3.4 * k;
+    const s = svg("svg", { viewBox: `-3 ${-top} ${PW + 6} ${PH + top + 1.5}`, role: "img",
+      "aria-label": `Pass map of the ${teamName(team)} move at ${clockText(mo.t)}: ${own.length} numbered actions, ` +
+        "attacking left to right. The same actions are listed in words below." });
+    drawPitch(s);
+    s.append(svg("circle", { cx: 1.1 * k, cy: -1.8 - 1.1 * k, r: 1.1 * k, fill: `var(--${team.split("_")[1]})` }),
+      text("team-label", 3 * k, -1.8, 3.2 * k, `${teamName(team)} move`, "start"),
+      text("dir", PW, -1.8, 2.6 * k, "attacking →", "end"));
+    drawMove(s, own, mo.map.key_event_id, analyst, k);
+    $("pitch").replaceChildren(s);
+    renderLegend(analyst);
+
+    $("move-list").replaceChildren(...own.map((e) => {
+      const li = el("li", e.event_id === mo.map.key_event_id ? { class: "key" } : {});
+      li.append(el("span", { class: "time" }, `${clockText(e.t)} `), document.createTextNode(eventWords(e, false)));
+      if (["pass", "carry"].includes(e.type)) {
+        li.append(document.createTextNode(analyst ? ` · xT ${signed(e.xt_added)}`
+          : ` · ${xtLevel(e.xt_added).words.toLowerCase()}`));
+      }
+      if (e.event_id === mo.map.key_event_id) li.append(document.createTextNode(" (this moment)"));
+      return li;
+    }));
+    if (others.length) {
+      $("move-others").hidden = false;
+      $("move-others").textContent = "Not drawn, the other team's events during this move: " +
+        others.map((e) => `${clockText(e.t)} ${eventWords(e, true)}`).join("; ") + ".";
+    }
+  }
+
+  function markSelected() {
+    for (const li of $("feed").children) {
+      const on = li.dataset.id === state.mapId;
+      li.classList.toggle("on-map", on);
+      li.querySelector(".show-move")?.setAttribute("aria-pressed", String(on));
+    }
+  }
+
+  function showMove(id) {
+    state.mapId = id;
+    markSelected();
+    renderMap();
+    $("map-status").textContent = `Pass map now shows ${momentTitle(D.moments[id])}`;
+    const r = $("pass-map").getBoundingClientRect();
+    if (r.top > window.innerHeight || r.bottom < 0) $("pass-map").scrollIntoView({ block: "start" });
   }
 
   // ------------------------------------------------------------ recap
@@ -479,6 +695,8 @@
         lastWidth = $("chart").clientWidth;
         buildChart();
         renderChart();
+        $("pitch").dataset.key = ""; // the map's text scales with its width
+        renderMap();
       }, 120);
     });
   }

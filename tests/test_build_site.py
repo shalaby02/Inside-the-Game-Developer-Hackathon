@@ -1,6 +1,8 @@
 """Checks src/build_site.py and the saved web/data/ files. No model calls."""
 
+import hashlib
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -130,3 +132,82 @@ def test_arabic_is_offered_only_when_a_profile_has_it():
     langs = {x["code"]: x["available"] for x in BUILT["meta.json"]["languages"]}
     has_ar = any(p["profile"]["language"] == "ar" for p in BUILT["profiles.json"]["profiles"])
     assert langs["ar"] is has_ar and langs["en"] is True
+
+
+# ------------------------------------------------------------ pass map
+
+def event_rows():
+    cols = BUILT["events.json"]["columns"]
+    return [dict(zip(cols, r)) for r in BUILT["events.json"]["rows"]]
+
+
+def test_events_carry_what_the_pass_map_needs():
+    assert {"event_id", "possession_id", "x", "y", "end_x", "end_y", "xt_added"} <= set(BUILT["events.json"]["columns"])
+
+
+def test_every_moment_has_a_map_or_a_stated_reason():
+    events = event_rows()
+    for m in BUILT["key_moments.json"]["moments"]:
+        mp = m["map"]
+        if m["category"] == "momentum_shift":
+            assert mp == {"reason": bs.SPELL_MAP_REASON}, m["id"]
+            continue
+        assert "reason" not in mp, m["id"]
+        move = [e for e in events if e["possession_id"] == mp["possession_id"]]
+        key = [e for e in move if e["event_id"] == mp["key_event_id"]]
+        assert len(key) == 1, m["id"]
+        assert key[0]["team"] == mp["team"]
+        assert (key[0]["period"], key[0]["minute"], key[0]["second"]) == (m["period"], m["minute"], m["second"])
+        drawn = [e for e in move if e["team"] == mp["team"] and e["type"] in ("pass", "carry", "shot")]
+        assert drawn, m["id"]
+        if m["category"] in bs.SHOT_CATEGORIES:
+            assert key[0]["type"] == "shot"
+        else:
+            assert key[0]["type"] in ("pass", "carry") and key[0]["team"] == m["team"]
+
+
+def test_spells_are_the_only_moments_without_a_map():
+    no_map = sorted(m["id"] for m in BUILT["key_moments.json"]["moments"] if "reason" in m["map"])
+    assert no_map == sorted(m["id"] for m in BUILT["key_moments.json"]["moments"]
+                            if m["category"] == "momentum_shift")
+
+
+def test_map_events_are_in_time_order():
+    events = event_rows()
+    for m in BUILT["key_moments.json"]["moments"]:
+        if "reason" in m["map"]:
+            continue
+        move = [e for e in events if e["possession_id"] == m["map"]["possession_id"]]
+        assert [e["t"] for e in move] == sorted(e["t"] for e in move), m["id"]
+        assert [e["event_id"] for e in move] == sorted(e["event_id"] for e in move), m["id"]
+
+
+def test_every_profile_names_its_voice():
+    for p in BUILT["profiles.json"]["profiles"]:
+        assert p["voice_label"] == bs.VOICE_LABELS[p["profile"]["voice"]]
+
+
+FROZEN = [ROOT / "data", ROOT / "src" / "generate_match.py"]
+
+
+def frozen_hashes():
+    files = [f for path in FROZEN for f in ([path] if path.is_file() else sorted(path.rglob("*"))) if f.is_file()]
+    return {str(f.relative_to(ROOT)): hashlib.sha256(f.read_bytes()).hexdigest() for f in files}
+
+
+def test_building_the_site_changes_no_frozen_file(tmp_path, monkeypatch):
+    before = frozen_hashes()
+    monkeypatch.setattr(bs, "OUT_DIR", tmp_path)
+    assert bs.main() == 0
+    assert frozen_hashes() == before
+    assert sorted(p.name for p in tmp_path.iterdir()) == sorted(BUILT)
+
+
+def test_frozen_files_match_the_last_commit():
+    """data/ and the generator are frozen: no uncommitted change to them."""
+    try:
+        out = subprocess.run(["git", "status", "--porcelain", "--", "data", "src/generate_match.py"],
+                             cwd=ROOT, capture_output=True, text=True, check=True).stdout
+    except (OSError, subprocess.CalledProcessError):
+        pytest.skip("git is not available")
+    assert out == ""

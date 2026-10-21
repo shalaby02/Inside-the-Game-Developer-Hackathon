@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Inside the Game</title>
+  <title>xT Match Assistant</title>
   <meta name="description" content="A synthetic London Red v London Blue match replayed with Expected Threat and checked, personalised commentary.">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -13,8 +13,8 @@
   <header class="top">
     <div class="wrap top-inner">
       <div>
-        <h1>Inside the Game</h1>
-        <p class="sub">London Red v London Blue · a synthetic match</p>
+        <h1>xT Match Assistant</h1>
+        <p class="sub">London Red v London Blue · a synthetic match replay</p>
       </div>
       <div class="score" aria-live="polite" aria-atomic="true">
         <span class="team"><span class="dot red" aria-hidden="true"></span>London Red</span>
@@ -52,6 +52,7 @@
       <fieldset class="choices" id="profiles">
         <legend class="visually-hidden">Profile</legend>
       </fieldset>
+      <p class="voice" id="voice"></p>
       <fieldset class="choices lang" id="languages">
         <legend>Language</legend>
       </fieldset>
@@ -97,11 +98,26 @@
       <ul class="recap" id="recap" hidden></ul>
     </section>
 
+    <section class="card map-card" id="pass-map" aria-labelledby="map-h" tabindex="-1">
+      <h2 id="map-h">Pass map <span class="profile-name" id="map-moment"></span></h2>
+      <p class="empty" id="map-empty">The move behind each moment is drawn here when its card appears. Choose
+        <strong>Show the move</strong> on any card to see it again.</p>
+      <div id="map-body" hidden>
+        <p class="map-reason" id="map-reason" hidden></p>
+        <div class="pitch" id="pitch"></div>
+        <div class="legend map-legend" id="map-legend"></div>
+        <h3 id="map-list-h">The move in words</h3>
+        <ol class="move-list" id="move-list" aria-labelledby="map-list-h"></ol>
+        <p class="hint" id="move-others" hidden></p>
+      </div>
+      <p class="visually-hidden" id="map-status" aria-live="polite"></p>
+    </section>
+
     <section class="card about-card" id="about" aria-labelledby="about-h" tabindex="-1">
       <h2 id="about-h">About</h2>
       <h3>Synthetic data</h3>
       <p>The match, both teams and every player are made up. A script generated about 700 events with a
-        fixed seed, so it is the same match every time. It is not real Premier League data.</p>
+        fixed seed, so it is the same match every time. It is not real match data.</p>
       <h3>How it works</h3>
       <ol class="steps">
         <li><strong>Code computes the facts.</strong> Plain Python scores every pass and carry with a simple
@@ -120,7 +136,6 @@
         <li>All text was generated before you opened the page; nothing is written live.</li>
         <li>Some texts were edited by hand while proofreading. Edited texts pass the same checks.</li>
         <li>A "spell on top" moment covers a stretch of play, so it appears when that stretch ends.</li>
-        <li>Arabic is planned but not written yet.</li>
       </ul>
     </section>
   </main>

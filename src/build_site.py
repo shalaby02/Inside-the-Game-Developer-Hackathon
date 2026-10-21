@@ -10,10 +10,13 @@ shows text that passes every check as it is saved now.
 
 Writes compact JSON to web/data/:
 - match.json            teams, final score, result line, goals, the playback timeline
-- events.json           every event as a row: columns + rows
+- events.json           every event as a row: columns + rows (x, y is the start;
+                        end_x, end_y the end; both in the acting team's frame)
 - threat.json           threat created per 5-minute block per team (the blocks
                         of src/key_moments.py: completed passes and carries)
-- key_moments.json      the moments, each with its playback time
+- key_moments.json      the moments, each with its playback time and its pass
+                        map: the possession and key event it was built from,
+                        or the reason it has none
 - narrations.json       the Narrator's checked headline and explanation per moment
 - analysis.json         the Analyst's match headline, story arc, turning point, phase notes
 - player_summaries.json per-player facts
@@ -45,7 +48,14 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 OUT_DIR = ROOT / "web" / "data"
 
-EVENT_COLUMNS = ["t", "period", "minute", "second", "team", "player", "type", "outcome", "x", "y", "xt_added"]
+EVENT_COLUMNS = ["t", "period", "minute", "second", "team", "player", "type", "outcome", "x", "y", "xt_added",
+                 "event_id", "possession_id", "end_x", "end_y"]
+
+SHOT_CATEGORIES = ("goal", "save", "big_chance_missed")
+SPELL_MAP_REASON = ("This moment is a spell of several minutes, not one move, so there is no single "
+                    "possession to draw. The threat chart shows the spell.")
+
+VOICE_LABELS = {"studio": "Studio (calm)", "stadium": "Stadium (energetic)"}
 
 # Overlay reading time, in match-clock seconds at 1x: about 2.5 words a second.
 OVERLAY_WORDS_PER_SECOND = 2.5
@@ -89,7 +99,7 @@ def timeline_length(timeline) -> int:
 def events_file(events, timeline) -> dict:
     rows = [[timeline_seconds(timeline, e["period"], e["minute"], e["second"]), e["period"], e["minute"],
              e["second"], e["team"], e["player"], e["type"], e["outcome"], e["start_x"], e["start_y"],
-             e["xt_added"]] for e in events]
+             e["xt_added"], e["event_id"], e["possession_id"], e["end_x"], e["end_y"]] for e in events]
     return {"columns": EVENT_COLUMNS, "rows": rows}
 
 
@@ -119,6 +129,35 @@ def spell_end(moment, events, timeline) -> int:
     return timeline_seconds(timeline, last["period"], last["minute"], last["second"])
 
 
+def key_event(moment, events):
+    """The event a moment was built from (src/key_moments.py): the shot for a
+    shot moment, the pass or carry for a threat swing. None for a momentum
+    shift, which covers a spell, not one event. Exits unless exactly one
+    event matches, so a map never shows the wrong move."""
+    if moment["category"] == "momentum_shift":
+        return None
+    f = moment["facts"]
+    at = [e for e in events if (e["period"], e["minute"], e["second"]) ==
+          (moment["period"], moment["minute"], moment["second"])]
+    if moment["category"] in SHOT_CATEGORIES:
+        found = [e for e in at if e["type"] == "shot" and (e["start_x"], e["start_y"]) == (f["shot_x"], f["shot_y"])]
+    else:
+        found = [e for e in at if e["team"] == moment["team"] and e["type"] == f["action_type"]
+                 and e["xt_added"] == f["xt_added"]]
+    if len(found) != 1:
+        sys.exit(f"{moment['id']}: expected one key event, found {len(found)}")
+    return found[0]
+
+
+def move_map(moment, events) -> dict:
+    """What the pass map draws for a moment: the possession of its key event,
+    or the reason there is no map."""
+    e = key_event(moment, events)
+    if e is None:
+        return {"reason": SPELL_MAP_REASON}
+    return {"possession_id": e["possession_id"], "key_event_id": e["event_id"], "team": e["team"]}
+
+
 def moments_file(moments, events, timeline) -> list:
     """Each moment with t (its own time) and reveal_t: when the page may show
     it. A momentum shift describes a whole spell, so it is revealed when the
@@ -132,7 +171,8 @@ def moments_file(moments, events, timeline) -> list:
                     "team": m["team"], "players": m["players"],
                     **({"spell": {"start_minute": m["facts"]["start_minute"],
                                   "last_minute": m["facts"]["last_minute"]}}
-                       if m["category"] == "momentum_shift" else {})})
+                       if m["category"] == "momentum_shift" else {}),
+                    "map": move_map(m, events)})
     return out
 
 
@@ -146,7 +186,7 @@ def profile_label(profile: dict, teams: dict) -> str:
 
 def profiles_file(docs, teams) -> list:
     return [{"key": d["profile_key"], "label": profile_label(d["profile"], teams), "profile": d["profile"],
-             "selection": d["selection"], "player": d["player"],
+             "voice_label": VOICE_LABELS[d["profile"]["voice"]], "selection": d["selection"], "player": d["player"],
              "moments": [{"id": e["id"], "involves_favourite": e["involves_favourite"], **e["output"]}
                          for e in d["moments"]],
              "recap": d["recap"]["output"]["lines"]} for d in docs]
