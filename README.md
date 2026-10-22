@@ -4,7 +4,7 @@ Replays a match as if live: code computes the threat numbers, AI agents explain,
 
 Built for the Microsoft "Inside the Game: Developer Hackathon". All data is synthetic. The teams, players and match are invented.
 
-- **Live demo:** [ADD DEPLOYED URL]
+- **Live demo:** https://victorious-mushroom-0cc79a410.4.azurestaticapps.net/
 - **Demo video (under 2 minutes):** [ADD VIDEO URL]
 
 ---
