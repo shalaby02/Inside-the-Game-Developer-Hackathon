@@ -262,6 +262,24 @@ th:first-child, td:first-child { text-align: left; }
 .steps li { margin-bottom: 6px; }
 .about-card ul { padding-left: 20px; }
 .check-status { font-size: 0.875rem; color: var(--text-2); }
+.xt-panel { margin-top: 12px; border: 1px solid var(--border); border-radius: 8px; padding: 0 12px; }
+.xt-panel > summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; }
+.xt-panel[open] { padding-bottom: 12px; }
+.xt-pitch { max-width: 640px; margin: 4px 0 8px; }
+.xt-pitch .line, .xt-pitch .spot { stroke: #ffffff; stroke-opacity: 0.45; }
+.xt-pitch .spot { fill: #ffffff; fill-opacity: 0.45; }
+.xt-pitch .xt-best { fill: none; stroke: #0b0b0b; stroke-width: 0.6; }
+.xt-pitch .xt-best-label { fill: #0b0b0b; font-variant-numeric: tabular-nums; }
+.xt-pitch .xt-best-label.strong { font-weight: 700; }
+.xt-pitch .xt-ex-halo { stroke: #0b0b0b; stroke-width: 1.2; stroke-linecap: round; }
+.xt-pitch .xt-ex { stroke: #ffffff; stroke-width: 0.55; stroke-linecap: round; }
+.xt-pitch .xt-ex-from { fill: #ffffff; stroke: #0b0b0b; stroke-width: 0.45; }
+.xt-pitch .xt-ex-to { fill: #0b0b0b; stroke: #ffffff; stroke-width: 0.45; }
+.xt-legend .swatch { border: 1px solid var(--border); }
+.xt-ramp { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 3px; }
+.xt-ramp > span:not(.swatch) { white-space: nowrap; }
+.xt-ramp > span:first-child { margin-right: 4px; }
+.xt-ramp > span:last-child { margin-left: 4px; }
 
 @media (max-width: 520px) {
   .score { width: 100%; justify-content: center; order: 3; }

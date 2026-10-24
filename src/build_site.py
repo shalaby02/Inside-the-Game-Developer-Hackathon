@@ -23,6 +23,7 @@ Writes compact JSON to web/data/:
 - profiles.json         the pre-generated Personalizer profiles: moment texts and recap
 - overlays.json         timed, machine-readable overlay entries per profile
 - meta.json             what was checked, and which languages exist
+- xt_grid.json          the xT zone values, colour scale and worked example (src/xt_reference.py)
 
 Playback timeline: one continuous clock in seconds. The first half runs
 from 0:00 to the end of its last event's minute (47:00); the second half
@@ -43,6 +44,7 @@ import player_summary
 import run_analyst
 import run_personalizer
 import verify_narrations
+import xt_reference
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
@@ -244,7 +246,8 @@ def build(checks: dict) -> dict:
     events = key_moments.load(DATA / "match_xt.csv")
     timeline = periods(events)
     summary = _read("match_summary.json")
-    moments = moments_file(_read("key_moments.json")["moments"], events, timeline)
+    raw_moments = _read("key_moments.json")["moments"]
+    moments = moments_file(raw_moments, events, timeline)
     narrations = {n["id"]: {"headline": n["narration"]["headline"], "explanation": n["narration"]["explanation"]}
                   for n in _read("narrations.json")["narrations"] if n["status"] == "ok"}
     analysis = _read("analysis.json")["analysis"]
@@ -273,6 +276,7 @@ def build(checks: dict) -> dict:
         "meta.json": {"synthetic": True, "checks": checks,
                       "languages": [{"code": c, "name": LANGUAGE_NAMES.get(c, c), "available": c in languages}
                                     for c in ("en", "ar")]},
+        "xt_grid.json": xt_reference.reference(events, raw_moments),
     }
 
 

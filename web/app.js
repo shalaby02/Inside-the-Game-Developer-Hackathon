@@ -5,7 +5,7 @@
 (() => {
   "use strict";
 
-  const FILES = ["match", "events", "threat", "key_moments", "profiles", "overlays", "meta"];
+  const FILES = ["match", "events", "threat", "key_moments", "profiles", "overlays", "meta", "xt_grid"];
   const TYPE_LABELS = {
     goal: "Goal", save: "Save", big_chance_missed: "Big chance missed",
     momentum_shift: "Spell on top", biggest_threat_swing: "Threat swing",
@@ -226,6 +226,7 @@
     renderChart();
     renderFeed();
     renderRecap();
+    renderXt();
   }
 
   // ------------------------------------------------------------ chart
@@ -657,6 +658,125 @@
     }
   }
 
+  // ------------------------------------------------------------ xT panel
+
+  // The xT grid from xt_grid.json (src/xt_reference.py, also behind the README
+  // image), drawn on the pitch. Analyst views show the numbers, fan views the
+  // words only.
+  function renderXt() {
+    if (!state.profile) return;
+    const g = D.xt_grid;
+    const ex = g.example;
+    const analyst = profile().profile.mode === "analyst";
+    const k = Math.min(1.8, Math.max(1, 560 / ($("about").clientWidth || 560)));
+    const key = `${analyst}|${k}`;
+    if ($("xt-body").dataset.key === key) return;
+    $("xt-body").dataset.key = key;
+    $("xt-title").textContent = analyst ? "What is xT?" : "How is danger measured?";
+
+    const when = clockText(timelineSeconds(ex.period, ex.minute, ex.second));
+    const top = g.top_value.toFixed(2);
+    const v4 = (v) => v.toFixed(4);
+    const intro = analyst
+      ? "xT (Expected Threat) gives every zone of the pitch a value: how likely possession there is to lead " +
+        `to a goal soon. The best zones are about ${top}. It is not shot probability. A completed pass or ` +
+        "carry scores the value of the zone it ends in minus the value of the zone it starts in."
+      : "The pitch is split into a grid of zones. The closer a zone is to the middle of the goal, the more " +
+        "dangerous it is to have the ball there. A completed pass or carry counts as more dangerous when it " +
+        "moves the ball into a brighter zone.";
+
+    const head = 2.5 + 3.4 * k;
+    const s = svg("svg", { viewBox: `-3 ${-head} ${PW + 6} ${PH + head + 1.5}`, role: "img",
+      "aria-labelledby": "xt-svg-t xt-svg-d" });
+    const title = svg("title", { id: "xt-svg-t" });
+    title.textContent = analyst ? "xT zone values" : "How dangerous each zone is";
+    const desc = svg("desc", { id: "xt-svg-d" });
+    desc.textContent = (analyst
+      ? `Heat map of the ${g.cols} by ${g.rows} xT zone grid, attacking left to right. Values rise from ` +
+        `${g.scale[0].label} in the team's own half to about ${top} in the central zones in front of goal.`
+      : "Heat map of the pitch zones, attacking left to right. Zones get brighter, meaning more dangerous, " +
+        "toward the middle of the goal.") + ` A line shows the ${when} pass described below.`;
+    s.append(title, desc);
+    drawPitch(s);
+    const cw = PW / g.cols, ch = PH / g.rows;
+    const stepOf = (v) => g.scale.reduce((i, st, j) => (v >= st.min ? j : i), 0);
+    const cells = svg("g", { "shape-rendering": "crispEdges" });
+    g.values.forEach((col, c) => col.forEach((v, r) => {
+      cells.append(svg("rect", { x: c * cw, y: (g.rows - 1 - r) * ch, width: cw, height: ch,
+        fill: g.scale[stepOf(v)].colour }));
+    }));
+    s.querySelector(".turf").after(cells); // under the pitch lines
+    const bc = g.best_zones.map((z) => z[0]), br = g.best_zones.map((z) => z[1]);
+    const bx = Math.min(...bc) * cw, by = (g.rows - 1 - Math.max(...br)) * ch;
+    const bw = (Math.max(...bc) - Math.min(...bc) + 1) * cw, bh = (Math.max(...br) - Math.min(...br) + 1) * ch;
+    s.append(svg("rect", { class: "xt-best", x: bx, y: by, width: bw, height: bh }));
+    if (analyst) {
+      const size = Math.min(2.4 * k, 3);
+      s.append(text("xt-best-label", bx + bw / 2, by + bh / 2 - 0.4, size, "about"),
+        text("xt-best-label strong", bx + bw / 2, by + bh / 2 + size, size, top));
+    }
+    const [x1, y1, x2, y2] = [px(ex.start[0]), py(ex.start[1]), px(ex.end[0]), py(ex.end[1])];
+    s.append(svg("line", { class: "xt-ex-halo", x1, y1, x2, y2 }), svg("line", { class: "xt-ex", x1, y1, x2, y2 }),
+      svg("circle", { class: "xt-ex-from", cx: x1, cy: y1, r: 1 }),
+      svg("circle", { class: "xt-ex-to", cx: x2, cy: y2, r: 1 }),
+      text("team-label", 0, -1.8, 3.2 * k, analyst ? "xT zone values" : "Danger by zone", "start"),
+      text("dir", PW, -1.8, 2.6 * k, "attacking →", "end"));
+    const pitch = el("div", { class: "pitch xt-pitch" });
+    pitch.append(s);
+
+    const swatch = (st) => {
+      const sp = el("span", { class: "swatch", "aria-hidden": "true" });
+      sp.style.background = st.colour;
+      return sp;
+    };
+    const legend = el("div", { class: "legend xt-legend" });
+    if (analyst) {
+      for (const st of g.scale) {
+        const item = el("span");
+        item.append(swatch(st), document.createTextNode(st.label));
+        legend.append(item);
+      }
+      legend.append(el("span", {}, `Outlined: the best zones, about ${top}`));
+    } else {
+      const ramp = el("span", { class: "xt-ramp" });
+      ramp.append(el("span", {}, "Less dangerous"), ...g.scale.map(swatch), el("span", {}, "More dangerous"));
+      legend.append(ramp, el("span", {}, "Outlined: the most dangerous zones"));
+    }
+    legend.append(el("span", {}, `Line: the ${when} pass, from the white dot to the dark dot`));
+
+    const example = el("p");
+    example.append(el("strong", {}, "Worked example. "), document.createTextNode(analyst
+      ? `At ${when} ${ex.player} (${teamName(ex.team)}) passed from zone ${ex.from_zone} (value ` +
+        `${v4(ex.from_value)}) to zone ${ex.to_zone} (value ${v4(ex.to_value)}). xT added: ` +
+        `${v4(ex.to_value)} − ${v4(ex.from_value)} = ${ex.xt_added >= 0 ? "+" : "−"}${v4(Math.abs(ex.xt_added))}.`
+      : `At ${when} ${ex.player} (${teamName(ex.team)}) passed from ${ex.from_place} to ${ex.to_place}: ` +
+        `${xtLevel(ex.xt_added).words.toLowerCase()}.`));
+
+    const parts = [el("p", {}, intro), pitch, legend, example, el("p", { class: "hint" }, g.caption)];
+    if (analyst) {
+      const headRow = el("tr");
+      headRow.append(el("th", { scope: "col" }, "Row"), ...g.values.map((_, c) => el("th", { scope: "col" }, `c${c}`)));
+      const thead = el("thead");
+      thead.append(headRow);
+      const tbody = el("tbody");
+      for (let r = g.rows - 1; r >= 0; r--) {
+        const tr = el("tr");
+        const side = r === g.rows - 1 ? " (left)" : r === 0 ? " (right)" : "";
+        tr.append(el("th", { scope: "row" }, `r${r}${side}`), ...g.values.map((col) => el("td", {}, v4(col[r]))));
+        tbody.append(tr);
+      }
+      const table = el("table");
+      table.append(el("caption", { class: "visually-hidden" },
+        "xT zone values: columns c0 to c11 toward goal, rows from the attacker's left to right"), thead, tbody);
+      const scroll = el("div", { class: "table-scroll" });
+      scroll.append(table);
+      const details = el("details", { class: "table-view" });
+      details.append(el("summary", {}, "Show the grid as a table"), scroll);
+      parts.push(details);
+    }
+    $("xt-body").replaceChildren(...parts);
+  }
+
   function renderChecks() {
     const c = D.meta.checks;
     const n = Object.values(c.narrations);
@@ -697,6 +817,7 @@
         renderChart();
         $("pitch").dataset.key = ""; // the map's text scales with its width
         renderMap();
+        renderXt();
       }, 120);
     });
   }
