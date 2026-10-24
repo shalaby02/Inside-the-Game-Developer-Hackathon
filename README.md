@@ -74,6 +74,20 @@ Pitch coordinates run 0 to 100 on both axes, and both teams attack toward x = 10
 | xT | how likely possession in a zone is to lead to a goal soon; the best zone is about 0.30. It is not shot probability. |
 | Shot-location value | the zone value where a shot was taken (not xG; there is no shot model) |
 
+<!-- xt-reference:start (written by python src/xt_reference.py, do not edit by hand) -->
+![Heat map of the 12 by 8 xT zone grid, attacking left to right. Zone values rise from below 0.005 in the team's own half to about 0.30 in the central zones in front of goal, and halve every 8 units further from goal. An arrow shows the 26:01 pass by Femi Oakhurst from zone c6r7 (value 0.0043) to zone c9r4 (value 0.0801).](docs/xt-grid.svg)
+
+*A simple distance-based model, not trained on real matches.*
+
+**Worked example, the 26th-minute pass (m03):** at 26:01, Femi Oakhurst passed from (52, 91.6) to (79.6, 55.9).
+
+| | Zone | Zone value |
+|---|---|---|
+| From | `c6r7` | 0.0043 |
+| To | `c9r4` | 0.0801 |
+| xT added | | 0.0801 − 0.0043 = **+0.0758** |
+<!-- xt-reference:end -->
+
 The xT grid is a hand-built distance formula (value halves every 8 units from goal, sideways distance counts 70%), not trained on real matches.
 
 ## Microsoft and Azure technologies
