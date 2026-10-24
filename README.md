@@ -5,7 +5,7 @@ Replays a match as if live: code computes the threat numbers, AI agents explain,
 Built for the Microsoft "Inside the Game: Developer Hackathon". All data is synthetic. The teams, players and match are invented.
 
 - **Live demo:** https://victorious-mushroom-0cc79a410.4.azurestaticapps.net/
-- **Demo video (under 2 minutes):** [ADD VIDEO URL]
+- **Demo video (under 2 minutes):** https://youtu.be/ER7vg4w4bGg
 
 ---
 
@@ -19,7 +19,7 @@ xT Match Assistant turns a stream of synthetic football events into explainable 
 4. Three AI agents work from those facts:
    - **Narrator** explains one moment at a time and says why it mattered.
    - **Analyst** reads all moments plus a code-computed match summary and chooses the story: headline, turning point, a role for each moment, and which moments are essential.
-   - **Personalizer** adapts the story to a viewer profile: analyst or fan mode, a calm "Studio" or energetic "Stadium" voice, a favourite team, or a follow-this-player view.
+   - **Personalizer** adapts the story to a viewer profile: analyst, a calm "Studio", energetic "Stadium" voice. You can also focus on your favourite team, or follow a specific player.
 5. A static web page replays the match on a controllable clock with a threat chart, timed commentary cards, a profile switcher and a recap. It also outputs timed, machine-readable overlay data.
 
 ## Architecture
@@ -80,7 +80,7 @@ The xT grid is a hand-built distance formula (value halves every 8 units from go
 
 - **Microsoft Foundry:** a chat model (gpt-5-mini, West Europe) deployed in a Foundry project and called from Python by all three agents.
 - **GitHub:** public repository. 
-- **Azure Static Web Apps (or the host you used):** hosts the page. [EDIT to match your deployment]
+- **Azure Static Web Apps** hosts the page. 
 
 ## Run it yourself
 
@@ -95,7 +95,7 @@ pip install -r requirements.txt
 Run the data pipeline (no model calls):
 
 ```
-python src/generate_match.py          # writes data/match.json and match.csv
+python src/generate_match.py          # writes data/match.json and data/match.csv
 python src/validate_match.py          # checks the data against docs/
 python src/xt_model.py                # writes data/match_xt.csv
 python src/key_moments.py             # writes data/key_moments.json
@@ -132,7 +132,7 @@ FOUNDRY_DEPLOYMENT=...
 FOUNDRY_API_KEY=...
 ```
 
-> **Warning:** the saved narrations, analysis and personalized outputs have been proofread by hand. Running an agent runner without `--verify` (and especially with `--force`) regenerates text and can overwrite those edits. Use `--verify` unless you mean to regenerate.
+> **Warning:** the saved narrations, analysis and personalized outputs have been proofread by hand. Running an agent runner without `--verify` (and especially with `--force`) regenerates text and can overwrite those edits. Use `--verify` unless you mean to regenerate (`run_narrator.py` has no `--verify`; use `python src/verify_narrations.py` instead).
 
 The generated match data is frozen. Re-running the generator should give identical files (checked byte for byte), but all story checks were done on the committed version.
 
